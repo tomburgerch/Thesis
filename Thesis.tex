@@ -32,25 +32,56 @@
 \usepackage{color}
 
 % Enable listings to embed code
-\usepackage{listings}
-\definecolor{light-gray}{gray}{0.95}
+\definecolor{lightgray}{gray}{0.95}
 \definecolor{darkblue}{rgb}{0,0,.5}
 
-\lstset{%
-language=ruby, %Setzt die Sprache
-basicstyle=\scriptsize, % Setzt den Standardstil
-keywordstyle=\color{darkblue}\bfseries, % Setzt den Stil für schluesselwoerter
-identifierstyle=, % Identifier bekommen keine gesonderte formatierung
-commentstyle=\color{DarkGreen}, % Stil für Kommentare
-stringstyle=\ttfamily, % Stil für Strings (gekennzeichnet mit "String")
-breaklines=true, % Zeilen werden umgebrochen
-numbers=none, % Zeilennummern links
-numberstyle=\tiny, % Stil für die Seitennummern
-frame=single, % Rahmen
-backgroundcolor=\color{light-gray} % Hintergrundfarb
-}
+\usepackage{listings}
+\usepackage{courier}
+\lstset{
+         basicstyle=\footnotesize\ttfamily, % Standardschrift
+         %numbers=left,               % Ort der Zeilennummern
+         numberstyle=\tiny,          % Stil der Zeilennummern
+         %stepnumber=2,               % Abstand zwischen den Zeilennummern
+         numbersep=5pt,              % Abstand der Nummern zum Text
+         tabsize=2,                  % Groesse von Tabs
+         extendedchars=true,         %
+         breaklines=true,            % Zeilen werden Umgebrochen
+         keywordstyle=\color{red},
+         frame=b,
+ %        keywordstyle=[1]\textbf,    % Stil der Keywords
+ %        keywordstyle=[2]\textbf,    %
+ %        keywordstyle=[3]\textbf,    %
+ %        keywordstyle=[4]\textbf,   \sqrt{\sqrt{}} %
+         stringstyle=\color{white}\ttfamily, % Farbe der String
+         showspaces=false,           % Leerzeichen anzeigen ?
+         showtabs=false,             % Tabs anzeigen ?
+         xleftmargin=17pt,
+         framexleftmargin=17pt,
+         framexrightmargin=5pt,
+         framexbottommargin=4pt,
+         backgroundcolor=\color{lightgray},
+         showstringspaces=false      % Leerzeichen in Strings anzeigen ?
+ }
+\lstloadlanguages{% Check Dokumentation for further languages ...
+         %[Visual]Basic
+         %Pascal
+         %C
+         %C++
+         %XML
+         %HTML
+         Ruby
+ }
+% \DeclareCaptionFont{blue}{\color{blue}}
 
+  %\captionsetup[lstlisting]{singlelinecheck=false, labelfont={blue}, textfont={blue}}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
 
+\captionsetup{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+
+\usepackage{subcaption}
 
 % Enables clickable links in the PDF and additional PDF specific configuration options.
 \usepackage[
@@ -69,29 +100,43 @@ backgroundcolor=\color{light-gray} % Hintergrundfarb
             pdfpagelayout=OneColumn
             ]{hyperref}
 
+
+
+
+% link to website in footnote automatically
+\newcommand\fnurl[2]{%
+  \href{#2}{#1}\footnote{\url{#2}}%
+}
+
 % Load own command definitions, a few helpful ones are already defined there.
 \input{CommandsAndDefs}
+
+
+% enable dashed lines
+\usepackage{etex}
+\usepackage{arydshln}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DOCUMENT METADATA
 
 \thesistype{Master Thesis}
-\title{Signature Recognition in Mobile Payments}
+\title{Fraud Prevention and Detection\\[5pt] in Mobile Payments}
 
 \author{Cedric Waldburger}
 \email{wcedric@ee.ethz.ch}
 \institute{Distributed Computing Group \\[2pt]
 Computer Engineering and Networks Laboratory \\[2pt]
-ETH Zürich}
+ETH Zurich}
 
 % You can put in your own logo here "\includegraphics{...}" or just comment the command
 % \logo{}
 
-\supervisors{Christian Decker (DISCO)\\Conor Wogan (SumUp)\\[2pt] Prof.\ Dr.\ Roger Wattenhofer}
+\supervisors{Christian Decker\\Conor Wogan (SumUp)\\[2pt] Prof.\ Dr.\ Roger Wattenhofer}
 
 % You can comment the following two commands if you don't need them
-\keywords{Signature Detection, Signature Recognition, Fraud Detection, Mobile Payments, Mobile Devices}
+\keywords{Fraud Detection, Signature Verification, Fraud Detection, Mobile Payments, Mobile Devices}
 % \categories{ACM categories go here.}
 
 \date{\today}
@@ -106,16 +151,23 @@ ETH Zürich}
 \cleardoublepage
 
 \begin{acknowledgements}
-  thank DISCO/Christian/Prof
 
-  thank SumUp
-
+  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Deck from the Institute for distributed computing at ETH Zurich for their help and support in the last months. I also wish to thank Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support and help.
 
 \end{acknowledgements}
 
 
 \begin{abstract}
-	Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    Mobile payments have seen a lot of traction recently and a wide variety of companies have emerged around the opportunity of payments that are processed from a mobile device. Our work was conducted in collaboration with a company that allows merchants to process credit card transactions on their smartphone by using an app and hardware dongle.
+
+    The innovative technology has opened up many new benefitial opportunities for both, merchant and clients. But it has also openend new opportunities for fraud in the area of credit card transactions, an area which has always been prone to fraud. Although the industry is highly regulated, the advances in technology call for new anti-fraud measures.
+
+    We identify two  separate but complementary methods against credit card fraud: \textbf{preventive}, in the form of an automatic, more in-depth check of all users during the sign-up process against a database of individuals with higher risk status, and \textbf{reactive} by providing mechanisms to check every transaction's signature in realtime against the cardholer's previous signatures.
+
+    Our work has shown that the optimization of the check during sign-up is able to reduce the number of false positives by (TODO: XX percent). This results in up to (TODO: XX hours) less manual work by operations team each week.
+
+    We found that the characteristics of a signature captured by finger on a mobile device are much less stable than those of signatures captured with a pen. Therefore, we propose to use a feedback loop to improve the reliabilty of the signature verification algorithm and reduce the EER of our algorithm which fuses the score of a DTW algorithm, an HMM and a score base on globabl features.
+
 \end{abstract}
 
 \tableofcontents
@@ -123,57 +175,136 @@ ETH Zürich}
 \mainmatter % do not remove this line
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER INTRODUCTION
 
 \chapter{Introduction}
 
-As Smartphones become more and more popular, they're being used in more and more industries and fields. An application that has seen a lot of traction recently is mobile payments where the smartphone is used to process payments - either between users or between a client and a merchant.
+As Smartphones become increasingly popular, they're being used in more and more industries and fields. An application that has seen a lot of traction recently is mobile payments. The usage of the smartphone in this field includes the utilization as an electronic wallet, a virtual bank account and as a payment processing terminal to accept credit cards and other payment methods.
+This work focuses on an application of the latter.
+% Although mobile payments were getting a lot of attention already 10 years ago \cite{5342298}, only recently as the density of smartphones has reached a critical level, the use of smartphones as electronic cash registers has become practical.
+The density of smartphones per capita and the computational power of current phones have reached a level where it became practical to use phones electronic cash registers.
+\fnurl{iZettle}{http://www.izettle.com}, \fnurl{Square}{http://www.squareup.com}, \fnurl{SumUp}{http://www.sumup.com} are just some of the companies which make use of this situation and are enabling merchants to receive payments via their smartphone. This thesis was written in collaboration with SumUp, a mobile payment company located in Berlin. % and Dublin.
+%In Section \ref{intro-sumup} SumUp's business model is explained in more detail.
 
-SquareUp (ref), SumUp (ref), iZettle (ref) and others are just some of the companies who are enabling merchants to take payments from their clients via their smartphone. This thesis was written in collaboration with SumUp, located in Berlin and Dublin. In section (ref: 1.1) we analyze the business model in more detail.\cite{Hanmandlu05} \cite{citeulike:3393241} \cite{citeulike:885135} \cite{1030918} \cite{1227706} \cite{Kim:2005:SED:2156512.2156558} \cite{Coetzer:2004:OSV:1289340.1289385} \cite{711942}
+% \cite{Hanmandlu05} \cite{citeulike:3393241} \cite{citeulike:885135} \cite{1030918} \cite{1227706} \cite{Kim:2005:SED:2156512.2156558} \cite{Coetzer:2004:OSV:1289340.1289385} \cite{711942}
 
-As with every area that involves financials and money transactions in particular, security becomes a very important topic. Security measures are taken on various ends but this thesis focuses on identifying card holders by their signature.
+Financial businesses are subject to fraud more than average due to the direct financial gain for fraudsters. On mobile devices, it becomes even more important to protect the system from Fraud --- especially as the mobile devices can be lost or stolen. While some security measures are imposed by the financial authorities, those rules were made for traditional financial institutions. The new mobile environment and  but as it is even more important to develop your own security measures as the area of mobile payments is still new and the rules that were made for traditional financial institutes (e.g. banks or funds)
+might not be enough to protect the complex systems in the mobile payment industry.
+Our work focuses on preventing and detecting fraud in two ways.
 
-As the technical complexity and thus the cost of a Chip-and-Pin-Reader are much higher than those of Swipe- and Chip-and-Signature-Readers, identification by signature rather than a four or six digit pin remains the dominating technique.
+We were able to reduce the amount of manual work required to ensure that no high risk customers are onboarded without a flag being raised by implementing a PEP/HAR-Check during the sign-up of new customers.
 
-This work is focused on automatic signature detection using a (TODO: MIXER) of Dynamic Time Warping (DTW) and Hidden Markov Models (HMM) to generate a similarity score between signatures and a reference signature in the case of DTW or the respective HMM signature model.
+Authorization of credit card transactions can be done in various ways. Among the most popular ways to authorize a transaction are the Chip-And-Signature mehtod and the Chip-And-Pin method. When using the Chip-And-Signature method, the card holder signs to authorize the transaction. With the Chip-And-Pin method, the cardholder enters a four or six digit pin to allow the transaction of funds. Although the Chip-And-Pin method is seen as more secure, it is also more complex and requires much more expensive hardware. Therefore, identification by signature has remained the predominant method.
 
-
-
-% Problem: How to make them secure? Chip \& Pin (most secure) is not in production yet and is expensive. So: Chip\&Signature - but how to make it secure? Mag Stripe is easiest to create but also easiest to do Fraud/Attack
+To improve this method's security, this work is focused on automatic signature detection using a fusioned score of gloabl features, a Dynamic Time Warping (DTW) score and a Hidden Markov Models (HMM) measurement to generate make a decision on whether two signatures belong to the same person or not.
 
 
 % Copied:
 
-% Smartphones and notebooks are becoming increasingly popular. These devices hold privacy critical information such as contact lists, email account access, web- browser passwords, communication history with contacts and so on. Additionally these devices are mobile and hence exposed to a higher risk of being accessed by unauthorized users. Therefore it seems necessary to explore new ways to protect this data using existing hardware. In the notebook industry, fingerprint readers and file encryption are becoming increasingly popular. Modern mobile phones provide lockscreens, which require a user to enter a code or draw a simple pat- tern on the touchscreen. These authorization mechanisms help to protect critical data more or less effectively. Fingerprint readers can be considered to be fairly secure, whereas current lockscreens are rather easily bypassed. A code or pattern entered on a touchscreen device can be observed either directly or by looking at the smears left by the finger on the screen. The simplicity of the entered token allows an adversary to easily observe and reproduce it. Compared to the finger- print reader, a lockscreen code or pattern contains very little information which can easily be stolen. Because acquiring a fingerprint requires special hardware, this thesis is focused on exploiting a users signature as the basic authentication token.
-
-% The proliferation of touchscreen-enabled devices represents many new promising scenarios and applications for signature verification. Automatic signature verification is a challenging task per se, as it must face a notable variability among signatures from the same individual and the risk of highly skilled forgers which, due to their unpredictable nature, are not completely possible to model during the design of a verification system. This work is focused on automatic person authentication using signature as a biometric trait. Dynamic signature verification for portable devices is studied and an analysis of its specificities compared to traditional signature verification systems based on digitizing tablets is performed.
-% Within biometrics, signature is one of the most socially accepted biometric traits, as it has been used in financial and legal transactions for centuries (Fierrez and Ortega-Garcia, 2007b; Plamondon and Lorette, 1989). In the current era of electronic services and ubiquitous access to information, secure access control and user authentication are common tasks which are usually performed with tokens or passwords. In this field, biometrics has become a focus of interest as it uses anatomical (e.g. fingerprint, iris) or behavioral (e.g. voice, signature) traits to authenticate a user (Jain et al., 2004). These traits cannot be easily stolen or forgotten. It is now common to observe fingerprint verification systems in portable electronic devices (e.g. handhelds), face recognition systems for border control purposes and iris verification in some airports (e.g. United Arab Emirates).
-% Biometric authentication has gathered an increasing research and commercial interest in the last few years (Jain et al., 2006) as it represents a convenient and secure means of person authentication.
+% Smartphones and notebooks are becoming increasingly popular. These devices hold privacy critical information such as contact lists, email account access, web- browser passwords, communication history with contacts and so on. Additionally these devices are mobile and hence exposed to a higher risk of being accessed by unauthorized users. Therefore it seems necessary to explore new ways to protect this data using existing hardware.
 
 
+\section{SumUp - Mobile Payments for Everyone}
+\label{intro-sumup}
 
+Over 176.8 million people owned a credit card in 2008 with an average of 3.5 cards per cardholder. About 60 percent of consumers own a rewards credit card and approximately 51 percent of the U.S. population has at least two credit cards.\cite{woolsey2010credit}
 
-\section{SumUp - Mobile Payment Company}
-
-SumUp was founded in fall 2011 in Berlin and Dublin and is today used actively by many thousand merchants in more than ten european countries. It's core business competes with traditional Credit Card Terminal companies who require their users to pay a monthly fee for their terminal.
-
-Instead of building and selling complex hardware, SumUp's Apps make use of the fact that almost anyone owns a smartphone today. SumUp works on the iOS and Android platform and the only additional hardware, a dongle that reads the credit cards, is sent to the customers for free. The Apps to use Sumup are available for free in both the Android and iOS store respectively.
-
-In order to accept a credit card payment, a new user follows the steps depicted in Fig X (TODO):
-
+This illustrate how widely used credit cards are on the consumer side. However, far less businesses allow customers to pay by credit card. This is mostly due to the following reasons:
 \begin{itemize}
-    \item Open Account and supply documents of identification
-    \item Plug in card reader
-    \item Choose product or enter amount manually
-    \item Choose Payment Method
-    \item Put Credit Card into reader
-    \item Let customer sign and confirm
+\item A business initially pays between 200 to 500 Euro for a credit card terminal
+\item There is a monthly subscription fee from 20 to 50 Euros
+\item A percentage of each transaction goes to the credit card company. Usually, merchants pay between 2.75 and 5 percent to the card issuer.
 \end{itemize}
+
+SumUp was founded in fall 2011 in Berlin and Dublin and is today used actively by many thousand merchants in more than ten european countries. It is successful, because it removed two of the three reasons why not more business allow customers to pay by credit card. Anyone who signs up with SumUp receives a free card reader for use with one's smartphone and there are no monthly cost. It's core business competes with traditional Credit Card Terminal companies who require their users to pay a monthly fee for their terminal.
+
+Instead of building and selling expensive hardware, SumUp's Apps make use of the fact that almost anyone owns a smartphone today. SumUp works on the iOS and Android platform and the only additional hardware, a dongle that reads the credit cards, is sent to the customers for free. The Apps to use Sumup are available for free in both the Android and iOS store.
+
+% Payment through SumUp gives taxi drivers, market traders and artisans in particular an enormous economic advantage, in that mobile payments can now be processed right on the spot. Customers no longer have to be turned away, as any service can be billed immediately. Other areas of industry such as personal grooming, beauty salons, bakeries and boutiques can also benefit from the mobile payment method. Traditional card terminals are often associated with high investment and operating costs. SumUp, however, provides its services to retailers free of charge while working with transparent pricing structures and a straightforward Terms of Service. SumUp only places a single low fee of 2.75 percent on any successful transaction. There are no additional costs.
+
+
+Processing a transaction with SumUp can be described with six simple steps as depicted in Fig \ref{fig:flow-customer} and \ref{fig:flow-merchant}.
+
+\begin{enumerate}
+    \item Once the merchant has registered a SumUp Account and handed in identification documents, he receives a free card reader and can accept payments.
+    \item The purchase amount can be entered manually into the app or via pre-determined product categories (Fig \ref{fig:flow1})
+    \item Debit cards and credit cards like Visa and MasterCard are all supported and can be chosen by clicking on the respective image. (Fig \ref{fig:flow2})
+    \item Once plugged in, the card reader confirms that it is ready to read a card. (Fig \ref{fig:flow3})
+    \item After reading the card, the app shows a confirmation of the card type and number. (Fig: \ref{fig:flow4})
+    \item The customer confirms the transaction with a signature written onto the screen of the smartphone or tablet. (Fig: \ref{fig:flow5})
+    \item After successful completion, the customer can have the receipt sent to their email account or via SMS to their phone. (Fig: \ref{fig:flow6})
+\end{enumerate}
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.22\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/flow1.png}
+                \caption{Merchant enters amount nto digital cash register}
+                \label{fig:flow1}
+        \end{subfigure}%
+        ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
+          %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{0.22\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/flow2.png}
+                \caption{Merchant chooes the payment method}
+                \label{fig:flow2}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.22\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/flow3.png}
+                \caption{Once the card reader has been plugged in, the device is ready to read a card}
+                \label{fig:flow3}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.22\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/flow4.png}
+                \caption{Card is recognized and shown on the screen}
+                \label{fig:flow4}
+        \end{subfigure}
+        \caption{In-App Flow during a Transaction, in which the merchant is involved}\label{fig:flow-merchant}
+\end{figure}
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.5\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/flow5.png}
+                \caption{Customer signs and thereby confirms transaction}
+                \label{fig:flow5}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.22\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/flow6.png}
+                \caption{Customer can choose to receive a receipt via email or text}
+                \label{fig:flow6}
+        \end{subfigure}
+        \caption{In-App Flow during a Transaction, in which the customer is involved}\label{fig:flow-customer}
+\end{figure}
+
 
 On the server side, a variety of Fraud checks are performed and the transaction is either accepted or declined. The signature detection developed during this work will likely be implemented as an additional security measurement on the server side.
 
 Besides it's simplicity and low setup time and cost, SumUp's advantage over its competitors is that it only collects a fixed percentage per transaction of 2.75\%.
+
+In the long term, SumUp will enable customers to process mobile payments, not just credit card transactions. As listed by the European Payments Council (EPC) \cite{mpwhitepaper}, mobile payments may at one point replace all current Payment Methods for Business-to-Consumer (B2C) transactions as well as Business-to-Business (B2B), Consumer-to-Business (C2B) and Consumer-to-Consumer (C2C) transactions as shown with examples in Table \ref{fig:mp-applications}. The EPC predicts this will happen because the availability and convenience of a mobile device paired with the perception of having full control over it, creates an environment of trust and convenience in which one conducts payments.
+
+
+\begin{figure}
+        \centering
+        \begin{tabular}{c|l}
+        \hline
+% & 0 & 0 \\ \hline
+C2C & Repay a friend \\ \hdashline[0.5pt/3pt]
+C2B & Buy Groceries \\ \hdashline[0.5pt/3pt]
+B2C & Pay for train to work with company account \\ \hdashline[0.5pt/3pt]
+B2B & Pay for Business Lunch \\ \hline
+        \end{tabular}
+        \caption{Examples of mobile payment applications as listed by the EPC}\label{fig:mp-applications}
+\end{figure}
+
+
 
 
 % \subsection{Business Model}
@@ -217,9 +348,24 @@ Besides it's simplicity and low setup time and cost, SumUp's advantage over its 
 % seeing a lot of traction currently:
 % http://techcrunch.com/2013/03/19/ex-googlers-launch-sift-science-a-fraud-fighting-system-for-websites-backed-by-5-5m-in-funding-from-union-square-first-round-yc-others/
 
-Automatic payment systems are always interesting for attackers due to their direct monetary return and usually high scalability. SumUp is no exception and chapter 2 (TODO: ref) will list the different fraud scenarios and counter measurements.
+% The proliferation of touchscreen-enabled devices represents many new promising scenarios and applications for signature verification. Automatic signature verification is a challenging task per se, as it must face a notable variability among signatures from the same individual and the risk of highly skilled forgers which, due to their unpredictable nature, are not completely possible to model during the design of a verification system. This work is focused on automatic person authentication using signature as a biometric trait. Dynamic signature verification for portable devices is studied and an analysis of its specificities compared to traditional signature verification systems based on digitizing tablets is performed.
+% Within biometrics, signature is one of the most socially accepted biometric traits, as it has been used in financial and legal transactions for centuries (Fierrez and Ortega-Garcia, 2007b; Plamondon and Lorette, 1989). In the current era of electronic services and ubiquitous access to information, secure access control and user authentication are common tasks which are usually performed with tokens or passwords. In this field, biometrics has become a focus of interest as it uses anatomical (e.g. fingerprint, iris) or behavioral (e.g. voice, signature) traits to authenticate a user (Jain et al., 2004). These traits cannot be easily stolen or forgotten. It is now common to observe fingerprint verification systems in portable electronic devices (e.g. handhelds), face recognition systems for border control purposes and iris verification in some airports (e.g. United Arab Emirates).
+% Biometric authentication has gathered an increasing research and commercial interest in the last few years (Jain et al., 2006) as it represents a convenient and secure means of person authentication.
 
-As credit cards are historically a very unsafe payment method (todo: list to paper), special attention has to be paid when dealing with credit card information and processing credit card transactions.
+Fraud, as defined by Phua et al. \cite{5522816}, refers to the abuse of a profit organisations's system without necessarily leading to direct legal consequences. Fraud Detection, as part of the overall fraud control, has become one of the most established data mining applications.
+
+Automatic payment systems are always interesting for attackers due to their direct monetary return and usually high scalability. SumUp is no exception and is therefore interested in having a solid and extensive anti-fraud system.
+
+As credit cards are historically a very unsafe payment method, special attention has to be paid when dealing with credit card information and processing credit card transactions. A fact that is reflected by looking at how many papers were written about fraud detection in which area. As shown in Figure \ref{fig:fraud-literature-count}.
+
+
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=\textwidth]{figures/fraud-literature-count}
+    \end{center}
+    \caption{Number of research papers published on different fraud areas}
+    \label{fig:fraud-literature-count}
+\end{figure}
 
 The main attack vectors in credit card fraud are: (TODO: ref paper)
 
@@ -233,6 +379,11 @@ The main attack vectors in credit card fraud are: (TODO: ref paper)
 We will mainly focus on the first fraud case and concentrate on identifying a card holder by his signature. Our goal is that after a card has been used a certain amount of times, we can build a reliable signature model to identify whether it is the same person signing or not the next time the card is used.
 
 Not only the pysical cards are at risk to be stolen, also the digital copy of the credit card data needs to be protected. This is one of the reasons SumUp only saves encrypted card information and does so in a PCI-DSS environment. The ensure maximum security precaution, only card numbers and not names of card holders are saved. This has one downside: We can only identify cards but not card holders and can therefore only build a signature for a card but not for a person (who might use several cards on several occasions).
+
+Realisticly, it is impossible to be absolutely certain about the legitimacy of a transaction. In reality, the goal must be to filter out possible evidences of fraud from the available data using cost-effective mathematical algorithms.
+
+
+PCI-DSS
 
 
 
@@ -290,46 +441,230 @@ We discuss our strategies to overcome these challenges in chapter X (TODO ref).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER FRAUD
 
-\chapter{Fraud}
+
+\chapter{Fraud Prevention \\PEP \& HRA Detection}
+
+The preventive part of our Fraud Protection work happens before a client is onboarded and therefore before he even has access to the system.
+
+Any financial institution has a self high interested, to implement as many anti-fraud mechanisms as posible. Still, as  the financial industry is a strictly regulated industry, many of these precautions are mandatory and described by the governing financial institution.
+
+The financial institution governing SumUp's operations is the English Financial Services Authority (FSA) and the regulatory environment is specified in the Money Laundry Regulations from 2007\cite{website:aml-regulations-2007}. Chapter 2 specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
+
+\begin{itemize}
+\item \textbf{Politically Exposed Persons} (PEP) are people who hold a prominent political function. In the United Kingdom this is defined as a national position. Also a PEP's spouse and children are included in this category.
+
+\item \textbf{High Risk Accounts} (HRA) are people who have previously commited a financial crime, been involved in a money-laundring related crime (e.g. dealing with narcotics) or are listed on a terrorism list.
+
+\end{itemize}
+
+Any new client needs to checked against both lists at sign-up and regularily after the initial sign-up.
+
+For an identified PEP, additional due diligence needs to be done to onboard the client. Additional documents need to be collected that give detail information about the wealth and assets of said person. After performing the additional due diligence, a client can be onboarded but settlements need to be blocked.
+
+A positiv match with the HRA list means that the subject cannot be onboarded and a Suspicious Act Report (SAR) needs to be filed with the Serious Organized Crime Agency (SOCA).
+
+A test based on first and last name was already in place but produced a lot of false negatives and part of our work was to replace the existing test component with a more efficient one.
+
+In the next section we'll present the data of the two databases and their origin before talking about the way we structured the lookup and implementation of our solution.
+
+% two strat agains aml: identify customer, get id \& proof of address
+% 2nd mitigating strategy: monitor patterns, activity, ...
+
+% plugged into both: screening at beginning \& end
+
+
+% sanctions hit => can't trade with him
+% report suspicion report
+
+% suspicious act report = sar
+
+% => serious organized crime association
+
+% pep = enhanced customer due diligence
+% get more docs, based on wealth and funds
+
+% if we onboard them, we need to block settlements
+
 
 % Our work is inspired by, amongst others, the potential fi- nancial benefits that the automatic clearing of cheques will have for the banking industry. Despite an increasing num- ber of electronic alternatives to paper cheques, fraud perpe- trated at financial institutions in the United States has be- come a national epidemic. The National Check Fraud Center Report of 2000 [1] states that: “. . . cheque fraud and coun- terfeiting are among the fastest-growing crimes affecting the United States’ financial system, producing estimated annual losses exceeding USD 10 billion with the number continuing to rise at an alarming rate each year.”
 
 % 1: National Check Fraud Center, National Check Fraud Center Report, 2000.
 
-\section{Fraud Scenarios}
-
-% The system offers attack vectors at various steps of the customer/merchant relation and needs to be prevented:
-% - Sign up (check this and that)
-% - ...
-% - ...
+\section{PEP \& HRA Database}
 
 
-\section{Fraud Prevention}
+World-Check \cite{website:world-check} is one of the provider's of the PEP \& HRA database, which we chose to work with to get the necessary data.
+
+The data is supplied in csv format and contains in 20+ fields. The most important fields are listed in table \ref{tbl:world-check-fields}.
+
+\begin{table}
+    \begin{tabular}{l|p{9cm}}
+    \hline Field & Value \\ \hline
+    uid & unique identifier within the World-Check database\\ \hdashline[0.5pt/3pt]
+    last\_name & subject's primarily used last name\\ \hdashline[0.5pt/3pt]
+    first\_name & subject's primarily used firs first name \\ \hdashline[0.5pt/3pt]
+    aliases & other first/last name combinations that the subject has used\\ \hdashline[0.5pt/3pt]
+    alternative\_spelling & alternative spelling of the subject's name\\ \hdashline[0.5pt/3pt]
+    category & used to define if subject is a PEP or HRA\\ \hdashline[0.5pt/3pt]
+    sub\_category & used to define if subject is a PEP or HRA\\ \hdashline[0.5pt/3pt]
+    age & age of the subject \\ \hdashline[0.5pt/3pt]
+    dob & the subject's date of birth \\ \hdashline[0.5pt/3pt]
+    deceased & information about the subject's death \\ \hdashline[0.5pt/3pt]
+    locations & the cities the subject was associated with \\ \hdashline[0.5pt/3pt]
+    countries & the countries the subject was associated with \\ \hdashline[0.5pt/3pt]
+    further\_information & description and references about the subject \\ \hdashline[0.5pt/3pt]
+    external\_sources & information about from which sources the information in the database was extracted \\ \hline
+
+    \end{tabular}
+
+    \caption{Fields of the World-Check database CSV file}
+    \label{tbl:world-check-fields}
+\end{table}
+
+
+The full database file is about 3 Gigabytes big and cointains some 1.8 million records.
 
 
 
-\section{Fraud Detection}
-
-% At various stages, different techniques need to be used to detect fraudsters:
-% - ...
-% - ...
-% - ...
-% - ...
-% - ...
 
 
 
+
+
+
+
+\section{Algorithm}
+
+The algorithm we used to make the lookup faster, consists of two parts - parsing and lookup.
+
+\textbf{Parsing the data}
+
+For faster lookup, each record from the original csv file is parsed into multiple records in the database such that there exists one database record for each pair of first / last name combination from the set of first and last names in aliases and alternative spellings.
+
+Listing \ref{lst:world-check-parse} shows the algorithm.
+
+\begin{lstlisting}[caption={The Algorithm that parses the csv file creates a separate DB record for each first/last name pair},label={lst:world-check-parse}]
+for record in csv-file
+
+    # Create Arrays to store all first & last names
+    # and initialize with the most common first/last name
+    first_names = []
+    first_names << record["first_name"]
+
+    last_names = []
+    last_names << record["last_name"]
+
+    # Get all other pairs from alternative_spellings ...
+    for pair in record["alternative_spellings"]
+        first_names << pair[0]
+        last_names << pair[1]
+    end
+
+    # ... and from aliases
+    for pair in record["aliases"]
+        first_names << pair[0]
+        last_names << pair[1]
+    end
+
+    # Now create the DB records
+    for fname in first_names
+        for lname in last_names
+            if record["category"] == "PEP"
+                PEP.create_in_db fname, lname, record
+            else
+                HRA.create_in_db fname, lname, record
+            end
+        end
+    end
+end
+\end{lstlisting}
+
+The database has an index on first and last name to speed up the lookup.
+
+
+
+\textbf{Lookup}
+
+To reduce the number of false positives, the lookup uses additional information besides the first and last name. For a lookup, the following information needs to be provided:
+\begin{itemize}
+\item First and last name
+\item Date of birth
+\item City
+\item Country
+\end{itemize}
+
+The algorithm is outlined in Listing \ref{lst:world-check-lookup}. It's output is a set of Know Your Customer (KYC) action and statuses which flag the customer in the system and may restrict him from certain actions, e.g. processing transactions with his account.
+
+\begin{lstlisting}[caption={The Lookup algorithm},label={lst:world-check-lookup}]
+def lookup fname, lname, dob, city, country
+
+    # collect all hits on first and last name
+    all_hits = verified_hits = []
+    all_hits << PEP.find_by_first_name_and_last_name(fname, lname)
+    all_hits << HRA.find_by_first_name_and_last_name(fname, lname)
+
+    for record in all_hits
+
+        # skip if peson is already deceased
+        next if record["deceased"]
+
+        # parse dob. if the dob in the db is incomplete (eg 1971/02/00)
+        # only check the complete parts
+        y = record["dob"].year  != 0 ? record["dob"]["year"]  : null
+        m = record["dob"].month != 0 ? record["dob"]["month"] : null
+        d = record["dob"].day   != 0 ? record["dob"]["day"]   : null
+
+        # now skip if one of the values exists but doesn't match
+        next if y && y != dob["year"]
+        next if m && m != dob["month"]
+        next if d && d != dob["day"]
+
+        # at this point, dob matches or wasn't given
+        # now, check city
+        next unless record["locations"].contains? city
+
+        # and country
+        next unless record["countries"].contains? country
+
+        # all checks passed, add this record to the result set
+
+        verified_hits << record
+
+    end
+
+    # now set KYC status for the proven records
+    for r in verified_hits
+        set_kyc_status r
+    end
+end
+\end{lstlisting}
+
+
+\section{Implementation \& Architecture}
+
+The PEP \& HAR check was implemented as a Sinatra Ruby Applicaton, that is accessible through a REST interface. It uses ActiveRecord (AR) to connect to the database and runs two cron jobs to perform these tasks:
+\begin{itemize}
+\item \textbf{daily:} download of incremental update files from world check and including the incremental data into the database
+\item \textbf{weekly:} re-check of all existing customers in the system against the database
+\end{itemize}
+
+
+TODO: Add System Topology
 
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER Signature Recognition
 
-\chapter{Signature Recognition}
+\chapter{Fraud Detection \\Signature Verification}
 
 In this chapter, we'll present an overview of existing signature detection methods and available resources.
 
 Traditionally, detection methods can be assign to either feature- or function-based methods. We describe both approaches in (TODO ref). A combination of feature- and function-based approaches has been providing better results than the individual techniques. (TODO: Ferrez-Aguilar et al, 2005)
+
+% Theoretically, the problem of handwritten signature verification is a pattern recognition task used to discriminate two classes of original and forgery signatures. A signature verification system must be able to detect forgeries and to reduce rejection of genuine signatures simultaneously.
+
+% Human signature verification (HSV) systems are usually built either on-line or off-line approaches, depending on the kind of data and application involved. On-line systems generally present a better performance than the off-line ones but require the necessary presence of the author during both the acquisition of the reference data and the verification process limiting its use of certain kind of applications.
 
 % Offline signature detection methods work based on the signature's static features like length and shape while online methods include the the dynamics of the how someone signs.
 
@@ -338,7 +673,13 @@ Traditionally, detection methods can be assign to either feature- or function-ba
 
 \section{Previous and Related Work}
 
-During the past 3 decades, a lot of work has been done to improve offline signature detection algorithms. An overview over previous work was given in a paper by Guo et al. \cite{Justino20051377}
+During the past 3 decades, a lot of work has been done on offline and online signature detection algorithms and many techniques exist.
+
+Among those techniques, there's been work on Dynamic Time Warping \cite{Herbst98onan} \cite{citeulike:891512}, Hidden Markov Models \cite{Justino00anoff-line}, directional pdf \cite{drouhard_1996_pr}, stroke extraction \cite{1047809}, synthetic discriminant functions \cite{Wilkinson:91}, granulometric size distributions \cite{615447}, neural classifiers \cite{Bajaj19971}, wavelets\cite{Ramesh1999217}, grid features\cite{Qi19941621} and elastic matching\cite{citeulike:941886} to name a few. \cite{PiyushShanker:2007:OSV:1274199.1274423}
+
+We will concentrate on the first two in our experiments as they have proven to be most successful and also most popular in earlier work.
+
+An overview over previous work was given in a paper by Guo et al. \cite{Justino20051377}
 
 TODO: list a few papers and their methods. Some for online and some for offline verification. List also how well they were performing.
 
@@ -357,16 +698,46 @@ TODO: list a few papers and their methods. Some for online and some for offline 
 
 \section{Features and Feature Extraction}
 
-As introduced in chapter X (TODO), all features can be classified as local or global features. Global features describe the signature as a whole and include the discrete Wavelet Transform (TODO: ref), thue Hough Transform (TODO: ref), horizontal and vertical projectsions (TODO: ref) and smoothness features (TODO: ref).
+
+As introduced in chapter X (TODO), a features can be classified as a local or global feature. Global features describe the signature as a whole. Examples are the discrete Wavelet Transform (TODO: ref), thue Hough Transform (TODO: ref), horizontal and vertical projectsions (TODO: ref) and smoothness features (TODO: ref).
 
 % The features that are extracted from static signature im- ages can be classified as global or local features. Global fea- tures describe an entire signature and include the discrete Wavelet transform [7], the Hough transform [8], horizontal and vertical projections [9], and smoothness features [10]. Local features are extracted at stroke and substroke levels and include unballistic motion and tremor information in stroke segments [11], stroke “elements” [9], local shape descriptors [12], and pressure and slant features [13].
 
 
 \section{Feature-based Systems}
 
-Feature-based systems, also called global systems, are characterized by the fact that the feature vector consists of measurements on the whole signature. Example features are the total duration, number of finger-up and finger-down events, average speed, etc.
+Feature-based systems, also called global systems, are characterized by the fact that the feature vector consists of measurements that are based on the whole signature. Example features are listed in table (TODO: ref)
 
 Sequential Forward Feature Selection (SFFS) is one of the best performing methods (TODO: Jain and Zongker, 1997) but many have been proposed. The matching is usually done using statistical classifiers such as Parzen Windows (Martinez-Diaz et al, 2007), majority voting (Lee et al, 1996) Mahalanobis distancis (Galbally et al, 20007) or Guassian Mixture Models (Martinez-Diaz et al, 2007).
+
+Important features include: \cite{Gueler2008940}
+
+\begin{table}[tb]
+    \caption{Important features}
+    \label{fig:figurename}
+    \begin{center}
+        \begin{tabular}{p{6cm}|p{6cm}}
+Max acceleration & Avg. acceleration \\ \hdashline[0.5pt/3pt]
+Var. of acceleration & Avg. x acceleration \\ \hdashline[0.5pt/3pt]
+Avg. y acceleration & Total dots recorded \\ \hdashline[0.5pt/3pt]
+Time of second pen down & Avg. velocity \\ \hdashline[0.5pt/3pt]
+Max velocity & Avg. velocity÷max velocity \\ \hdashline[0.5pt/3pt]
+Avg. x velocity & Avg. y velocity \\ \hdashline[0.5pt/3pt]
+xy velocity correlation & Max x velocity \\ \hdashline[0.5pt/3pt]
+Max y velocity & Var. of x velocity \\ \hdashline[0.5pt/3pt]
+Num. pts. with positive x velocity & Var. of velocity \\ \hdashline[0.5pt/3pt]
+RMS velocity & Direction at first pen down, first pen up \\ \hdashline[0.5pt/3pt]
+First moment & Signature height (H) \\ \hdashline[0.5pt/3pt]
+Signature width (W) & W to H ratio \\ \hdashline[0.5pt/3pt]
+Pen down samples (D) & Time of max velocity÷D \\ \hdashline[0.5pt/3pt]
+Time of max x velocity÷D Point max. velocity÷D & Avg. azimuth \\ \hdashline[0.5pt/3pt]
+Avg. elevation & Number of pen ups and downs  \\ \hdashline[0.5pt/3pt]
+RMS acceleration & \\ \hline
+
+        \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 
 
@@ -374,37 +745,91 @@ Sequential Forward Feature Selection (SFFS) is one of the best performing method
 
 Function-based systems, also called local systems, are characterized by the fact that the feature vecotr consists of measurements on partial segments of the signature. Theses segments can be single points of groups of points. The most popular methods are Dynamic Time Warping (DTW) and Hidden Markov Models (HMM).
 
+Important functions include: \cite{Gueler2008940}
 
+\begin{table}[tb]
+    \caption{Important functions}
+    \label{fig:figurename}
+    \begin{center}
+        \begin{tabular}{p{6cm}|p{6cm}}
+        \hline
+Signature length  & Horizontal position  \\ \hdashline[0.5pt/3pt]
+Vertical position  & Normal pressure  \\ \hdashline[0.5pt/3pt]
+Path tangent angle & Initial direction Total velocity \\ \hdashline[0.5pt/3pt]
+x velocity & y velocity \\ \hdashline[0.5pt/3pt]
+Total acceleration & Pen elevation \\ \hdashline[0.5pt/3pt]
+x acceleration & y acceleration \\ \hdashline[0.5pt/3pt]
+Log radius of curvature Pen azimuth & \\ \hdashline[0.5pt/3pt]
+        \hline
+        \end{tabular}
+    \end{center}
+\end{table}
 
 
 \subsection{Comparison of time series}
 
-The first approach to compare two time signals that comes to mind, might be to use linear correlation \cite{Plamondon1989107} but as soon as the time signals are not of equal length or there is a non-linear distortion, this approach will not be valid anymore. As it is very likely that the same signer's signature will have different dynamics every time he signs, this is not a feasible approach.
+The most simple approach to compare two time signals that comes to mind, might be to use linear correlation \cite{Plamondon1989107} ie by comparing two time series dot by dot and calculating the distance between each pair.
+
+But as soon as the time signals are not of equal length or there is a non-linear distortion, this approach will not be valid anymore. As it is very likely that the same signer's signature will have different dynamics every time he signs, this is not a feasible approach.
 
 We discuss approaches that take these limitations into account in the next two sub-chapters.
 
+
+
+
+
 \subsection{Dynamic Time Warping}
 
-Dynamic Time Warping is a dynamic programming algorithm to measure the similarity between two time series which may vary in time or speed. This has been used for speech recognition and can also be used for signature detection to cope with the non-linear time distortions which one might have in the signals because a signer does not always sign with the same speed. It has shown to be a much more robust distance measure than the Euclidean distance \cite{Keogh:2000:SUD:347090.347153}\cite{1030918}\cite{1227706} due to it's ability to match similar shapes even if they are out of phase in the time axis.
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/dtw-stretch.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+        \quad
+        \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/dtw-distort.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+
+        \caption{DTW allows to match two time series even if they are stretched (left) or distorted (right) }
+        \label{fig:dtw-model}
+\end{figure}
+
+
+
+Dynamic Time Warping is a dynamic programming algorithm to measure the similarity between two time series which may vary in time or speed. This has been used for speech recognition and can also be used for signature detection to cope with the non-linear time distortions which one might see in the signals because a signer does not always sign with the same speed. It has shown to be a much more robust distance measure than the Euclidean distance \cite{Keogh:2000:SUD:347090.347153}\cite{1030918}\cite{1227706} due to it's ability to match similar shapes even if they are out of phase in the time axis.
 
 Koegh et al. showed on a very large dataset that the mean error rate average over 1000 runs for DTW was an order of magnitude lower than the error rate for the Euclidian distance. However, the DTW algorithm also took approximately 230 times longer than the Euclidean distance. \cite{Keogh:2002:EID:1287369.1287405}
 
-It has first been applied to signatures in 1977 by Yasuhara and Oka (TODO: ref).
+It has first been applied to signatures in 1977 by Yasuhara and Oka \cite{yasuhara1977DTW} who concluded that is a very useful approach for online real-time signature verification. Yasuhara and Oka used an adaption of the algorithm that was originally poposed by Sakoe and Chiba \cite{1163055}.
 
 DTW allows us to compare signatures even if the signer was signing slower at the beginning in one of the two signatures.
 
 \textbf{Training} is done by computing the distance measure $dtw[n][m]$ for all signatures $n, m$ in the set of signatures for a certain user and selecting the signature $s$ with the smallest distance to all other signatures.
 
-\textbf{Classification} is done by computing the distance DTW distance $dtw[s][t]$ between the model signature $s$ and a signature $t$ under test.
+\textbf{Classification} is done by computing the distance DTW distance $dtw[s][t]$ between the model signature $s$ and a test signature $t$.
 
+\textbf{Algorithm} We have two Signatures $X,Y$ defined as follows:
 
-\begin{lstlisting}[frame=single,caption={DTW in Pseudo-Code}]
-for i:=maxint to 0 do
-begin
-end
-\end{lstlisting}
+$$X = x_1, x_2, ... , x_i, ... , x_I$$ $$Y = y_1, y_2, ..., y_j, ..., y_J$$
 
-Another short coming of the Euclidean distance is that it is only defined if both time series have equal length, as $e_k = (i,j)_k, i= j = k$. The time and space complexity of DTW is $O(nm)$
+and a distance measure defined as $$d(i,j) = ||x_i - y_i||$$
+
+We define a warping path $C$ as $$ C = c_1, c_2, ..., c_k, ..., c_K $$ where each element $c_k$ correspondes to a combination $(x_i, y_i)$.
+
+The algorithm is initialized with $$g_1 = g(1,1) = d(1,1) * w(1)$$ where $g_k$ is the accumulated distance after $k$ steps and $w(k)$ is a weighting function that has to be defined.
+In each iteration, $g_k$ is computed as $$g_k = g(i,j) = \min\limits_{c_{k-1}} [g_{k-1}+d(c_k) * w(k)]$$ until both Signatures $X,Y$ have been traversed.
+
+The normalized distance of the two signatures is therefore: $$D(X,Y) = \frac{g_K}{\sum_{k=1}^K w(k)}$$ where $\sum w(k)$ compensates the effect of the length of the sequences.
+
+The definitionen of weighting factors $w_k$ defines the matching between the two signatures. The most common definitionen in literature is such that only three types of transitions - deletion, instertion and match - are allowed. The resulting $g_k$ becomes: $$g_k = g(i,j) = \min \left[\begin{array}{c}g(i,j-1) + d(i,j) \\g(i-1,j-1)+ 2 d(i,j) \\g(i-1,j) + d(i,j)\end{array}\right]$$
+
 
 TODO: show image like 10.1007 s10115 page 362
 
@@ -420,7 +845,7 @@ DTW causes heavy computational load becauseit does not obey the triangular inequ
 
 The second drawback can be addressed by looking at how straight or bended the warping path is. A straight warping path indicates that a genuine signature is more likely whereas a curvy warping path indicates a forgery. Work on this has been done \cite{Sato1982} but made comparison between different signatures harder because it introduce another dimension and thus made computation harder and has hence not found wide spread use.
 
-Hao Feng et al. proposed another extension of the DTW algorithm, called extreme points warping (EPW) which proved to be more adaptive in the field of signature verification than DTW and reduced the computation time by a factor of 11. \cite{Feng:2003:OSV:961320.961331}
+Hao Feng et al. proposed another extension of the DTW algorithm, called extreme points warping (EPW) which proved to be more adaptive in the field of signature verification than DTW and reduced the computation time by a factor of 11. \cite{Feng:2003:OSV:961320.961331} Instead of warping the signature as a whole, they only warp so called Extreme Points that are characteristic to a signer's signature and match the curves between those points linearly.
 
 
 
@@ -443,45 +868,130 @@ Hao Feng et al. proposed another extension of the DTW algorithm, called extreme 
 
 \subsection{Hidden Markov models}
 
+% Hidden Markov Models (HMM) have been widely used by the speech recognition community (Ra- biner, 1989) as well as in many handwriting recognition applications (Dolfing, 1998). Sev- eral approaches using HMMs for dynamic signature verification have been proposed in the last years (Dolfing et al., 1998; Fierrez et al., 2007; Muramatsu and Matsumoto, 2003; Van et al., 2007; Yang et al., 1995). An HMM represents a double stochastic process, governed by an underlying Markov chain, with a finite number of states and random function set that gen- erate symbols or observations each of which is associated with one state (Yang et al., 1995). Observations are modeled with GMMs in most speech and handwriting recognition applica- tions. GMMs, which can be considered a single-state HMM, have been also successfully used for signature verification (Richiardi and Drygajlo, 2003).
+
 A Hidden Markov Model (HMM) is a stochastic process with an underlying Markov Model of which the states can not directly be observed but the only observations can be made. Each state transition emits a certain observation with a certain probability.
 
-While HMMs with a too small set of states and observations perform bad because they are too simple, too many states and observations make the model computational heavy and accuracy is reduced because of overfitting.
+Other than with a Markov Model, the states of a Hidden Markov Model can not directly be observed. Only Symbols, which are emitted from each state with a certain probability, can be observeed.
 
-HMMs are defined by:
-\begin{itemize}
-\item Number of hidden states: $N$
-\item Number of Observations or Symbols: $M$
-\item Probability transition matrix $A = \{a_{ij}\}$ defining the probabilities fo jumping from one state to another or staying on the same state
-\end{itemize}
 
-TODO: Add Image of how HMM looks
 
 Markov Models can be modeled as Left-to-right, ... (TODO: name all types, show graph).
 
 
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/hmm-ltr1.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+        \quad
+        \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/hmm-ltr2.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+
+        ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
+          %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/hmm-ltr3.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+        \quad
+        \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/hmm-ltr5.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+
+        \begin{subfigure}[b]{0.30\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/hmm-ltr4.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+
+
+
+        \caption{Different Markov Models: a: ...}\label{fig:markov-models}
+\end{figure}
+
+
+
+While HMMs with a too small set of states and observations perform bad because they are too simple, too many states and observations make the model computational heavy and accuracy is reduced because of overfitting.
+
+There are three fundamental problems for HMMs:
+Given the model parameters and observed data, estimate the optimal sequence of hidden states.
+Given the model parameters and observed data, calculate the likelihood of the data.
+Given just the observed data, estimate the model parameters.
+The first and the second problem can be solved by the dynamic programming algorithms known as the Viterbi algorithm and the Forward-Backward algorithm, respectively. The last one can be solved by an iterative Expectation-Maximization (EM) algorithm, known as the Baum-Welch algorithm.
+
+
+Baum-Welch-Algorithm
+
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=\textwidth]{figures/hmm-general-model.eps}
+    \end{center}
+    \caption{General representation of an HMM with states $w_1, w_2, 2_3, ...$ and observations $v_1, v_2, v_3, ...$}
+    \label{fig:hmm-general-model}
+\end{figure}
+
+\textbf{Algorithm}: An HMM is defined by the following elements:
+
+The HMM consists of $N$ states $w_1, w_2, ..., w_N$, each of which cannot be directly observed. Each of the states emits a symbol at time $t$ which can be observed. Therefore, after going through $T$ time steps, the System emits the sequence $$V^T = \{ v(1), v(2), ..., v(T)\}$$
+
+The probabilities to go from one state to another are given by the Transition matrix $A$ with elements $$a_{ij} = P(w_j(t+1)|w_i(t))$$
+
+The probability that a system is a certain state when an certain symbol is observed, is defined by the emission matrix $B$ with elements
+$$b_j(v(t)) = P(v(t)|w_j(t))$$
+
+$A$ and $B$ fulfill the normalisation condition:
+$$\sum_k b_j(k) = 1, \sum_{j=1}^{N} a_{ij} = 1$$
+
+
+$\pi$ defines the initial probability distribution for a csystem to be in a certain state.
+
+To summarize, an HMM is defined by the transition matrix $A$, the emission matrix $B$ and the initial distribution $\pi$.
+
+
+Therefore,
+
+\begin{itemize}
+\item Number of (hidden) States: $N$
+\item Number of Symbols per State: $M$
+\item Probability transition matrix $A = \{a_{ij}\}$ which defines the probability of going from one state to any other state or itself and holds $\sum_{j=1}^{N} a_{ij} = 1$ for all states $i$
+\end{itemize}
+
+
+
+\textbf{Training}:
+
+
+
+
+
+
+% Finding a reliable and robust model structure for dynamic signature verification is not a trivial task. While too simple HMMs may not allow to model properly the user signatures, too complex models may not be able to model future realizations due to overfitting. On the other hand, as simple models have less parameters to be estimated, their estimation may be more robust than for complex models.
 
 
 % El-Yacoubi [17] uses HMMs and the cross-validation princi- ple for random forgery detection. A grid is superimposed on each signature image, segmenting it into local square cells. From each cell, the pixel density is computed so that each pixel density represents a local feature. Each signature im- age is therefore represented by a sequence of feature vectors, where each feature vector represents the pixel densities asso- ciated with a column of cells. The cross-validation principle involves the use of a subset (validation set) of each writer’s training set for validation purposes. Since this system aims to detect only random forgeries, subsets of other writers’ train- ing sets are used for impostor validation. Two experiments are conducted on two independent data sets, where each data set contains the signatures of 40 and 60 writers, respectively. Both experiments use 20 genuine signatures for training and 10 for validation. Both experiments use the forgeries of the first experiment for impostor validation. Each test signature is analyzed under several resolutions and the majority-vote rule is used to make a decision. AERs of 0.46% and 0.91% are reported for the respective data sets.
 % Justino [18] uses a discrete observation HMM to detect random, casual, and skilled forgeries. A grid segmentation scheme is used to extract three features: a pixel density fea- ture, a pixel distribution feature (extended-shadow-code), and an axial slant feature. A cross-validation procedure is used to dynamically define the optimal number of states for each model (writer). Two data sets are used. The first data set contains the signatures of 40 writers with 40 genuine signa- tures per writer. This data set is used to determine the opti- mal codebook size for detecting random forgeries. This op- timised system is then used to detect random, casual, and skilled forgeries in a second data set. The second data set contains the signatures of 60 writers with 40 training signa- tures, 10 genuine test signatures, 10 casual forgeries, and 10 skilled forgeries per writer. An FRR of 2.83% and an FAR of 1.44%, 2.50%, and 22.67% are reported for random, casual, and skilled forgeries, respectively.
 
 
-% In the prob- abilistic framework, like in the Hidden Markov formalism (HMM) [16, 5, 7, 18], the distance is actually the likelihood of the observation (the signature to verify) given a statis- tical model of the signer. In all cases, the difficulty is to determine a threshold that allows taking the decision. In- deed, in an operational verification system, it is not possible to record forgeries of each new client to build a decision frontier. The only way to evaluate such a threshold is to ex- ploit the availability of some forgeries associated to genuine signatures that are already stored in a database, in order to infer a decision function. This explains why very few dis- criminating methods like neural networks have been used to solve signature verification [2, 13, 9].
 
-% Although our results, obtained on a rather diffi- cult database (given to us by Philips, for research purposes) were rather good, we considered them unsatisfactory for two reasons. First, our HMM approach did not permit us to introduce global parameters, like signature length, speed auto-correlation, etc... Second, as previously mentioned, we found that the FR (False Rejection) rate was rather high due to the fact that the HMM is not trained on counter-examples.
+% \subsection{Neural networks}
 
-
-% Hidden Markov Models (HMM) have been widely used by the speech recognition community (Ra- biner, 1989) as well as in many handwriting recognition applications (Dolfing, 1998). Sev- eral approaches using HMMs for dynamic signature verification have been proposed in the last years (Dolfing et al., 1998; Fierrez et al., 2007; Muramatsu and Matsumoto, 2003; Van et al., 2007; Yang et al., 1995). An HMM represents a double stochastic process, governed by an underlying Markov chain, with a finite number of states and random function set that gen- erate symbols or observations each of which is associated with one state (Yang et al., 1995). Observations are modeled with GMMs in most speech and handwriting recognition applica- tions. GMMs, which can be considered a single-state HMM, have been also successfully used for signature verification (Richiardi and Drygajlo, 2003).
-
-% more: p13++ Martinez08
-
-% Finding a reliable and robust model structure for dynamic signature verification is not a trivial task. While too simple HMMs may not allow to model properly the user signatures, too complex models may not be able to model future realizations due to overfitting. On the other hand, as simple models have less parameters to be estimated, their estimation may be more robust than for complex models.
-
-
-\subsection{Neural networks}
-
-Neural networks have also been used to build a system for detection of random forgeries. (TODO: explain random forgeries, list reference Baltzakis)
-Baltzakis uses global features, grid features such as pixel densities and texture features such as cooccurrence matrices to represent each signature. A two-stage perceptron one-class-one-network (OCON) calssification is used for each feature set.
-TODO: explain more when reference found
+% Neural networks have also been used to build a system for detection of random forgeries. (TODO: explain random forgeries, list reference Baltzakis)
+% Baltzakis uses global features, grid features such as pixel densities and texture features such as cooccurrence matrices to represent each signature. A two-stage perceptron one-class-one-network (OCON) calssification is used for each feature set.
+% TODO: explain more when reference found
 
 
 
@@ -492,10 +1002,7 @@ TODO: explain more when reference found
 
 
 
-
-
-
-\subsection{Template matching techniques}
+% \subsection{Template matching techniques}
 
 % Deng [7] developed a system that uses a closed contour trac- ing algorithm to represent the edges of each signature with several closed contours. The curvature data of the traced closed contours are decomposed into multiresolutional sig- nals using wavelet transforms. The zero crossings corre- sponding to the curvature data are extracted as features for matching. A statistical measurement is devised to decide sys- tematically which closed contours and their associated fre- quency data are most stable and discriminating. Based on these data, the optimal threshold value which controls the ac- curacy of the feature extraction process is calculated. Match- ing is done through dynamic time warping. Experiments are conducted independently on two data sets, one consisting of English signatures and the other consisting of Chinese sig- natures. For each experiment, twenty-five writers are used with ten training signatures, ten genuine test signatures, ten skilled forgeries, and ten casual forgeries per writer. When only the skilled forgeries are considered, AERs of 13.4% and 9.8% are reported for the respective data sets. When only the casual forgeries are considered, AERs of 2.8% and 3.0% are reported.
 % Fang [9] proposes two methods for the detection of skilled forgeries. These methods are evaluated on a database of 1320 genuine signatures from 55 writers and 1320 forg- eries from 12 forgers. In determining the FRR, the leave- one-out method was adopted to maximise the use of the available genuine signatures. The first method calculates one- dimensional projection profiles for each signature in both the horizontal and vertical directions. These profiles are then op- timally matched with reference profiles using dynamic pro- gramming. This method differs from previous methods in the sense that the distance between the warped projection profiles is not used in the decision. Instead, the positional distortion of each point of the sample profile, when warped onto a reference profile, is incorporated into a distance mea- sure. A Mahalanobis distance is used instead of a simple Euclidean distance. The leave-one-out covariance (LOOC) method is adopted for this purpose, but the unreliable off- diagonal elements of the covariance matrices are set to zero. When binary and gray-scale signatures are considered, the best AERs for this method are 20.8% and 18.1%, respectively. The second method matches the individual stroke segments of a two-dimensional test signature directly with those of a template signature using a two-dimensional elastic match- ing algorithm. The objective of this algorithm is to achieve maximum similarity between the “elements” of a test signa- ture and the “elements” of a reference signature, while min- imising the deformation of these signatures. A gradient de- scent procedure is used for this purpose. Elements are short straight lines that approximate the skeleton of a signature. A
@@ -503,7 +1010,7 @@ TODO: explain more when reference found
 % Guo [11] approached the offline problem by establish- ing a local correspondence between a model and a ques- tioned signature. The questioned signature is segmented into consecutive stroke segments that are matched to the stroke segments of the model. The cost of the match is deter- mined by comparing a set of geometric properties of the corresponding substrokes and computing a weighted sum of the property value differences. The least invariant fea- tures of the least invariant substrokes are given the largest weights, thus emphasizing features that are highly writer de- pendant. Using the local correspondence between the model and a questioned signature, the writer dependant informa- tion embedded at the substroke level is examined and un- ballistic motion and tremor information in each stroke seg- ment are examined. Matching is done through dynamic time warping. A database with 10 writers is used with 5 train- ing signatures, 5 genuine test signatures, 20 skilled forgeries, and ten casual forgeries per writer. An AER of 8.8% is ob- tained when only skilled forgeries are considered and an AER of 2.7% is obtained when only casual forgeries are consid- ered.
 
 
-\subsection{Minimum distance classifiers}
+% \subsection{Minimum distance classifiers}
 
 % Fang [10] developed a system that is based on the assump- tion that the cursive segments of forged signatures are gener- ally less smooth than that of genuine ones. Two approaches are proposed to extract the smoothness feature: a crossing method and a fractal dimension method. The smoothness feature is then combined with global shape features. Verifi- cation is based on a minimum distance classifier. An itera- tive leave-one-out method is used for training and for testing genuine test signatures. A database with 55 writers is used with 24 training signatures and 24 skilled forgeries per writer. An AER of 17.3% is obtained.
 % Fang [14] also developed a system that uses an elastic matching method to generate additional samples. A set of peripheral features, which is useful in describing both the in- ternal and the external structures of signatures, is employed to represent a signature in the verification process. Verifica- tion is based on a Mahalanobis distance classifier. An itera- tive leave-one-out method is used for training and for test- ing genuine test signatures. The same database that was used in Fang’s previous paper [10] is again used here. The addi- tional samples generated by this method reduced the AER from 15.6% to 11.4%.
@@ -517,38 +1024,38 @@ TODO: explain more when reference found
 
 
 
-\section{Online Signature Detection}
-% Online signature verification methods are generally categorized to either use global or local features to classify a given signature
+% \section{Online Signature Detection}
+% % Online signature verification methods are generally categorized to either use global or local features to classify a given signature
 
-% ==
+% % ==
 
-% On-line or dynamic systems use captured signature time-functions. These functions are obtained using digitizer tablets or touchscreens (e.g. Tablet-PCs, smart phones, etc.). Tradition- ally, dynamic systems have presented a better performance than off-line systems as more levels of information than the signature static image are available (Plamondon and Lorette, 1989). This is the approach considered in this work, and will be described in the following chapters.
+% % On-line or dynamic systems use captured signature time-functions. These functions are obtained using digitizer tablets or touchscreens (e.g. Tablet-PCs, smart phones, etc.). Tradition- ally, dynamic systems have presented a better performance than off-line systems as more levels of information than the signature static image are available (Plamondon and Lorette, 1989). This is the approach considered in this work, and will be described in the following chapters.
 
-% Feature Extraction: Two main approaches have been followed in this step: feature- based systems extract global features (e.g. signature duration, number of pen-ups, average velocity) from the signature in order to obtain a holistic feature vector (Lee et al., 1996). On the other hand, function-based systems use the signature time functions (e.g. position, pressure) for verification. Traditionally, function-based approaches have yielded better results than feature-based ones (Fierrez-Aguilar et al., 2005a; Kholmatov and Yanikoglu,
-2005).
-
-
-\subsection{Feature-Based Methods}
-% As the name suggests, feature-based methods use features extracted from the sig- natures to perform the verification task. In general two different types of features are considered: global and local. Global features are related to the signature as a whole, for instance the signature duration or the mean pressure applied. Local features are based on single sample points. Examples for local features are the maximum velocity or the highest curvature.
-
-% Lee et al. [5].
-
-% A large number of features useful for signature verification was listed by Fierrez-Aguilar et al. [6].
-
-% This is why in general a smaller set of more discriminative features is preferred. The issue of feature selection in the signature verification task was extensively studied by Richiardi et al. [7].
-
-% After having found a suitable feature vector, an arbitrary one-class classifi- cation scheme can be used to perform the classification into valid and invalid signatures. Since there is no negative training data available, the task of classifi- cation is very similar to the task of outlier- or novelty detection. Several methods to perform such a classification are known [8].
+% % Feature Extraction: Two main approaches have been followed in this step: feature- based systems extract global features (e.g. signature duration, number of pen-ups, average velocity) from the signature in order to obtain a holistic feature vector (Lee et al., 1996). On the other hand, function-based systems use the signature time functions (e.g. position, pressure) for verification. Traditionally, function-based approaches have yielded better results than feature-based ones (Fierrez-Aguilar et al., 2005a; Kholmatov and Yanikoglu,
+% 2005).
 
 
+% \subsection{Feature-Based Methods}
+% % As the name suggests, feature-based methods use features extracted from the sig- natures to perform the verification task. In general two different types of features are considered: global and local. Global features are related to the signature as a whole, for instance the signature duration or the mean pressure applied. Local features are based on single sample points. Examples for local features are the maximum velocity or the highest curvature.
+
+% % Lee et al. [5].
+
+% % A large number of features useful for signature verification was listed by Fierrez-Aguilar et al. [6].
+
+% % This is why in general a smaller set of more discriminative features is preferred. The issue of feature selection in the signature verification task was extensively studied by Richiardi et al. [7].
+
+% % After having found a suitable feature vector, an arbitrary one-class classifi- cation scheme can be used to perform the classification into valid and invalid signatures. Since there is no negative training data available, the task of classifi- cation is very similar to the task of outlier- or novelty detection. Several methods to perform such a classification are known [8].
 
 
-\subsection{Function-Based Methods}
 
-% Function-based signature verification methods are focused on building a signa- ture model which accurately reflects the temporal behaviour of the signature. Instead of extracting features that are used for verification, the emphasis of the signature model lies in the (timed) sequence of strokes drawn during the signing process. Comparing any signature to the model built during training will lead to a match score which is based on the level of similarity between (timed) sequence of strokes in the model and the signature under test. Function-based methods are reported to deliver better performance than global feature based methods [6]. Two function-based methods are predominant in the literature: Hidden Markov Model based methods and Dynamic Time Warping (DTW) based methods.
 
-% page 6-8 for sample feature set
+% \subsection{Function-Based Methods}
 
-% Function-based methods to perform signature verification compare the tempo- ral behaviour of the recorded signals x(t), y(t), p(t) and a(t). In this work, a dynamic time warping based method is used. The performance of a Hidden Markov Model system might be higher than the DTW system performance but the implementation complexity is much lower for the DTW system.
+% % Function-based signature verification methods are focused on building a signa- ture model which accurately reflects the temporal behaviour of the signature. Instead of extracting features that are used for verification, the emphasis of the signature model lies in the (timed) sequence of strokes drawn during the signing process. Comparing any signature to the model built during training will lead to a match score which is based on the level of similarity between (timed) sequence of strokes in the model and the signature under test. Function-based methods are reported to deliver better performance than global feature based methods [6]. Two function-based methods are predominant in the literature: Hidden Markov Model based methods and Dynamic Time Warping (DTW) based methods.
+
+% % page 6-8 for sample feature set
+
+% % Function-based methods to perform signature verification compare the tempo- ral behaviour of the recorded signals x(t), y(t), p(t) and a(t). In this work, a dynamic time warping based method is used. The performance of a Hidden Markov Model system might be higher than the DTW system performance but the implementation complexity is much lower for the DTW system.
 
 
 
@@ -592,6 +1099,26 @@ Unlike the signature's that are captured on a digital tablet, our database of si
 We will consider these factors when applying our algorithm in Chapter X (TODO)
 
 
+\section{Feedback Loop}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER EXPERIMENTS
 \chapter{Experiments}
@@ -603,47 +1130,100 @@ We will consider these factors when applying our algorithm in Chapter X (TODO)
 % Circle Detection?
 % X Detection?
 
+Section \ref{sec:exp-preventive} will give insight into how our work has affected the number of false positives and thus the manual inputs from Operations have changed since the new component was released.
 
-\section{Database}
+Section \ref{sec:exp-reactive} will first introduce the database of signatures we collected to test our signature verification algorithms and afterwards show the equal error rate (EER) achieved in different scenarios.
 
 
-\subsection{Acquisition}
+\section{Preventive Fraud Detection}
+\label{sec:exp-preventive}
 
-Between 8 and 80 Signatures per person were collected from 11 people on 4 different days on four different devices. In total, a set of 487 (TODO: correct) signatures and X Forgeries were collected.
+The algorithms described in Listing \ref{lst:world-check-parse} and Listing \ref{lst:world-check-lookup} were implemented in a Ruby Sinatra app with a REST interface and released to production about 2 months prior to the submission of this thesis.
 
-The devices used to collect the signatures are listed in Table X (TODO: ref).
+\subsection{Setup}
+
+The full database was parsed on a testing environment and the resulting data was copied over into production. The daily updates are received on the production machine and directly parsed into the production database through the parsing script.
+
+The PEP/HRA check is performed either automatically or manually:
+\begin{itemize}
+\item \textbf{Automatically} for each new user during sign-up
+\item \textbf{Automatically} for each existing user once a week to re-check each account after incorporating the changes of that week
+\item \textbf{Manually} from the Operations Admin Panel (OAP) via a button
+\end{itemize}
+
+Each request must be triggered via a POST request. Depending on the user object that needs to be checked, the body of the request changes. Table \ref{tbl:har-pep-requests} lists the different request types.
 
 \begin{table}[tb]
-    \caption{The four devices used to collect signatures, ordered by screen size}
-    \label{fig:figurename}
     \begin{center}
-        \begin{tabular}{l|cccc}
+        \begin{tabular}{p{1.75cm}|p{3cm}p{7cm}}
         \hline
-
+        \textbf{Method} & \textbf{Path} & \textbf{Parameter} \\
         \hline
-        \textbf{Device} & \textbf{Software Version} & \textbf{Screen Size [cm]} & \textbf{Screen Resolution [px]} & \textbf{Pixel Density [ppi} \\
-        \hline
-        Apple iPhone 4s & iOS 6.1.2 & 8.9 & 640x960 & 326 \\
-        \hline
-        Apple iPhone 5 & iOS 6.1.2 & 10 & 640x1136 & 326 \\
-        \hline
-        Samsung Galaxy Note II & Android 4.1.1 & 14.1 & 720x1280 & 267 \\
-        \hline
-        Apple iPad mini & iOS 6.1.2 & 20 & 768x1024 & 163\\
-        \hline
-
+        POST & /person/check & \{"params": \{"user\_id": "1"\}\} \\ \hdashline[0.5pt/3pt]
+        POST & /person/check & \{"params": \{"business\_owner\_id": "1"\}\} \\ \hdashline[0.5pt/3pt]
+        POST & /person/check & \{"params": \{"business\_officer\_id": "1"\}\} \\
         \hline
         \end{tabular}
     \end{center}
+    \label{tbl:har-pep-requests}
+    \caption{The requests received by the PEP/HAR component}
 \end{table}
 
-\subsection{Pre-Alignment and Normalization}
+\subsection{Results}
 
-\section{Databases}
+Show how many false positives/false negatives were collected before switch to new component and after switch.
+
+
+
+
+\section{Reactive Fraud Detection}
+\label{sec:exp-reactive}
+
+\subsection{Database}
+
+As there don't seem to be any publicly available databases of signatures that were collected with a finger on a mobile device, we collected our own database and forgeries.
+
+Between 8 and 80 Signatures per person were collected from 11 people on 4 different days on four different devices. In total, a set of 487 signatures was collected.
+
+The devices used to collect the signatures are listed in Table \ref{tbl:signatures-devices}.
+
+\begin{table}[tb]
+    \begin{center}
+        \begin{tabular}{p{1.75cm}|p{2cm}p{2cm}p{2cm}p{2cm}}
+        \hline
+
+        \hline
+        \textbf{Device} & \textbf{Software Version} & \textbf{Screen Size [cm]} & \textbf{Screen Resolution [px]} & \textbf{Pixel Density [ppi]} \\
+        \hline
+        Apple iPhone 4s & iOS 6.1.2 & 8.9 & 640x960 & 326 \\
+        \hdashline[0.5pt/3pt]
+        Apple iPhone 5 & iOS 6.1.2 & 10 & 640x1136 & 326 \\
+        \hdashline[0.5pt/3pt]
+        Samsung Galaxy Note II & Android 4.1.1 & 14.1 & 720x1280 & 267 \\
+        \hdashline[0.5pt/3pt]
+        Apple iPad mini & iOS 6.1.2 & 20 & 768x1024 & 163\\
+        \hline
+        \end{tabular}
+    \end{center}
+    \label{tbl:signatures-devices}
+    \caption{The four devices used to collect signatures, ordered by screen size}
+\end{table}
+
+We also collected three forgeries for each person. The forgeries were created by an untrained person in the following modi.
+
+\begin{itemize}
+\item \textbf{Spontaneous Forgery}: A random signature from the set of one person's signatures was shown the imposter for 5 secs. The imposter was only allowed to forge the signature after the five seconds.
+\item \textbf{Sample Forgery}: A random signature from the set of one person's signatures was shown to the imposter for an indefinite amount of time and the imposter was able to look at the signature while forging the signature.
+\item \textbf{Knowledgable Forgery}: The imposter had unlimited access to all of one person's signatures to forge the signature.
+\end{itemize}
+
+\subsubsection{Pre-Alignment and Normalization}
+
+% \section{Databases}
 % most available signature DB are pen/tablet signatures
 
 
-\section{Forgeries}
+\subsection{Forgeries}
 % A signature verification system typically focuses on the detection of one or more category of forged signatures. A skilled forgery is produced when the forger has unrestricted
 % access to one or more samples of the writer’s actual signa- ture (see Figure 1b). A casual forgery or a simple forgery (see Figure 1c) is produced when the forger is familiar with the writer’s name, but does not have access to a sample of the ac- tual signature—stylistic differences are therefore prevalent. A random forgery or zero-effort forgery (see Figure 1d) can be any random scribble or a signature of another writer, and may even include the forger’s own signature. The genuine signatures and high quality forgeries for other writers are usually considered to be forgeries of this type.
 % Skilled forgeries can be subdivided into amateur and pro- fessional forgeries. A professional forgery is produced by an in- dividual who has professional expertise in handwriting anal- ysis. They are able to circumvent obvious problems and ex- ploit their knowledge to produce high-quality, spacial forg- eries (see Figure 2b).
@@ -675,9 +1255,9 @@ The devices used to collect the signatures are listed in Table X (TODO: ref).
 
 
 
-\section{Recognition}
+\subsection{Experiment Setup}
 
-\subsection{Feature Extraction}
+\subsubsection{Feature Extraction}
 
 % From 01030918.pdf:
 % Like in [2], in order to estimate the speed at time 􏰥, we consider the point visited at time 􏰥, 􏰖 􏰶􏰥􏰷 􏰭 􏰶􏰨􏰶􏰥􏰷􏰈 􏰩 􏰶􏰥􏰷􏰷 and its two neighbors in the se-
@@ -689,10 +1269,12 @@ The devices used to collect the signatures are listed in Table X (TODO: ref).
 % include also for motion direction 􏰂􏰶􏰥􏰷 and Æ 􏰂􏰶􏰥􏰷 under the form of their cosine and sine.1 Besides these 5 dynamic features, we keep the axial pressure and the pen-tilt. Fur- thermore, following the principle in [11], we extract a low resolution image (of 9 values) around each point in order to introduce spatial information. As shown in Fig. 1, a 􏰺 􏰱 􏰺 window centered on each point of this sequence permits to compute a ”context bitmap” as follows: when the window is centered on a pen-down, the number of pen-down points in each of the 9 rectangles are computed; when the win- dow is centered on a pen-up, the 9 values representing the low resolution image of spatial context are all set to zero. This permits to introduce rough variations in such parame- ters when a pen-up appears in the sequence. The window shifts along the trajectory described by the pen, point per point. Therefore, 17 parameters are extracted on each point of the sequence: 8 dynamic and 9 static.
 
 
-\subsection{Dynamic Time Warping}
+\subsubsection{Dynamic Time Warping}
 
 
-\subsection{Hidden Markov Models}
+\subsubsection{Hidden Markov Models}
+
+list different packages that are available and why we chose to work with matlab
 
 \subsubsection{Model}
 
@@ -709,7 +1291,7 @@ The devices used to collect the signatures are listed in Table X (TODO: ref).
 % As in [4], signature verification for signer 􏰠 was first per-formed using an adaptive threshold 􏰆 􏰮􏰞􏰮􏰣􏰥 􏰶􏰠􏰷 􏰭 􏰴􏰡 􏰶􏰠􏰷 􏰰 􏰨 where 􏰴􏰡 􏰶􏰠􏰷 denotes the average normalized log-likelihood score on the training database of signer 􏰠 and 􏰨 denotes an offset that is common to all signers. The decision is made on whether the pretended signature of signer 􏰠 is authentic or forged comparing the normalized log-likelihood score to this threshold. Two types of error are characteristic of the signature verification problem: false rejection (􏰏 􏰗 ), that is when an authentic signature is rejected, and false accep- tance (􏰏 􏰋), that is when a forgery is accepted. The level of these two error rates depends on the offset chosen; tradition- ally, the value of 􏰨 is chosen such as to realize the Equal Er- rorRate􏰎 􏰎 􏰗 (􏰏 􏰋 􏰭 􏰏 􏰗 ).Inordertoestimatetheoffset, we minimize the quadratic criterion 􏰶􏰏 􏰋􏰶􏰨􏰷 􏰰 􏰏 􏰗 􏰶􏰨􏰷􏰷 􏰬 on 􏰌 􏰋 (2330 signatures), which contains only genuine signa- tures and forgeries from signers of 􏰘 􏰫 (see Table 1). Then, we test the decision threshold on 􏰌 􏰙 (1365 signatures - same scheme for signers of 􏰘 􏰬 ).
 
 
-\subsection{MLP}
+% \subsection{MLP}
 % http://en.wikipedia.org/wiki/Multilayer_perceptron
 
 % In opposition to the sequential and generative approach characteristic of the HMM expert, we have privileged here, for more complementarity, a discriminating model based on global features. Table 4 presents these features. No pre- liminary filtering was necessary for computing these fea- tures because the noise effect was neglectable since they result of a summation over the entire signature. Vari- ables􏰦 􏰨 􏰈 􏰦􏰩 􏰈 􏰂􏰈 Æ 􏰂􏰈 􏰄􏰨 and􏰄 􏰩 havebeenpreviouslydefined in sections 3.1 and 3.2. The four histograms (parameters 11-26) of Table 4 count the angles (􏰂􏰈 Æ 􏰂􏰈 􏰄 􏰨 􏰈 􏰄􏰩 ) which be- long to quadrants 1,2,3,4. This choice of features seems to be discriminant, according to [6], even if the importance of a feature depends strongly on the signer. This number of features may seem important, but as we deal with a great number of signers we need several features to characterize the signers’ variability. Moreover, our learning procedure
@@ -744,11 +1326,13 @@ The devices used to collect the signatures are listed in Table X (TODO: ref).
 
 
 \section{Discussion and conclusions}
+
 \subsection{Signature Detection}
 
 \subsection{Feedback Loop}
 
-\subsection{Feature Work}
+\subsection{Future Work}
+
 - use lower bound proposed by Keogh et al.\cite{Keogh:2002:EID:1287369.1287405} to make DTW faster on large datasets
 
 

@@ -225,9 +225,6 @@ INPUT figures/flow6.png
 INPUT ./figures/flow6.png
 INPUT ./figures/flow6.png
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
-INPUT figures/fraud-literature-count.png
-INPUT ./figures/fraud-literature-count.png
-INPUT ./figures/fraud-literature-count.png
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT figures/dtw-stretch.eps
 INPUT ./figures/dtw-stretch.eps

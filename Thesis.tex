@@ -232,21 +232,11 @@ Instead of building and selling expensive hardware, the only hardware required -
 Payment through SumUp gives taxi drivers, market traderrs and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advante, in that mobile payments can now be processed right on the spot and without an initial financial investment.
 
 
-Processing a transaction with SumUp can be described with six simple steps as depicted in Fig \ref{fig:flow-customer} and \ref{fig:flow-merchant}.
-
-\begin{enumerate}
-    \item Once the merchant has registered a SumUp Account and handed in identification documents, he receives a free card reader and can accept payments.
-    \item The purchase amount can be entered manually into the app or via pre-determined product categories (Fig \ref{fig:flow1})
-    \item Debit cards and credit cards like Visa and MasterCard are all supported and can be chosen by clicking on the respective image. (Fig \ref{fig:flow2})
-    \item Once plugged in, the card reader confirms that it is ready to read a card. (Fig \ref{fig:flow3})
-    \item After reading the card, the app shows a confirmation of the card type and number. (Fig: \ref{fig:flow4})
-    \item The customer confirms the transaction with a signature written onto the screen of the smartphone or tablet. (Fig: \ref{fig:flow5})
-    \item After successful completion, the customer can have the receipt sent to their email account or via SMS to their phone. (Fig: \ref{fig:flow6})
-\end{enumerate}
+Processing a transaction with SumUp can be described with six simple steps as depicted in Fig \ref{fig:flow-customer}.
 
 \begin{figure}
         \centering
-        \begin{subfigure}[b]{0.22\textwidth}
+        \begin{subfigure}[b]{0.12\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow1.png}
                 % \caption{Merchant enters amount nto digital cash register}
@@ -254,46 +244,54 @@ Processing a transaction with SumUp can be described with six simple steps as de
         \end{subfigure}%
         ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
           %(or a blank line to force the subfigure onto a new line)
-        \begin{subfigure}[b]{0.22\textwidth}
+        \begin{subfigure}[b]{0.12\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow2.png}
                 % \caption{Merchant chooes the payment method}
                 \label{fig:flow2}
         \end{subfigure}
-        \begin{subfigure}[b]{0.22\textwidth}
+        \begin{subfigure}[b]{0.12\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow3.png}
                 % \caption{Once the card reader has been plugged in, the device is ready to read a card}
                 \label{fig:flow3}
         \end{subfigure}
-        \begin{subfigure}[b]{0.22\textwidth}
+        \begin{subfigure}[b]{0.12\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow4.png}
                 % \caption{Card is recognized and shown on the screen}
                 \label{fig:flow4}
         \end{subfigure}
-
-        \begin{subfigure}[b]{0.5\textwidth}
+        \begin{subfigure}[b]{0.2\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow5.png}
                 % \caption{Customer signs and thereby confirms transaction}
                 \label{fig:flow5}
         \end{subfigure}
-        \begin{subfigure}[b]{0.22\textwidth}
+        \begin{subfigure}[b]{0.12\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow6.png}
                 % \caption{Customer can choose to receive a receipt via email or text}
                 \label{fig:flow6}
         \end{subfigure}
-        \caption{In-App Flow during a Transaction from step 2 (top left) to step 7 (lower right)}\label{fig:flow-customer}
+        \caption{In-App Flow during a Transaction from step 1 to step 6 (from left to right)}\label{fig:flow-customer}
 \end{figure}
 
+\begin{enumerate}
+\setcounter{enumi}{-1}
+    \item Once the merchant has registered a SumUp Account and handed in identification documents, he receives a free card reader and can accept payments.
+    \item The purchase amount can be entered manually into the app or via pre-determined product categories %(Fig \ref{fig:flow1})
+    \item Debit cards and credit cards like Visa and MasterCard are all supported and can be chosen by clicking on the respective image. (Fig %\ref{fig:flow2})
+    \item Once plugged in, the card reader confirms that it is ready to read a card. %(Fig \ref{fig:flow3})
+    \item After reading the card, the app shows a confirmation of the card type and number. %(Fig: \ref{fig:flow4})
+    \item The customer confirms the transaction with a signature written onto the screen of the smartphone or tablet. %(Fig: \ref{fig:flow5})
+    \item After successful completion, the customer can have the receipt sent to their email account or via SMS to their phone. %(Fig: \ref{fig:flow6})
+\end{enumerate}
 
-On the server side, a variety of Fraud checks are performed and the transaction is either accepted or declined. The signature detection developed during this work will likely be implemented as an additional security measurement on the server side.
 
-Besides it's simplicity and low setup time and cost, SumUp's advantage over its competitors is that it only collects a fixed percentage per transaction of 2.75\%.
+Depending on the Authorization method, there's a variety of calls to the SumUp backend from there to other components of the transaction authorization chaing, including acquirers, banks and credit card institutions. One of the internal calls is sent to SumUp's fraud server which performs a variety of checks to decide whether or not the transaction is accepted or declined. There's currently no third party provider for fraud detection in this area and all rules are custom made by each company. The signature is part of the data that is exchanged with the fraud server and the signature verification process as described in Chapter \ref{chp:signature-verification} is an integral part of the  authorization process.
 
-In the long term, SumUp will enable customers to process mobile payments, not just credit card transactions. As listed by the European Payments Council (EPC) \cite{mpwhitepaper}, mobile payments may at one point replace all current Payment Methods for Business-to-Consumer (B2C) transactions as well as Business-to-Business (B2B), Consumer-to-Business (C2B) and Consumer-to-Consumer (C2C) transactions as shown with examples in Table \ref{fig:mp-applications}. The EPC predicts this will happen because the availability and convenience of a mobile device paired with the perception of having full control over it, creates an environment of trust and convenience in which one conducts payments.
+Besides it's simplicity and low setup time and cost, SumUp's advantage over its competitors is that it deducts a relatively low fee per transaction of 2.75\%. From that fee, it also pays the other parties in the value chain. To build a sustainable business model, SumUp will enable customers to also process other types of mobile payments, not just credit card transactions. The Consumer-To-Business credit card transactions will only make up for part of all mobile payment transactions. A long term strategy is to implemen all payment schemes as listed by the European Payments Council (EPC). Mobile payments may at one point replace all current payment methods for Business-to-Consumer (B2C) transactions as well as Business-to-Business (B2B), Consumer-to-Business (C2B) and Consumer-to-Consumer (C2C) transactions as listed with examples in Table \ref{fig:mp-applications}. The EPC predicts this will happen because the availability and convenience of a mobile device paired with the perception of having full control over it, creates an environment of trust and convenience in which one conducts payments. \cite{mpwhitepaper}
 
 
 \begin{figure}
@@ -310,43 +308,12 @@ B2B & Pay for Business Lunch \\ \hline
 \end{figure}
 
 
-
-
-% \subsection{Business Model}
-% Traditional Terminals: High initial cost, high monthly fees, high minimum transaction limits
-
-% => Solution: Use merchant's mobile devices (iOS, Android) to collect accept credit cards
-
-% => Collect fixed percentage per transaction
-
-% on the technical side: multiple operation modes - online transaction (ecom), ... depending on the hardware used
-
-% \subsection{Facts \& Numbers}
-
-% - list countries where sumup is active
-
-% - many thousand merchants to date
-
-%  SUMUP MARKETING EMAIL:
 % So funktioniert SumUp:
-
-% SumUp-App downloaden und registrieren: Laden Sie mit Ihrem Smartphone oder Tablet die kostenlose SumUp App aus dem App Store oder Google Play Store runter und registrieren Sie sich darin. Sobald dies passiert ist, bekommen Sie eine Verifizierungsemail, in der Sie auf den Link klicken müssen, um Ihre Emailadresse zu bestätigen.
-
 % Identifizieren und Kartenleser bekommen: Lassen Sie sich mit dem angehängten Formular per Postident identifizieren und wir schicken Ihnen den kostenlosen SumUp Kartenleser zu.
-
 % Starten: Jetzt können Sie Zahlungen von EC- und Kreditkarte empfangen. Nachdem bereits 40% aller Zahlungen mit Karte getätigt werden, verpassen auch Sie nun kein Geschäft mehr! Ob im heimischen Betrieb oder mobil, kein Spontankauf wird mangels Bargeld ausfallen.
-
 % Geld empfangen: Auszahlungen auf Ihr Konto erfolgen jeden Tag, sobald Sie eine Schwelle von nur 20€ Umsatz erreicht haben.
-
 % Kosten: SumUp berechnet eine Gebühr von 2,75% pro Kartenzahlung. Ohne Vertragslaufzeit, ohne Mindestgebühr, ohne Einrichtungsgebühr, ohne monatliche Kosten.
 
-% Sicherheit: SumUp entspricht allen gängigen Sicherheitsstandards und schützt Ihre Daten und die Ihrer Kunden. PCI- und EMV-Zertifizierungen sowie Codierungsrichtlinien nach OWASP sprechen für uns.
-
-% Sie wollen gleich starten? Dann warten Sie nicht länger und gehören zu den Ersten, die über Ihr Smartphone oder Tablet mobil EC- und Kreditkartenzahlungen akzeptieren können.
-
-% Falls Sie Unterstützung beim Registrierungs-Prozess benötigen, können Sie uns unter 030/609 88 74 44 oder untersupport@sumup.de erreichen.
-
-% Wir freuen uns auf die erfolgreiche Zusammenarbeit und verbleiben mit freundlichen Grüßen
 
 \section{Fraud}
 
@@ -364,13 +331,13 @@ Automatic payment systems are always interesting for attackers due to their dire
 As credit cards are historically a very unsafe payment method, special attention has to be paid when dealing with credit card information and processing credit card transactions. A fact that is reflected by looking at how many papers were written about fraud detection in which area. As shown in Figure \ref{fig:fraud-literature-count}.
 
 
-\begin{figure}[tb]
-    \begin{center}
-        \includegraphics[width=\textwidth]{figures/fraud-literature-count}
-    \end{center}
-    \caption{Number of research papers published on different fraud areas}
-    \label{fig:fraud-literature-count}
-\end{figure}
+% \begin{figure}[tb]
+%     \begin{center}
+%         \includegraphics[width=\textwidth]{figures/fraud-literature-count}
+%     \end{center}
+%     \caption{Number of research papers published on different fraud areas}
+%     \label{fig:fraud-literature-count}
+% \end{figure}
 
 The main attack vectors in credit card fraud are: (TODO: ref paper)
 
@@ -662,6 +629,7 @@ TODO: Add System Topology
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER Signature Recognition
 
 \chapter{Fraud Detection \\Signature Verification}
+\label{chp:signature-verification}
 
 In this chapter, we'll present an overview of existing signature detection methods and available resources.
 

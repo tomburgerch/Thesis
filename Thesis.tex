@@ -360,29 +360,27 @@ It is impossible to be absolutely certain about the legitimacy of a transaction.
 % \end{figure}
 
 
+\section{Signature Verification}
 
-
-\section{Signature Recognition}
-
-Methods for signature detection is usually divded into Online and Offline Methods.
-
-Offline Signature Detection performs recognition algorithms based on static features of a signature, mainly it's shape and length.
-
-Online signature detection has become possible when digital tablets and touchscreens have become widely used and it became feasible to also capture the dynamic features of a signature.
-
-In chapter X (todo: ref) we look at the common techniques in both areas to compare signatures.
-
-Traditionally, digital signatures were captured on a digital tablet with a pen.
-
-\textbf{Signatures captured on mobile devices} are different from existing work because
+Most previous work has been done on signature verification with signatures captured with a pen on paper or on a digital tablet. When a signature was captured on paper, it was afterwards digitalized using a scanner. The dynamic characteristics of a signature are lost in that process and the algorithms that can be applied to the signature information are very different. Therefore it is common to divide signature verification methods into two methods:
 
 \begin{itemize}
-    \item they're capture by finger instead of a pen
-    \item the sampling rate isn't constant as the finger-up/-down are event based
-    \item the signature is captured on screen with different resolutions and densities
+\item \textbf{Offline signature verification} performs recognition algorithms based on static features of a signature, mainly it's shape and length.
+\item \textbf{Online signature verification} performs algorithms on the dynamic features of a signature as well. These include speed, acceleration, angular acceleration, pressure and many more.
 \end{itemize}
 
-We discuss our strategies to overcome these challenges in chapter X (TODO ref).
+Online signature detection has become possible when digital tablets and touchscreens have become widely used and it became feasible to capture the dynamic features of a signature. In Chapter \ref{chp:signature-verification} we look at the common techniques in both areas, offline and online, to verify signatures.
+
+The high accuracy and resolution of current digitizing tablets and smartphone screens allow to capture signature data in high resolution and precision on relatively cheap devices.
+Traditionally, digital signatures were captured on a digital tablet with a pen. Signatures captured by SumUp however, are collected on a variety of mobile devices and have fundamentally different characteristics than signatures captured on a digital tables. The main reasons for these differences are:
+
+\begin{itemize}
+    \item The signatures are captured by finger instead of a pen which is not how people are used to sign. This leads to higher variabilities and less stable signature models.
+    \item Most smartphones don't have a fixed sampling rate but an event-based sampling. Whereas the sampling rate on digitizing tables is constant, the rate in signatures captured on smartphones can vary a lot within one signature.
+    \item The signatures are captured on a lot of different devices with different screen sizes, resolutions, sensor densities and other device specific characteristics.
+\end{itemize}
+
+We discuss our strategies to overcome these challenges in Chapter \ref{chp:signature-verification}.
 
 % How to approach that without the complicated and expensive chip\&pin device?
 

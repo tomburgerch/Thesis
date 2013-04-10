@@ -133,7 +133,7 @@ ETH Zurich}
 % You can put in your own logo here "\includegraphics{...}" or just comment the command
 % \logo{}
 
-\supervisors{Christian Decker\\Conor Wogan (SumUp)\\[2pt] Prof.\ Dr.\ Roger Wattenhofer}
+\supervisors{Christian Decker\\[2pt] Conor Wogan (SumUp)\\[2pt] Prof.\ Dr.\ Roger Wattenhofer}
 
 % You can comment the following two commands if you don't need them
 \keywords{Fraud Detection, Signature Verification, Fraud Detection, Mobile Payments, Dynamic Time Warping, Hidden Markov Models}
@@ -152,7 +152,7 @@ ETH Zurich}
 
 \begin{acknowledgements}
 
-  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Deck from the Institute for distributed computing at ETH Zurich for their help and support in the last months. I also wish to thank Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support and help.
+  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Deck from the Institute for distributed computing at ETH Zurich for their help and support in the last months. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support and help.
 
 \end{acknowledgements}
 
@@ -204,7 +204,7 @@ Authorization of credit card transactions can be done in various ways. Widely us
 
 Although authorization with CAS is a lenghty process with VISA cards in Europe, it is currently the best compromise between speed, cost and usability. SumUp provides merchants with SAS readers or CAS readers based on the merchant's profile. This means that currently, all signatures are authorized by signature. Also with other providers of the same service, authorization by signature stays the predominant way to authorize transactions.
 
-We propose an automatic signature verification system based on global featuers, dynamic time warping (DTW) and hidden markov models (HMM) to make the authorization process more secure. As the signatures which are captured by finger, tend to have a high variability and unstable characteristics, our system has to account for false positive fraud detection. To account for that, we propose a system involving a feedback loop. Using the feedback loop, transactions are still possible even if a cardholder's signature could not be matched to his previous signatures.
+We propose an automatic signature verification system based on global featuers, dynamic time warping (DTW) and hidden markov models (HMM) to make the authorization process more secure. As the signatures which are captured by finger, tend to have a high variability and unstable characteristics, our system has to account for false positive fraud detection. To account for that, we propose a system involving a feedback loop. Using the feedback loop, transactions are still possible even if a cardholder's signature could not be matched to her previous signatures.
 
 
 
@@ -317,18 +317,38 @@ B2B & Pay for Business Lunch \\ \hline
 
 \section{Fraud}
 
-% seeing a lot of traction currently:
-% http://techcrunch.com/2013/03/19/ex-googlers-launch-sift-science-a-fraud-fighting-system-for-websites-backed-by-5-5m-in-funding-from-union-square-first-round-yc-others/
+Fraud, as defined by Phua et al. ~\cite{5522816}, refers to the abuse of a profit organisations's system without necessarily leading to direct legal consequences. Fraud detection, as part of the overall fraud control, has become one of the most established data mining applications.
 
-% The proliferation of touchscreen-enabled devices represents many new promising scenarios and applications for signature verification. Automatic signature verification is a challenging task per se, as it must face a notable variability among signatures from the same individual and the risk of highly skilled forgers which, due to their unpredictable nature, are not completely possible to model during the design of a verification system. This work is focused on automatic person authentication using signature as a biometric trait. Dynamic signature verification for portable devices is studied and an analysis of its specificities compared to traditional signature verification systems based on digitizing tablets is performed.
-% Within biometrics, signature is one of the most socially accepted biometric traits, as it has been used in financial and legal transactions for centuries (Fierrez and Ortega-Garcia, 2007b; Plamondon and Lorette, 1989). In the current era of electronic services and ubiquitous access to information, secure access control and user authentication are common tasks which are usually performed with tokens or passwords. In this field, biometrics has become a focus of interest as it uses anatomical (e.g. fingerprint, iris) or behavioral (e.g. voice, signature) traits to authenticate a user (Jain et al., 2004). These traits cannot be easily stolen or forgotten. It is now common to observe fingerprint verification systems in portable electronic devices (e.g. handhelds), face recognition systems for border control purposes and iris verification in some airports (e.g. United Arab Emirates).
-% Biometric authentication has gathered an increasing research and commercial interest in the last few years (Jain et al., 2006) as it represents a convenient and secure means of person authentication.
+The large volume of transactions processed each day by SumUp make a manual verification of each transaction impossible. As such, SumUp has to rely on automated systems to process and validate transactions. As of the time of this research, there is no established provider of anti-fraud software in this field. However, that there is a need for a fraud detection service from third party providers proves \fnurl{Sift Science}{http://siftscience.com}, a company that specializes in this kind of service and has recently raised more than four millions USD from leading venture capital firms.
 
-Fraud, as defined by Phua et al. \cite{5522816}, refers to the abuse of a profit organisations's system without necessarily leading to direct legal consequences. Fraud Detection, as part of the overall fraud control, has become one of the most established data mining applications.
+But at the point of this work, SumUp is doing internal research to implement, train and tweak its own fraud rules. An internal assessment has shown that the four most popular fraud scenarios are the following:
 
-Automatic payment systems are always interesting for attackers due to their direct monetary return and usually high scalability. SumUp is no exception and is therefore interested in having a solid and extensive anti-fraud system.
+% As credit cards are historically a very unsafe payment method, special attention has to be paid when dealing with credit card information and processing credit card transactions.
+% A fact that is reflected by looking at how many papers were written about fraud detection in which area. As shown in Figure \ref{fig:fraud-literature-count}.
 
-As credit cards are historically a very unsafe payment method, special attention has to be paid when dealing with credit card information and processing credit card transactions. A fact that is reflected by looking at how many papers were written about fraud detection in which area. As shown in Figure \ref{fig:fraud-literature-count}.
+\begin{itemize}
+    \item Copied or stolen cards
+    \item Money laundry
+    \item Impersonators transferring money under someone else's name
+    \item Illegal money being transferrend through SumUp's system
+\end{itemize}
+
+We will mainly focus on the first fraud case and concentrate on identifying a card holder by her signature. Our goal is that after a card has been used a certain amount of times, we can build a reliable signature model to identify whether it is the same person signing or not the next time the card is used.
+
+Not only the pysical cards are at risk to be stolen, also the digital copy of the credit card data needs to be protected. This is one of the reasons SumUp only saves encrypted card information and is obliged to do so in a Payment Card Industry Data Security Standard (PCI DSS) environment. The policy entails a set of rules to reach these control objectives:
+\begin{itemize}
+\item Build and maintain a secure network
+\item Protect cardholder data
+\item Maintain a vulnerability management program
+\item Implement strong access control measures
+\item Regularily monitor and test networks
+\item Maintain an information security policy
+\end{itemize}
+
+This has an impact on our work as the regulations connected to the object to protect cardholder data only allows SumUp to store card numbers and not names of card holders. The goal of this requirement is that even if someone would gain access to SumUp's database, he would not be able to retrieve all information to process a transaction. This has one disadvantage though: we cannot collude information of multiple cards used by a single customer and can therefore only build a signature model based on the signatures we collect per card, not per customer. As the majority of all US cardholders holds at least two credit cards \cite{woolsey2010credit}, being able to merge the signature databases from different cards of one cardholder, could significantly increase the accurateness of the signature model.
+
+It is impossible to be absolutely certain about the legitimacy of a transaction. In reality, the goal must be to filter out possible evidences of fraud from the available data using cost-effective mathematical algorithms in realtime.
+
 
 
 % \begin{figure}[tb]
@@ -339,31 +359,8 @@ As credit cards are historically a very unsafe payment method, special attention
 %     \label{fig:fraud-literature-count}
 % \end{figure}
 
-The main attack vectors in credit card fraud are: (TODO: ref paper)
-
-\begin{itemize}
-    \item Copied and stolen cards
-    \item Money Laundry
-    \item People transferring money under someone else's name
-    \item Illegal money being transferrend through one's system
-\end{itemize}
-
-We will mainly focus on the first fraud case and concentrate on identifying a card holder by his signature. Our goal is that after a card has been used a certain amount of times, we can build a reliable signature model to identify whether it is the same person signing or not the next time the card is used.
-
-Not only the pysical cards are at risk to be stolen, also the digital copy of the credit card data needs to be protected. This is one of the reasons SumUp only saves encrypted card information and does so in a PCI-DSS environment. The ensure maximum security precaution, only card numbers and not names of card holders are saved. This has one downside: We can only identify cards but not card holders and can therefore only build a signature for a card but not for a person (who might use several cards on several occasions).
-
-Realisticly, it is impossible to be absolutely certain about the legitimacy of a transaction. In reality, the goal must be to filter out possible evidences of fraud from the available data using cost-effective mathematical algorithms.
 
 
-PCI-DSS
-
-
-
-% As with every payment system, fraud plays a role
-
-% most common fraud cases: ...
-
-% and link them to the technology used (mag stripe, chip \& signature, ...)
 
 \section{Signature Recognition}
 
@@ -565,7 +562,7 @@ To reduce the number of false positives, the lookup uses additional information 
 \item Country
 \end{itemize}
 
-The algorithm is outlined in Listing \ref{lst:world-check-lookup}. It's output is a set of Know Your Customer (KYC) action and statuses which flag the customer in the system and may restrict him from certain actions, e.g. processing transactions with his account.
+The algorithm is outlined in Listing \ref{lst:world-check-lookup}. It's output is a set of Know Your Customer (KYC) action and statuses which flag the customer in the system and may restrict him from certain actions, e.g. processing transactions with her account.
 
 \begin{lstlisting}[caption={The Lookup algorithm},label={lst:world-check-lookup}]
 def lookup fname, lname, dob, city, country
@@ -1046,7 +1043,7 @@ Our experiments in chapter X (TODO ref) will show to which extent known techniqu
 
 Our experience shows that people are not used to write their signature with their bare finger and the first few times they sign, their signature differs a lot. However, after just 10-15 times , the signature's shape seems to stabilize.
 
-This means that it will be a lot harder to detect signatures based on the first few signatures than on later signatures, once a user got used to signing with his finger.
+This means that it will be a lot harder to detect signatures based on the first few signatures than on later signatures, once a user got used to signing with her finger.
 
 It also means that we should prefer later signatures to earlier ones as in later signatures the signer's signature might have stabilized.
 

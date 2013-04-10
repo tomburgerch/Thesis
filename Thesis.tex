@@ -136,7 +136,7 @@ ETH Zurich}
 \supervisors{Christian Decker\\Conor Wogan (SumUp)\\[2pt] Prof.\ Dr.\ Roger Wattenhofer}
 
 % You can comment the following two commands if you don't need them
-\keywords{Fraud Detection, Signature Verification, Fraud Detection, Mobile Payments, Mobile Devices}
+\keywords{Fraud Detection, Signature Verification, Fraud Detection, Mobile Payments, Dynamic Time Warping, Hidden Markov Models}
 % \categories{ACM categories go here.}
 
 \date{\today}
@@ -183,44 +183,53 @@ As Smartphones become increasingly popular, they're being used in more and more 
 This work focuses on an application of the latter.
 % Although mobile payments were getting a lot of attention already 10 years ago \cite{5342298}, only recently as the density of smartphones has reached a critical level, the use of smartphones as electronic cash registers has become practical.
 The density of smartphones per capita and the computational power of current phones have reached a level where it became practical to use phones electronic cash registers.
-\fnurl{iZettle}{http://www.izettle.com}, \fnurl{Square}{http://www.squareup.com}, \fnurl{SumUp}{http://www.sumup.com} are just some of the companies which make use of this situation and are enabling merchants to receive payments via their smartphone. This thesis was written in collaboration with SumUp, a mobile payment company located in Berlin. % and Dublin.
-%In Section \ref{intro-sumup} SumUp's business model is explained in more detail.
+\fnurl{iZettle}{http://www.izettle.com}, \fnurl{Square}{http://www.squareup.com}, \fnurl{SumUp}{http://www.sumup.com} are just some of the companies which make use of this situation and are enabling merchants to receive payments via their smartphone. This thesis was written in collaboration with SumUp, a mobile payment company located in Berlin.
 
 % \cite{Hanmandlu05} \cite{citeulike:3393241} \cite{citeulike:885135} \cite{1030918} \cite{1227706} \cite{Kim:2005:SED:2156512.2156558} \cite{Coetzer:2004:OSV:1289340.1289385} \cite{711942}
 
-Financial businesses are subject to fraud more than average due to the direct financial gain for fraudsters. On mobile devices, it becomes even more important to protect the system from Fraud --- especially as the mobile devices can be lost or stolen. While some security measures are imposed by the financial authorities, those rules were made for traditional financial institutions. The new mobile environment and  but as it is even more important to develop your own security measures as the area of mobile payments is still new and the rules that were made for traditional financial institutes (e.g. banks or funds)
-might not be enough to protect the complex systems in the mobile payment industry.
-Our work focuses on preventing and detecting fraud in two ways.
+Financial businesses are subject to fraud more than average due to the direct financial gain for fraudsters. On mobile devices, it becomes even more important to protect the system from Fraud --- especially as the mobile devices can be lost or stolen. While some security measures are imposed by the financial authorities, those rules were made for traditional financial institutions. The new mobile, connceted environment not only opens up a lot of beneficial opportunities but also more attack vectors for fraudsters. Therefore it is important to not only respect given guidelines but proactively look for ways to prevent possible attacks.
 
-We were able to reduce the amount of manual work required to ensure that no high risk customers are onboarded without a flag being raised by implementing a PEP/HAR-Check during the sign-up of new customers.
-
-Authorization of credit card transactions can be done in various ways. Among the most popular ways to authorize a transaction are the Chip-And-Signature mehtod and the Chip-And-Pin method. When using the Chip-And-Signature method, the card holder signs to authorize the transaction. With the Chip-And-Pin method, the cardholder enters a four or six digit pin to allow the transaction of funds. Although the Chip-And-Pin method is seen as more secure, it is also more complex and requires much more expensive hardware. Therefore, identification by signature has remained the predominant method.
-
-To improve this method's security, this work is focused on automatic signature detection using a fusioned score of gloabl features, a Dynamic Time Warping (DTW) score and a Hidden Markov Models (HMM) measurement to generate make a decision on whether two signatures belong to the same person or not.
+We focused our work on two separate, but complementary approaches to reduce the fraud risk for a mobile payment company like SumUp.
+Thanks to implementing an in-depth check of new users during the sign-up process, we preventively reduced the risk of signing up a high risk account. After screening a new user, suspicious applications are flagged for manual inspection with the repsective information that caused the flagging. As this reduced the amount of accounts that have to be checked manually, we were able to reduce the amount of manual work per sign-up substantially.
 
 
-% Copied:
+Our second approach focused on reactive fraud detection and makes use of the most popular method to authorize credit card transactions in mobile payments: by signature.
+Authorization of credit card transactions can be done in various ways. Widely used are the three following methods:
 
-% Smartphones and notebooks are becoming increasingly popular. These devices hold privacy critical information such as contact lists, email account access, web- browser passwords, communication history with contacts and so on. Additionally these devices are mobile and hence exposed to a higher risk of being accessed by unauthorized users. Therefore it seems necessary to explore new ways to protect this data using existing hardware.
+\begin{itemize}
+\item Swipe and signature (SAS): The cardholder swipes card through card reader and transaction is confirmed by signature on the mobile device. Low technical complexity but easy to attack as the data on the magnet stripe is not encrypted. Main problem: cards can be copied while the card data is read. Widely deployed in the USA due to high acceptance by Card Schemes.
+\item Chip and signature (CAS): The cardholder inserts card into card reader and the encrypted data is read from the card's chip. The user authorizes the transaction by signature on the smartphone screen. Higher technical complexity than SAS. Currently most popular method to authorize payments in Europe on mobile devices. Biggest drawback: Visa Europe doesn't consider this method secure enough and therefore requires an extended flow that requires the client to confirm the transaction with a text message.
+\item Chip and pin (CAP): User inserts card into card reader and enters pin into pinpad to authorize the transaction. Only after the correct pin has been entered, the phone is able to read the necessary data to process the transaction. Biggest drawback: High technical complexity as well in the reader as well as on the server side and thus high costs incurred by the hardware and software. Although this process is accepted by most card schemes in Europe, the high cost make a widespread use unlikely.
+\end{itemize}
+
+Although authorization with CAS is a lenghty process with VISA cards in Europe, it is currently the best compromise between speed, cost and usability. SumUp provides merchants with SAS readers or CAS readers based on the merchant's profile. This means that currently, all signatures are authorized by signature. Also with other providers of the same service, authorization by signature stays the predominant way to authorize transactions.
+
+We propose an automatic signature verification system based on global featuers, dynamic time warping (DTW) and hidden markov models (HMM) to make the authorization process more secure. As the signatures which are captured by finger, tend to have a high variability and unstable characteristics, our system has to account for false positive fraud detection. To account for that, we propose a system involving a feedback loop. Using the feedback loop, transactions are still possible even if a cardholder's signature could not be matched to his previous signatures.
+
+
+
 
 
 \section{SumUp - Mobile Payments for Everyone}
 \label{intro-sumup}
 
-Over 176.8 million people owned a credit card in 2008 with an average of 3.5 cards per cardholder. About 60 percent of consumers own a rewards credit card and approximately 51 percent of the U.S. population has at least two credit cards.\cite{woolsey2010credit}
+Credit cards enjoy a huge popularity among consumers which is illustrated by the number of credit card holders in the USA only: In 2008 over 176.8 million people owned a credit card with average of 3.5 cards per cardholder. About 60 percent of consumers own a rewards credit card and approximately 51 percent of the U.S. population has at least two credit cards.\cite{woolsey2010credit}
 
-This illustrate how widely used credit cards are on the consumer side. However, far less businesses allow customers to pay by credit card. This is mostly due to the following reasons:
+While credit cards are also very popular with consumers in Europe, far fewer businesses in Europe allow customers to pay by credit card than in the USA. This is mostly due to the following reasons:
 \begin{itemize}
-\item A business initially pays between 200 to 500 Euro for a credit card terminal
+\item A european business initially pays between 200 to 500 Euro for a credit card terminal
 \item There is a monthly subscription fee from 20 to 50 Euros
 \item A percentage of each transaction goes to the credit card company. Usually, merchants pay between 2.75 and 5 percent to the card issuer.
 \end{itemize}
 
-SumUp was founded in fall 2011 in Berlin and Dublin and is today used actively by many thousand merchants in more than ten european countries. It is successful, because it removed two of the three reasons why not more business allow customers to pay by credit card. Anyone who signs up with SumUp receives a free card reader for use with one's smartphone and there are no monthly cost. It's core business competes with traditional Credit Card Terminal companies who require their users to pay a monthly fee for their terminal.
+It is likely that these costs are higher due to more complex regulations and more complex payment terminals that are required by the card schemes in Europe.
 
-Instead of building and selling expensive hardware, SumUp's Apps make use of the fact that almost anyone owns a smartphone today. SumUp works on the iOS and Android platform and the only additional hardware, a dongle that reads the credit cards, is sent to the customers for free. The Apps to use Sumup are available for free in both the Android and iOS store.
+SumUp's goal is to lower the barrier for merchants to accept credit card payments by providing a professional yet inexpensive solution for anyone to accept card payments. The company was founded in fall 2011 and has enjoyed a rapid growth since.
+in Berlin and Dublin and is today used actively by many thousand merchants in more than ten european countries. Today, SumUp's services are used by thousands of merchants in more than ten european countries.
+The business has been successful because it removed two of the above-mentioned three obstacles to a more widespread adoption: anyone who signs up with SumUp receives a free card reader for use with one's smartphone and there is no monthly subscription fee. As the merchant already owns the expensive hardware in form of a smartphone and pays for a data subscription anyway, the cost on both ends is much lower. This way, SumUp is able to finance itself through the 2.75 percent transaction fee. At its core, it competes with traditional Credit Card Terminal companies who require their users to pay a monthly fee for their terminal and the expensive initial charge for the device.
 
-% Payment through SumUp gives taxi drivers, market traders and artisans in particular an enormous economic advantage, in that mobile payments can now be processed right on the spot. Customers no longer have to be turned away, as any service can be billed immediately. Other areas of industry such as personal grooming, beauty salons, bakeries and boutiques can also benefit from the mobile payment method. Traditional card terminals are often associated with high investment and operating costs. SumUp, however, provides its services to retailers free of charge while working with transparent pricing structures and a straightforward Terms of Service. SumUp only places a single low fee of 2.75 percent on any successful transaction. There are no additional costs.
+Instead of building and selling expensive hardware, the only hardware required --- the card reader --- is shipped for free and the software is distributed for free via the Apple AppStore and Google Play Store.
+Payment through SumUp gives taxi drivers, market traderrs and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advante, in that mobile payments can now be processed right on the spot and without an initial financial investment.
 
 
 Processing a transaction with SumUp can be described with six simple steps as depicted in Fig \ref{fig:flow-customer} and \ref{fig:flow-merchant}.
@@ -240,7 +249,7 @@ Processing a transaction with SumUp can be described with six simple steps as de
         \begin{subfigure}[b]{0.22\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow1.png}
-                \caption{Merchant enters amount nto digital cash register}
+                % \caption{Merchant enters amount nto digital cash register}
                 \label{fig:flow1}
         \end{subfigure}%
         ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
@@ -248,39 +257,35 @@ Processing a transaction with SumUp can be described with six simple steps as de
         \begin{subfigure}[b]{0.22\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow2.png}
-                \caption{Merchant chooes the payment method}
+                % \caption{Merchant chooes the payment method}
                 \label{fig:flow2}
         \end{subfigure}
         \begin{subfigure}[b]{0.22\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow3.png}
-                \caption{Once the card reader has been plugged in, the device is ready to read a card}
+                % \caption{Once the card reader has been plugged in, the device is ready to read a card}
                 \label{fig:flow3}
         \end{subfigure}
         \begin{subfigure}[b]{0.22\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow4.png}
-                \caption{Card is recognized and shown on the screen}
+                % \caption{Card is recognized and shown on the screen}
                 \label{fig:flow4}
         \end{subfigure}
-        \caption{In-App Flow during a Transaction, in which the merchant is involved}\label{fig:flow-merchant}
-\end{figure}
 
-\begin{figure}
-        \centering
         \begin{subfigure}[b]{0.5\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow5.png}
-                \caption{Customer signs and thereby confirms transaction}
+                % \caption{Customer signs and thereby confirms transaction}
                 \label{fig:flow5}
         \end{subfigure}
         \begin{subfigure}[b]{0.22\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow6.png}
-                \caption{Customer can choose to receive a receipt via email or text}
+                % \caption{Customer can choose to receive a receipt via email or text}
                 \label{fig:flow6}
         \end{subfigure}
-        \caption{In-App Flow during a Transaction, in which the customer is involved}\label{fig:flow-customer}
+        \caption{In-App Flow during a Transaction from step 2 (top left) to step 7 (lower right)}\label{fig:flow-customer}
 \end{figure}
 
 

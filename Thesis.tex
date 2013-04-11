@@ -367,22 +367,22 @@ It is impossible to be absolutely certain about the legitimacy of a transaction.
 Most previous work has been done on signature verification with signatures captured with a pen on paper or on a digital tablet. When a signature was captured on paper, it was afterwards digitalized using a scanner. The dynamic characteristics of a signature are lost in that process and the algorithms that can be applied to the signature information are very different. Therefore it is common to divide signature verification methods into two methods:
 
 \begin{itemize}
-\item \textbf{Offline signature verification} performs recognition algorithms based on static features of a signature, mainly it's shape and length.
-\item \textbf{Online signature verification} performs algorithms on the dynamic features of a signature as well. These include speed, acceleration, angular acceleration, pressure and many more.
+\item \textbf{Offline signature verification} performs recognition algorithms based on static features of a signature, mainly shape and length.
+\item \textbf{Online signature verification} performs algorithms on the dynamic features of a signature as well. These analyze the speed, the acceleration, the angular acceleration, the pressure and many other local properties of a signature.
 \end{itemize}
 
-Online signature detection has become possible when digital tablets and touchscreens have become widely used and it became feasible to capture the dynamic features of a signature. In Chapter \ref{chp:signature-verification} we look at the common techniques in both areas, offline and online, to verify signatures.
+Since digital tablets, touchscreens interfaces and smartphones became affordable and widely deployed, it became feasible to capture dynamic features of a signature. In Chapter \ref{chp:signature-verification} we look at the common techniques in both areas, offline and online, to verify signatures.
 
-The high accuracy and resolution of current digitizing tablets and smartphone screens allow to capture signature data in high resolution and precision on relatively cheap devices.
+The high accuracy and resolution of current digitizing tablets and smartphone screens enables to capture signature data in high resolution and precision on relatively cheap devices.
 Traditionally, digital signatures were captured on a digital tablet with a pen. Signatures captured by SumUp however, are collected on a variety of mobile devices and have fundamentally different characteristics than signatures captured on a digital tables. The main reasons for these differences are:
 
 \begin{itemize}
-    \item The signatures are captured by finger instead of a pen which is not how people are used to sign. This leads to higher variabilities and less stable signature models.
-    \item Most smartphones don't have a fixed sampling rate but an event-based sampling. Whereas the sampling rate on digitizing tables is constant, the rate in signatures captured on smartphones can vary a lot within one signature.
+    \item The signatures are captured by finger instead of a pen which is not how people are accustomed to sign. This leads to higher variability and less stable signature models.
+    \item Most smartphones don't have a fixed sampling rate but an event-based sampling. Whereas the sampling rate on digital tablets is constant, the rate in signatures captured on smartphones can vary a lot within one signature.
     \item The signatures are captured on a lot of different devices with different screen sizes, resolutions, sensor densities and other device specific characteristics.
 \end{itemize}
 
-We have to verify signatures within a matter of split seconds to give instant feedback whether or not a transaction should be authorized. This limits not only the number of algorithms we can use in parallel but also the complexity of our models and our dataset.
+We have to verify signatures within a fraction of a second to give instant feedback whether or not a transaction will be authorized. This limits not only the number of algorithms we can use in parallel but also the complexity of our models and our dataset.
 We discuss our strategies to overcome the listed difficulties in Chapter \ref{chp:signature-verification}.
 
 % How to approach that without the complicated and expensive chip\&pin device?
@@ -414,25 +414,25 @@ We discuss our strategies to overcome the listed difficulties in Chapter \ref{ch
 
 \chapter{Fraud Prevention \\PEP \& HRA Detection}
 
-The fraud prevention applies during the sign-up process of a new user and its goal is to keep high risk users from gaining access to the system.
-Any financial institution has a high interest to implement as many anti-fraud mechanisms as possible. As  the financial industry being a strictly regulated industry, many precautions are mandatory and described by the governing financial institution. Yet, more mechanisms are added on top of the mandated ones as they provide a competitive advantage.
+The fraud prevention is applied during the sign-up process of a new user and with the goal to keep high risk users from gaining access to the system.
+Any financial institution has a high interest to implement as many anti-fraud mechanisms as possible. With the financial industry being a strictly regulated industry, many precautions are mandatory and described by the governing financial authority. Yet, more mechanisms are added on top of the mandated ones as they provide a competitive advantage.
 
-The financial institution governing SumUp's operations is the English Financial Services Authority (FSA) and the regulatory environment is specified in the Money Laundry Regulations (MLR) from 2007 ~\cite{website:aml-regulations-2007}. Chapter 2 of the MLR specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
+The financial authority governing SumUp's operations is the United Kingdom (UK) Financial Services Authority (FSA) and the regulatory environment is specified in the Money Laundry Regulations (MLR) from 2007 ~\cite{website:aml-regulations-2007}. Chapter 2 of the MLR specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
 
 \begin{itemize}
 \item \textbf{Politically Exposed Persons} (PEP) are people who hold a prominent political function. In the United Kingdom this is defined as a national position. Also a PEP's spouse and children are included in this category.
 
-\item \textbf{High Risk Accounts} (HRA) are people who have previously commited a financial crime, been involved in a money-laundring related crime (e.g. dealing with narcotics) or are listed on a terrorist watch list.
+\item \textbf{High Risk Accounts} (HRA) are people who have previously committed a financial crime, been involved in a money-laundering related crime (e.g. dealing with narcotics) or are listed on a government watch list.
 
 \end{itemize}
 
-We will refer to the sum of PEP and HRA as "high risk clients". Any new client needs to be checked against both lists at sign-up and regularily after the initial sign-up.
+We will refer to the combination of PEP and HRA as "high risk clients". Any new client needs to be checked against both lists at sign-up and regularily after the initial sign-up.
+If the algorithm returns a positive match with either a PEP or an HRA, a flag is raised in the SumUp Operations Admin Panel (SOAP) and the match has to be confirmed or falsified manually. If the match can be falsified, nothing more needs to be done and the user will continue the sign-up flow. However, if there is a positive PEP or HRA match, different procedures have to be followed.
 
-If the algorithm returns a positive match with either a PEP or an HRA, a flag is raised in the SumUp Operations Admin Panel (SOAP) and the match has to be confirmed or falsified manually. If the match can be falsified, nothing more needs to happen and the user will continue in the sign-up flow. However, if there is a positive match, different procedures have to be followed based on a PEP or HRA match.
-For an identified PEP, additional due diligence needs to be done to onboard the client. Additional documents need to be collected that give detail information about the wealth and assets of said person. After performing the additional due diligence, a client can be onboarded but settlements need to be blocked.
+For an identified PEP match, additional due diligence needs to be done to onboard the client. Additional documents need to be collected that give detail information about the wealth and assets of said person. After performing the additional due diligence, a client can be onboarded but settlements need to be blocked.
 A positive match with the HRA list means that the subject cannot be onboarded and a Suspicious Act Report (SAR) needs to be filed with the Serious Organized Crime Agency (SOCA). All HRAs are banned from conducting business with any financial institution.
 
-Previous to our work, a test based on only first and last name was already in place but produced a lot of false positives. This required a lot of manual work to falsify the matches. Our goal was to create a fast, reliable check that requires as little manual input as possible. Chapter \ref{chp:experiments} lists our results.
+Previous to our work, a test based on only first and last name was already in place but produced a lot of false positives. This required a lot of manual work to falsify matches. Our goal was to create a fast, reliable check requiring as little manual input as possible. Chapter \ref{chp:experiments} lists our results.
 
 In the next section we'll present the data of the two databases and their origin before talking about the way we structured the lookup and implementation of our solution.
 
@@ -462,9 +462,9 @@ In the next section we'll present the data of the two databases and their origin
 \section{PEP \& HRA Database}
 
 
-World-Check \cite{website:world-check} is one of the providers of the PEP \& HRA database. It consolidates the list by polling many different lists - including the FBI's Most Wanted, Interpol and others.
+World-Check \cite{website:world-check} is one of the providers of the PEP \& HRA database. It consolidates the list by polling many different lists - including the FBI's Most Wanted LIist, Interpol and others.
 
-The data is supplied in csv format and contains in 20+ fields. The most important fields are listed in table \ref{tbl:world-check-fields}. Unfortunately, the records are far from being complete. A lot of the records are missing some of the important fields like birthday or locations, which makes it hard to falsify a match automatically and sometimes a match falls back on just first and last name correlation. World-Check normalizes the data so that all dates have the same format, city and country names are always spelled the same name and data in one field is always represented the same way.
+The data is supplied in a text file as Comma Separated Values (CSV) and contains information in 26 fields per person. The most important fields are listed in table \ref{tbl:world-check-fields}. Unfortunately, the records are far from complete. A lot of the records are missing some of the important fields like birthday or locations, which makes it hard to falsify a match automatically and sometimes a match falls back on just first and last name correlation. World-Check normalizes the data so that all dates have the same format, city and country names are always spelled the same name and data in one field is always represented the same way.
 
 \begin{table}
     \begin{tabular}{l|p{9cm}}
@@ -492,26 +492,24 @@ The data is supplied in csv format and contains in 20+ fields. The most importan
 \end{table}
 
 
-The full database file is about three gigabytes big and cointains some 1.8 million records of PEPs and HRAs combined. As the database is constantly changing, there's also a daily, weekly and monthly incremental update and delete file, with which the database is kept updated without having to download the full database file every so often.
-World-Check is a paid service and the data is retrieved over ancrypted HTTPS connection.
-
-
+The full database file is about three gigabytes in size and contains some 1.8 million records of PEPs and HRAs combined. As the database is constantly changing, there's also a daily, weekly and monthly incremental update and delete file, with which the database is kept updated without having to download the full database file every so often.
+World-Check is a paid service and the data is retrieved over encrypted HTTPS connection.
 
 
 
 
 \section{Algorithm}
 
-Clearly, parsing three gigabytes of raw data each time a new user processes through the sign-up flow is slow and not practical. We therefore chose to parse the needed data into a relational database, allowing us to perform queries within split seconds. The algorithm we used to make the lookup faster, consists of two parts - parsing and lookup.
+Clearly, parsing three gigabytes of raw data and rebuilding the database each time a new user processes through the sign-up flow is slow and not practical. We therefore chose to parse the needed data into a relational database, allowing us to perform queries within split seconds. The algorithm we used to make the lookup faster, consists of two parts - parsing and lookup.
 
 \textbf{Parsing the data}
 
-The raw data contains only one record per individual but often lists not only one pair of first and last name but many. The additional pairs are retrieved from the aliases and alternative\_spellings fields. For faster lookup, each record from the original csv file is parsed into multiple records in the database such that there exists one database record for each pair of first and last name combination. We create a record for each permutation of first and last name retrieved from those fields to cover all identities a high risk user might possibly use.
+The raw data contains only one record per individual but often lists not only one pair of first and last name but many. The additional pairs are retrieved from the aliases and alternative\_spellings fields. For faster lookup, each record from the original CSV file is parsed into multiple records in the database such that there exists one database record for each pair of first and last name combination. We create a record for each permutation of first and last name retrieved from those fields to cover all identities a high risk user might possibly use.
 Listing \ref{lst:world-check-parse} shows the algorithm used to create the cross product of all name pairs.
 
 \textbf{Lookup}
 
-To improve the duration of a lookup, the database has an index on first and last name on the PEP/HRA table to speed up the lookup. An index was also generated on the other fields used by the lookup algorithm: dob, deceased, locations and countries.
+To improve the duration of a lookup, the database has an index on first and last name on the PEP/HRA table to speed up the lookup. An index was also generated on the other fields used by the lookup algorithm: Date Of Birth (DOB), deceased, locations (cities) and countries.
 
 To reduce the number of false positives, the lookup uses additional information besides the first and last name to confirm or falsify a match. For each lookup, at least the following information needs to be provided to the algorithm:
 \begin{itemize}
@@ -570,15 +568,15 @@ end
 
 \section{Implementation \& Architecture}
 
-The PEP \& HAR check was implemented as a Sinatra Ruby Applicaton, that is accessible through a REST interface. It fulfills multiple purposes: It parses the initial or incremental database file, it continuously rechecks all users in the database versus the updated database and it answers requests from the signup component.
+The PEP \& HAR check was implemented as a \fnurl{Sinatra}{http://www.sinatrarb.com/} Ruby Applicaton, accessible through a REST interface. It fulfills multiple purposes: It parses the initial or incremental database file, it continuously rechecks all users in the database versus the updated database and also answers requests from the sign-up component.
 
-It uses ActiveRecord (AR) to connect to a relational database. Two cron jobs are used to perform the first two tasks:
+It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a \fnurl{CentOS}{http://www.centos.org/} Linux environment and the linux \fnurl{Cron Tool}{http://www.crontool.com/} is used to run the first two tasks in a constant interval:
 \begin{itemize}
 \item \textbf{daily:} Each day, the incremental update and delete file are downloaded from World-Check to keep the database up to date.
 \item \textbf{weekly:} On a weekly base, each user is screened against the updated database and new hits raise a flag in SOAP.
 \end{itemize}
 
-The third task, answering requests coming from the sign-up flow is done via a REST interface. Chapter \ref{chp:experiments} goes into greater detail of how the requests are structured. The system topoly is shown in Figure \ref{fig:fraud-arch}.
+The third task, answering requests from the sign-up flow is done via a REST interface. Chapter \ref{chp:experiments} goes into greater detail of how the requests are structured. The system topology is shown in Figure \ref{fig:fraud-arch}.
 
 \begin{figure}[tb]
     \begin{center}
@@ -595,12 +593,20 @@ A request is triggered and answered with the following steps:
 \item The sign-up component sends a request for the new user to the fraud detection component
 \item The component retrieves the necessary data from the database
 \item The database delivers all matches based on first and last name
-\item THe Lookup algorithm is performed within the fraud detection component
-\item The result is returned to the sign-up component with the information of whether or not the user can continue the sign-up flow
+\item The Lookup algorithm is performed within the fraud detection component
+\item The result is returned to the sign-up component with information of whether or not the user can continue the sign-up flow
 \item The respective KYC actions and statuses are set in the database.
 \end{enumerate}
 
 TODO: Add performance improvement/performance data in Experiments chapter
+
+
+
+
+
+
+
+
 
 
 

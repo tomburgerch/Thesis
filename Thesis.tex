@@ -570,7 +570,7 @@ end
 
 The PEP \& HAR check was implemented as a \fnurl{Sinatra}{http://www.sinatrarb.com/} Ruby Applicaton, accessible through a REST interface. It fulfills multiple purposes: It parses the initial or incremental database file, it continuously rechecks all users in the database versus the updated database and also answers requests from the sign-up component.
 
-It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a \fnurl{CentOS}{http://www.centos.org/} Linux environment and the linux \fnurl{Cron Tool}{http://www.crontool.com/} is used to run the first two tasks in a constant interval:
+It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a \fnurl{CentOS}{http://www.centos.org/} Linux environment and the linux \fnurl{Crontab Tool}{http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5/} is used to run the first two tasks in a constant interval:
 \begin{itemize}
 \item \textbf{daily:} Each day, the incremental update and delete file are downloaded from World-Check to keep the database up to date.
 \item \textbf{weekly:} On a weekly base, each user is screened against the updated database and new hits raise a flag in SOAP.
@@ -613,12 +613,23 @@ TODO: Add performance improvement/performance data in Experiments chapter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER Signature Recognition
 
-\chapter{Fraud Detection \\Signature Verification}
+\chapter{Fraud Verification \\Signature Verification}
 \label{chp:signature-verification}
 
-In this chapter, we'll present an overview of existing signature detection methods and available resources.
+For centuries, being able to authenticate someone based on biometrics, has been important to conduct business, identify each other and connect written information with an author. In order to guarantee someone's identity, it has always been important to work towards more exact, more reliable means to measure someone's biometric properties. The characteristic properties of a handwritten signature help to prove a signer's identity. A signature has four legal properties: \cite{Hanmandlu05}
 
-Traditionally, detection methods can be assign to either feature- or function-based methods. We describe both approaches in (TODO ref). A combination of feature- and function-based approaches has been providing better results than the individual techniques. (TODO: Ferrez-Aguilar et al, 2005)
+\begin{itemize}
+\item \textbf{Authentication}: Signature verification allows to confirm a signer's identification
+\item \textbf{Acceptance}: By signing a document, the writer conveys a willful intent and acceptance of the document's terms and contents
+\item \textbf{Integrity}: By signing a document, the signer establishes the integrity of the signed document and that it has not been altered
+\item \textbf{Non-repudiation}: The above three factors make it impossible for the signer to deny having signed the document
+\end{itemize}
+
+Signature verifications is a particularly important biometric identification process as the signature is a widely accepted method for endorsing financial transactions ~\cite{1227706}.
+As the signature is recorded in the SAS and CAS authorization process, it makes sense for SumUp to use this information to improve the security of both authorization methods.
+
+We present existing methods and related work before describing the signature verification methods used in our work and the peculiarities for signature detection in mobile payments.
+Traditionally, detection methods can be assigned to either feature- and function-based methods. We describe both approaches in Section \ref{sec:features} and Section \ref{sec:functions}. As a combination of feature- and function-based approaches has been providing better results than the individual techniques \cite{fierrez2005line}, we combine both approaches in our method to verify signatures.
 
 % Theoretically, the problem of handwritten signature verification is a pattern recognition task used to discriminate two classes of original and forgery signatures. A signature verification system must be able to detect forgeries and to reduce rejection of genuine signatures simultaneously.
 
@@ -629,18 +640,6 @@ Traditionally, detection methods can be assign to either feature- or function-ba
 % An offline signature verification method can classify a static image of a signature whereas an online signature verification method also con- siders the dynamics of the signing process.
 
 
-\section{Previous and Related Work}
-
-During the past 3 decades, a lot of work has been done on offline and online signature detection algorithms and many techniques exist.
-
-Among those techniques, there's been work on Dynamic Time Warping \cite{Herbst98onan} \cite{citeulike:891512}, Hidden Markov Models \cite{Justino00anoff-line}, directional pdf \cite{drouhard_1996_pr}, stroke extraction \cite{1047809}, synthetic discriminant functions \cite{Wilkinson:91}, granulometric size distributions \cite{615447}, neural classifiers \cite{Bajaj19971}, wavelets\cite{Ramesh1999217}, grid features\cite{Qi19941621} and elastic matching\cite{citeulike:941886} to name a few. \cite{PiyushShanker:2007:OSV:1274199.1274423}
-
-We will concentrate on the first two in our experiments as they have proven to be most successful and also most popular in earlier work.
-
-An overview over previous work was given in a paper by Guo et al. \cite{Justino20051377}
-
-TODO: list a few papers and their methods. Some for online and some for offline verification. List also how well they were performing.
-
 % A great deal of work has been done in the area of offline sig- nature verification over the past two decades. A recent paper by Guo et al. [11] includes an extensive overview of previous work. Numerous methods and approaches are summarised in a number of survey articles. The state of the art from 1993 to 2000 is discussed in a paper by Plamondon and Srihari [5]. The period from 1989 to 1993 is covered by Leclerc and Pla- mondon [19] and the period before 1989 by Plamondon and Lorette [20]. Another survey was published by Sabourin et al. in 1992 [21]. A review of online signature verification by Gupta and McCabe in 1998 also includes a summary of some earlier work on the offline case [22].
 % Earlier work on offline signature verification deals pri- marily with casual and random forgeries. Many researchers therefore found it sufficient to consider only the global fea- tures of a signature.
 
@@ -648,21 +647,13 @@ TODO: list a few papers and their methods. Some for online and some for offline 
 % We now briefly discuss some recent papers on offline sig- nature verification.
 
 
-% \section{Offline Signature Detection}
-
-
-% \section{Online Signature Detection}
-
-
-\section{Features and Feature Extraction}
-
-
-As introduced in chapter X (TODO), a features can be classified as a local or global feature. Global features describe the signature as a whole. Examples are the discrete Wavelet Transform (TODO: ref), thue Hough Transform (TODO: ref), horizontal and vertical projectsions (TODO: ref) and smoothness features (TODO: ref).
-
 % The features that are extracted from static signature im- ages can be classified as global or local features. Global fea- tures describe an entire signature and include the discrete Wavelet transform [7], the Hough transform [8], horizontal and vertical projections [9], and smoothness features [10]. Local features are extracted at stroke and substroke levels and include unballistic motion and tremor information in stroke segments [11], stroke “elements” [9], local shape descriptors [12], and pressure and slant features [13].
 
 
 \section{Feature-based Systems}
+\label{sec:features}
+
+As introduced in chapter X (TODO), a features can be classified as a local or global feature. Global features describe the signature as a whole. Examples are the discrete Wavelet Transform (TODO: ref), thue Hough Transform (TODO: ref), horizontal and vertical projectsions (TODO: ref) and smoothness features (TODO: ref).
 
 Feature-based systems, also called global systems, are characterized by the fact that the feature vector consists of measurements that are based on the whole signature. Example features are listed in table (TODO: ref)
 
@@ -679,7 +670,7 @@ Max acceleration & Avg. acceleration \\ \hdashline[0.5pt/3pt]
 Var. of acceleration & Avg. x acceleration \\ \hdashline[0.5pt/3pt]
 Avg. y acceleration & Total dots recorded \\ \hdashline[0.5pt/3pt]
 Time of second pen down & Avg. velocity \\ \hdashline[0.5pt/3pt]
-Max velocity & Avg. velocity÷max velocity \\ \hdashline[0.5pt/3pt]
+Max velocity & Avg. velocity ÷ max velocity \\ \hdashline[0.5pt/3pt]
 Avg. x velocity & Avg. y velocity \\ \hdashline[0.5pt/3pt]
 xy velocity correlation & Max x velocity \\ \hdashline[0.5pt/3pt]
 Max y velocity & Var. of x velocity \\ \hdashline[0.5pt/3pt]
@@ -700,8 +691,18 @@ RMS acceleration & \\ \hline
 
 
 \section{Function-based Systems}
+\label{sec:functions}
 
-Function-based systems, also called local systems, are characterized by the fact that the feature vecotr consists of measurements on partial segments of the signature. Theses segments can be single points of groups of points. The most popular methods are Dynamic Time Warping (DTW) and Hidden Markov Models (HMM).
+During the past 3 decades, a lot of work has been done on offline and online signature detection algorithms and many techniques exist.
+
+Among those techniques, there's been work on Dynamic Time Warping \cite{Herbst98onan} \cite{citeulike:891512}, Hidden Markov Models \cite{Justino00anoff-line}, directional pdf \cite{drouhard_1996_pr}, stroke extraction \cite{1047809}, synthetic discriminant functions \cite{Wilkinson:91}, granulometric size distributions \cite{615447}, neural classifiers \cite{Bajaj19971}, wavelets\cite{Ramesh1999217}, grid features\cite{Qi19941621} and elastic matching\cite{citeulike:941886} to name a few. \cite{PiyushShanker:2007:OSV:1274199.1274423}
+
+We will concentrate on the first two in our experiments as they have proven to be most successful and also most popular in earlier work.
+
+An overview over previous work was given in a paper by Guo et al. \cite{Justino20051377}
+
+
+Function-based systems, also called local systems, are characterized by the fact that the feature vector consists of measurements on partial segments of the signature. Theses segments can be single points of groups of points. The most popular methods are Dynamic Time Warping (DTW) and Hidden Markov Models (HMM).
 
 Important functions include: \cite{Gueler2008940}
 

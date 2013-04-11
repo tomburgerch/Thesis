@@ -121,7 +121,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DOCUMENT METADATA
 
-\thesistype{Master Thesis}
+\thesistype{Master Thesis\\[5pt]CONFIDENTIAL}
 \title{Fraud Prevention and Detection\\[5pt] in Mobile Payments}
 
 \author{Cedric Waldburger}
@@ -191,6 +191,7 @@ Financial businesses are subject to fraud more than average due to the direct fi
 
 We focused our work on two separate, but complementary approaches to reduce the fraud risk for a mobile payment company like SumUp.
 Thanks to implementing an in-depth check of new users during the sign-up process, we preventively reduced the risk of signing up a high risk account. After screening a new user, suspicious applications are flagged for manual inspection with the repsective information that caused the flagging. As this reduced the amount of accounts that have to be checked manually, we were able to reduce the amount of manual work per sign-up substantially.
+Going forward, we refer to the preventive part of our work as "fraud prevention" and the reactive part as "fraud detection". We use the term "fraud protection" for findings that apply to both, fraud prevention and detection.
 
 
 Our second approach focused on reactive fraud detection and makes use of the most popular method to authorize credit card transactions in mobile payments: by signature.
@@ -232,11 +233,11 @@ Instead of building and selling expensive hardware, the only hardware required -
 Payment through SumUp gives taxi drivers, market traderrs and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advante, in that mobile payments can now be processed right on the spot and without an initial financial investment.
 
 
-Processing a transaction with SumUp can be described with six simple steps as depicted in Fig \ref{fig:flow-customer}.
+Processing a transaction with SumUp can be described with five simple steps as depicted in Fig \ref{fig:flow-customer}.
 
 \begin{figure}
         \centering
-        \begin{subfigure}[b]{0.12\textwidth}
+        \begin{subfigure}[b]{0.16\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow1.png}
                 % \caption{Merchant enters amount nto digital cash register}
@@ -244,37 +245,37 @@ Processing a transaction with SumUp can be described with six simple steps as de
         \end{subfigure}%
         ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
           %(or a blank line to force the subfigure onto a new line)
-        \begin{subfigure}[b]{0.12\textwidth}
+        \begin{subfigure}[b]{0.16\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow2.png}
                 % \caption{Merchant chooes the payment method}
                 \label{fig:flow2}
         \end{subfigure}
-        \begin{subfigure}[b]{0.12\textwidth}
+        \begin{subfigure}[b]{0.16\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow3.png}
                 % \caption{Once the card reader has been plugged in, the device is ready to read a card}
                 \label{fig:flow3}
         \end{subfigure}
-        \begin{subfigure}[b]{0.12\textwidth}
-                \centering
-                \includegraphics[width=\textwidth]{figures/flow4.png}
-                % \caption{Card is recognized and shown on the screen}
-                \label{fig:flow4}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.2\textwidth}
+        % \begin{subfigure}[b]{0.12\textwidth}
+        %         \centering
+        %         \includegraphics[width=\textwidth]{figures/flow4.png}
+        %         % \caption{Card is recognized and shown on the screen}
+        %         \label{fig:flow4}
+        % \end{subfigure}
+        \begin{subfigure}[b]{0.3\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow5.png}
                 % \caption{Customer signs and thereby confirms transaction}
                 \label{fig:flow5}
         \end{subfigure}
-        \begin{subfigure}[b]{0.12\textwidth}
+        \begin{subfigure}[b]{0.16\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/flow6.png}
                 % \caption{Customer can choose to receive a receipt via email or text}
                 \label{fig:flow6}
         \end{subfigure}
-        \caption{In-App Flow during a Transaction from step 1 to step 6 (from left to right)}\label{fig:flow-customer}
+        \caption{In-App Flow during a Transaction from step 1 to step 5 (from left to right)}\label{fig:flow-customer}
 \end{figure}
 
 \begin{enumerate}
@@ -282,7 +283,7 @@ Processing a transaction with SumUp can be described with six simple steps as de
     \item Once the merchant has registered a SumUp Account and handed in identification documents, he receives a free card reader and can accept payments.
     \item The purchase amount can be entered manually into the app or via pre-determined product categories %(Fig \ref{fig:flow1})
     \item Debit cards and credit cards like Visa and MasterCard are all supported and can be chosen by clicking on the respective image. (Fig %\ref{fig:flow2})
-    \item Once plugged in, the card reader confirms that it is ready to read a card. %(Fig \ref{fig:flow3})
+    % \item Once plugged in, the card reader confirms that it is ready to read a card. %(Fig \ref{fig:flow3})
     \item After reading the card, the app shows a confirmation of the card type and number. %(Fig: \ref{fig:flow4})
     \item The customer confirms the transaction with a signature written onto the screen of the smartphone or tablet. %(Fig: \ref{fig:flow5})
     \item After successful completion, the customer can have the receipt sent to their email account or via SMS to their phone. %(Fig: \ref{fig:flow6})
@@ -380,7 +381,8 @@ Traditionally, digital signatures were captured on a digital tablet with a pen. 
     \item The signatures are captured on a lot of different devices with different screen sizes, resolutions, sensor densities and other device specific characteristics.
 \end{itemize}
 
-We discuss our strategies to overcome these challenges in Chapter \ref{chp:signature-verification}.
+We have to verify signatures within a matter of split seconds to give instant feedback whether or not a transaction should be authorized. This limits not only the number of algorithms we can use in parallel but also the complexity of our models and our dataset.
+We discuss our strategies to overcome the listed difficulties in Chapter \ref{chp:signature-verification}.
 
 % How to approach that without the complicated and expensive chip\&pin device?
 
@@ -411,26 +413,25 @@ We discuss our strategies to overcome these challenges in Chapter \ref{chp:signa
 
 \chapter{Fraud Prevention \\PEP \& HRA Detection}
 
-The preventive part of our Fraud Protection work happens before a client is onboarded and therefore before he even has access to the system.
+The fraud prevention applies during the sign-up process of a new user and its goal is to keep high risk users from gaining access to the system.
+Any financial institution has a high interest to implement as many anti-fraud mechanisms as possible. As  the financial industry being a strictly regulated industry, many precautions are mandatory and described by the governing financial institution. Yet, more mechanisms are added on top of the mandated ones as they provide a competitive advantage.
 
-Any financial institution has a self high interested, to implement as many anti-fraud mechanisms as posible. Still, as  the financial industry is a strictly regulated industry, many of these precautions are mandatory and described by the governing financial institution.
-
-The financial institution governing SumUp's operations is the English Financial Services Authority (FSA) and the regulatory environment is specified in the Money Laundry Regulations from 2007\cite{website:aml-regulations-2007}. Chapter 2 specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
+The financial institution governing SumUp's operations is the English Financial Services Authority (FSA) and the regulatory environment is specified in the Money Laundry Regulations (MLR) from 2007 ~\cite{website:aml-regulations-2007}. Chapter 2 of the MLR specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
 
 \begin{itemize}
 \item \textbf{Politically Exposed Persons} (PEP) are people who hold a prominent political function. In the United Kingdom this is defined as a national position. Also a PEP's spouse and children are included in this category.
 
-\item \textbf{High Risk Accounts} (HRA) are people who have previously commited a financial crime, been involved in a money-laundring related crime (e.g. dealing with narcotics) or are listed on a terrorism list.
+\item \textbf{High Risk Accounts} (HRA) are people who have previously commited a financial crime, been involved in a money-laundring related crime (e.g. dealing with narcotics) or are listed on a terrorist watch list.
 
 \end{itemize}
 
-Any new client needs to checked against both lists at sign-up and regularily after the initial sign-up.
+We will refer to the sum of PEP and HRA as "high risk clients". Any new client needs to be checked against both lists at sign-up and regularily after the initial sign-up.
 
+If the algorithm returns a positive match with either a PEP or an HRA, a flag is raised in the SumUp Operations Admin Panel (SOAP) and the match has to be confirmed or falsified manually. If the match can be falsified, nothing more needs to happen and the user will continue in the sign-up flow. However, if there is a positive match, different procedures have to be followed based on a PEP or HRA match.
 For an identified PEP, additional due diligence needs to be done to onboard the client. Additional documents need to be collected that give detail information about the wealth and assets of said person. After performing the additional due diligence, a client can be onboarded but settlements need to be blocked.
+A positive match with the HRA list means that the subject cannot be onboarded and a Suspicious Act Report (SAR) needs to be filed with the Serious Organized Crime Agency (SOCA). All HRAs are banned from conducting business with any financial institution.
 
-A positiv match with the HRA list means that the subject cannot be onboarded and a Suspicious Act Report (SAR) needs to be filed with the Serious Organized Crime Agency (SOCA).
-
-A test based on first and last name was already in place but produced a lot of false negatives and part of our work was to replace the existing test component with a more efficient one.
+Previous to our work, a test based on only first and last name was already in place but produced a lot of false positives. This required a lot of manual work to falsify the matches. Our goal was to create a fast, reliable check that requires as little manual input as possible. Chapter \ref{chp:experiments} lists our results.
 
 In the next section we'll present the data of the two databases and their origin before talking about the way we structured the lookup and implementation of our solution.
 
@@ -460,13 +461,14 @@ In the next section we'll present the data of the two databases and their origin
 \section{PEP \& HRA Database}
 
 
-World-Check \cite{website:world-check} is one of the provider's of the PEP \& HRA database, which we chose to work with to get the necessary data.
+World-Check \cite{website:world-check} is one of the providers of the PEP \& HRA database. It consolidates the list by polling many different lists - including the FBI's Most Wanted, Interpol and others.
 
-The data is supplied in csv format and contains in 20+ fields. The most important fields are listed in table \ref{tbl:world-check-fields}.
+The data is supplied in csv format and contains in 20+ fields. The most important fields are listed in table \ref{tbl:world-check-fields}. Unfortunately, the records are far from being complete. A lot of the records are missing some of the important fields like birthday or locations, which makes it hard to falsify a match automatically and sometimes a match falls back on just first and last name correlation. World-Check normalizes the data so that all dates have the same format, city and country names are always spelled the same name and data in one field is always represented the same way.
 
 \begin{table}
     \begin{tabular}{l|p{9cm}}
-    \hline Field & Value \\ \hline
+    \hline
+    Field & Value \\ \hline
     uid & unique identifier within the World-Check database\\ \hdashline[0.5pt/3pt]
     last\_name & subject's primarily used last name\\ \hdashline[0.5pt/3pt]
     first\_name & subject's primarily used firs first name \\ \hdashline[0.5pt/3pt]
@@ -489,11 +491,8 @@ The data is supplied in csv format and contains in 20+ fields. The most importan
 \end{table}
 
 
-The full database file is about 3 Gigabytes big and cointains some 1.8 million records.
-
-
-
-
+The full database file is about three gigabytes big and cointains some 1.8 million records of PEPs and HRAs combined. As the database is constantly changing, there's also a daily, weekly and monthly incremental update and delete file, with which the database is kept updated without having to download the full database file every so often.
+World-Check is a paid service and the data is retrieved over ancrypted HTTPS connection.
 
 
 
@@ -502,57 +501,18 @@ The full database file is about 3 Gigabytes big and cointains some 1.8 million r
 
 \section{Algorithm}
 
-The algorithm we used to make the lookup faster, consists of two parts - parsing and lookup.
+Clearly, parsing three gigabytes of raw data each time a new user processes through the sign-up flow is slow and not practical. We therefore chose to parse the needed data into a relational database, allowing us to perform queries within split seconds. The algorithm we used to make the lookup faster, consists of two parts - parsing and lookup.
 
 \textbf{Parsing the data}
 
-For faster lookup, each record from the original csv file is parsed into multiple records in the database such that there exists one database record for each pair of first / last name combination from the set of first and last names in aliases and alternative spellings.
-
-Listing \ref{lst:world-check-parse} shows the algorithm.
-
-\begin{lstlisting}[caption={The Algorithm that parses the csv file creates a separate DB record for each first/last name pair},label={lst:world-check-parse}]
-for record in csv-file
-
-    # Create Arrays to store all first & last names
-    # and initialize with the most common first/last name
-    first_names = []
-    first_names << record["first_name"]
-
-    last_names = []
-    last_names << record["last_name"]
-
-    # Get all other pairs from alternative_spellings ...
-    for pair in record["alternative_spellings"]
-        first_names << pair[0]
-        last_names << pair[1]
-    end
-
-    # ... and from aliases
-    for pair in record["aliases"]
-        first_names << pair[0]
-        last_names << pair[1]
-    end
-
-    # Now create the DB records
-    for fname in first_names
-        for lname in last_names
-            if record["category"] == "PEP"
-                PEP.create_in_db fname, lname, record
-            else
-                HRA.create_in_db fname, lname, record
-            end
-        end
-    end
-end
-\end{lstlisting}
-
-The database has an index on first and last name to speed up the lookup.
-
-
+The raw data contains only one record per individual but often lists not only one pair of first and last name but many. The additional pairs are retrieved from the aliases and alternative\_spellings fields. For faster lookup, each record from the original csv file is parsed into multiple records in the database such that there exists one database record for each pair of first and last name combination. We create a record for each permutation of first and last name retrieved from those fields to cover all identities a high risk user might possibly use.
+Listing \ref{lst:world-check-parse} shows the algorithm used to create the cross product of all name pairs.
 
 \textbf{Lookup}
 
-To reduce the number of false positives, the lookup uses additional information besides the first and last name. For a lookup, the following information needs to be provided:
+To improve the duration of a lookup, the database has an index on first and last name on the PEP/HRA table to speed up the lookup. An index was also generated on the other fields used by the lookup algorithm: dob, deceased, locations and countries.
+
+To reduce the number of false positives, the lookup uses additional information besides the first and last name to confirm or falsify a match. For each lookup, at least the following information needs to be provided to the algorithm:
 \begin{itemize}
 \item First and last name
 \item Date of birth
@@ -609,14 +569,37 @@ end
 
 \section{Implementation \& Architecture}
 
-The PEP \& HAR check was implemented as a Sinatra Ruby Applicaton, that is accessible through a REST interface. It uses ActiveRecord (AR) to connect to the database and runs two cron jobs to perform these tasks:
+The PEP \& HAR check was implemented as a Sinatra Ruby Applicaton, that is accessible through a REST interface. It fulfills multiple purposes: It parses the initial or incremental database file, it continuously rechecks all users in the database versus the updated database and it answers requests from the signup component.
+
+It uses ActiveRecord (AR) to connect to a relational database. Two cron jobs are used to perform the first two tasks:
 \begin{itemize}
-\item \textbf{daily:} download of incremental update files from world check and including the incremental data into the database
-\item \textbf{weekly:} re-check of all existing customers in the system against the database
+\item \textbf{daily:} Each day, the incremental update and delete file are downloaded from World-Check to keep the database up to date.
+\item \textbf{weekly:} On a weekly base, each user is screened against the updated database and new hits raise a flag in SOAP.
 \end{itemize}
 
+The third task, answering requests coming from the sign-up flow is done via a REST interface. Chapter \ref{chp:experiments} goes into greater detail of how the requests are structured. The system topoly is shown in Figure \ref{fig:fraud-arch}.
 
-TODO: Add System Topology
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=0.8\textwidth]{figures/fraud-arch.eps}
+    \end{center}
+    \caption{The simplified architecture and strucutre of a PEP/HRA check request}
+    \label{fig:fraud-arch}
+\end{figure}
+
+A request is triggered and answered with the following steps:
+
+\begin{enumerate}
+\item A new user signs up from one of the mobile apps or the website
+\item The sign-up component sends a request for the new user to the fraud detection component
+\item The component retrieves the necessary data from the database
+\item The database delivers all matches based on first and last name
+\item THe Lookup algorithm is performed within the fraud detection component
+\item The result is returned to the sign-up component with the information of whether or not the user can continue the sign-up flow
+\item The respective KYC actions and statuses are set in the database.
+\end{enumerate}
+
+TODO: Add performance improvement/performance data in Experiments chapter
 
 
 
@@ -1090,7 +1073,7 @@ We will consider these factors when applying our algorithm in Chapter X (TODO)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER EXPERIMENTS
 \chapter{Experiments}
-
+\label{chp:experiments}
 % offline vs online
 % using dynamic features: speed, acceleration
 
@@ -1394,5 +1377,41 @@ list different packages that are available and why we chose to work with matlab
 % This creates an appendix chapter, comment if not needed.
 \appendix
 \chapter{Appendix Chapter}
+
+\begin{lstlisting}[caption={The Algorithm that parses the csv file creates a separate DB record for each first/last name pair},label={lst:world-check-parse}]
+for record in csv-file
+
+    # Create Arrays to store all first & last names
+    # and initialize with the most common first/last name
+    first_names = []
+    first_names << record["first_name"]
+
+    last_names = []
+    last_names << record["last_name"]
+
+    # Get all other pairs from alternative_spellings ...
+    for pair in record["alternative_spellings"]
+        first_names << pair[0]
+        last_names << pair[1]
+    end
+
+    # ... and from aliases
+    for pair in record["aliases"]
+        first_names << pair[0]
+        last_names << pair[1]
+    end
+
+    # Now create the DB records
+    for fname in first_names
+        for lname in last_names
+            if record["category"] == "PEP"
+                PEP.create_in_db fname, lname, record
+            else
+                HRA.create_in_db fname, lname, record
+            end
+        end
+    end
+end
+\end{lstlisting}
 
 \end{document}

@@ -215,9 +215,6 @@ INPUT ./figures/flow2.png
 INPUT figures/flow3.png
 INPUT ./figures/flow3.png
 INPUT ./figures/flow3.png
-INPUT figures/flow4.png
-INPUT ./figures/flow4.png
-INPUT ./figures/flow4.png
 INPUT figures/flow5.png
 INPUT ./figures/flow5.png
 INPUT ./figures/flow5.png
@@ -225,6 +222,15 @@ INPUT figures/flow6.png
 INPUT ./figures/flow6.png
 INPUT ./figures/flow6.png
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
+INPUT figures/fraud-arch.eps
+INPUT ./figures/fraud-arch.eps
+INPUT ./figures/fraud-arch.eps
+INPUT ./figures/fraud-arch-eps-converted-to.pdf
+INPUT ./figures/fraud-arch-eps-converted-to.pdf
+INPUT ./figures/fraud-arch.eps
+INPUT ./figures/fraud-arch-eps-converted-to.pdf
+INPUT ./figures/fraud-arch-eps-converted-to.pdf
+INPUT ./figures/fraud-arch-eps-converted-to.pdf
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT figures/dtw-stretch.eps
 INPUT ./figures/dtw-stretch.eps

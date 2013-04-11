@@ -136,7 +136,7 @@ ETH Zurich}
 \supervisors{Christian Decker\\[2pt] Conor Wogan (SumUp)\\[2pt] Prof.\ Dr.\ Roger Wattenhofer}
 
 % You can comment the following two commands if you don't need them
-\keywords{Fraud Detection, Signature Verification, Fraud Detection, Mobile Payments, Dynamic Time Warping, Hidden Markov Models}
+\keywords{Fraud Detection, Signature Verification, Mobile Payments, Mobile Applications, Dynamic Time Warping, Hidden Markov Models}
 % \categories{ACM categories go here.}
 
 \date{\today}
@@ -152,21 +152,21 @@ ETH Zurich}
 
 \begin{acknowledgements}
 
-  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Deck from the Institute for distributed computing at ETH Zurich for their help and support in the last months. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support and help.
+  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Deck from the Institute for distributed computing at ETH Zurich for their help and support. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support and help.
 
 \end{acknowledgements}
 
 
 \begin{abstract}
-    Mobile payments have seen a lot of traction recently and a wide variety of companies have emerged around the opportunity of payments that are processed from a mobile device. Our work was conducted in collaboration with a company that allows merchants to process credit card transactions on their smartphone by using an app and hardware dongle.
+    Mobile payments have seen a lot of traction recently and a wide variety of companies have emerged around the opportunity of payments processed from mobile devices. Our work was conducted in collaboration with a company that allows merchants to process credit card transactions on their smartphone by using a mobile application and hardware dongle.
 
-    The innovative technology has opened up many new benefitial opportunities for both, merchant and clients. But it has also openend new opportunities for fraud in the area of credit card transactions, an area which has always been prone to fraud. Although the industry is highly regulated, the advances in technology call for new anti-fraud measures.
+    The innovative technology has opened up many new beneficial opportunities for both, merchants and clients. It has also opened new opportunities for fraud in the area of credit card transactions, an area which has always been prone to fraud. Although the industry is highly regulated, the advances in technology call for new anti-fraud measures.
 
-    We identify two  separate but complementary methods against credit card fraud: \textbf{preventive}, in the form of an automatic, more in-depth check of all users during the sign-up process against a database of individuals with higher risk status, and \textbf{reactive} by providing mechanisms to check every transaction's signature in realtime against the cardholer's previous signatures.
+    We identify two  separate but complementary methods against credit card fraud: \textbf{preventive}, in the form of an automatic, more in-depth check of all users during the sign-up process against a database of individuals with higher risk status, and \textbf{reactive} by providing mechanisms to check every transaction's signature in real time against the card holder's previous signatures.
 
     Our work has shown that the optimization of the check during sign-up is able to reduce the number of false positives by (TODO: XX percent). This results in up to (TODO: XX hours) less manual work by operations team each week.
 
-    We found that the characteristics of a signature captured by finger on a mobile device are much less stable than those of signatures captured with a pen. Therefore, we propose to use a feedback loop to improve the reliabilty of the signature verification algorithm and reduce the EER of our algorithm which fuses the score of a DTW algorithm, an HMM and a score base on globabl features.
+    We found that the characteristics of a signature captured by finger on a mobile device are much less stable than those of signatures captured with a pen. Therefore, we propose to use a feedback loop to improve the reliability of the signature verification algorithm and reduce the EER of our algorithm which fuses the score of a DTW algorithm, an HMM and a score base on global features.
 
 \end{abstract}
 
@@ -179,33 +179,32 @@ ETH Zurich}
 
 \chapter{Introduction}
 
-As Smartphones become increasingly popular, they're being used in more and more industries and fields. An application that has seen a lot of traction recently is mobile payments. The usage of the smartphone in this field includes the utilization as an electronic wallet, a virtual bank account and as a payment processing terminal to accept credit cards and other payment methods.
+As smartphones become increasingly popular, they're being used in more and more industries and fields. An application that has seen a lot of traction recently is mobile payments. The usage of the smartphone in this field includes the utilization as an electronic wallet, a virtual bank account and as a payment processing terminal to accept credit cards and other payment methods.
 This work focuses on an application of the latter.
 % Although mobile payments were getting a lot of attention already 10 years ago \cite{5342298}, only recently as the density of smartphones has reached a critical level, the use of smartphones as electronic cash registers has become practical.
-The density of smartphones per capita and the computational power of current phones have reached a level where it became practical to use phones electronic cash registers.
+The density of smartphones per capita and the computational power of current mobile phones have reached a level where it became practical to use phones electronic cash registers.
 \fnurl{iZettle}{http://www.izettle.com}, \fnurl{Square}{http://www.squareup.com}, \fnurl{SumUp}{http://www.sumup.com} are just some of the companies which make use of this situation and are enabling merchants to receive payments via their smartphone. This thesis was written in collaboration with SumUp, a mobile payment company located in Berlin.
 
 % \cite{Hanmandlu05} \cite{citeulike:3393241} \cite{citeulike:885135} \cite{1030918} \cite{1227706} \cite{Kim:2005:SED:2156512.2156558} \cite{Coetzer:2004:OSV:1289340.1289385} \cite{711942}
 
-Financial businesses are subject to fraud more than average due to the direct financial gain for fraudsters. On mobile devices, it becomes even more important to protect the system from Fraud --- especially as the mobile devices can be lost or stolen. While some security measures are imposed by the financial authorities, those rules were made for traditional financial institutions. The new mobile, connceted environment not only opens up a lot of beneficial opportunities but also more attack vectors for fraudsters. Therefore it is important to not only respect given guidelines but proactively look for ways to prevent possible attacks.
+Financial businesses have a higher risk of being the target of fraud attacks than businesses in other industries due to the direct financial gain for fraudsters. On mobile devices, it becomes even more important to protect the system from fraud --- especially as the mobile devices can be lost or stolen. While some security measures are imposed by financial authorities, those rules were made for traditional financial institutions. The new mobile, connected environment not only opens up a lot of beneficial opportunities but also more attack vectors for fraudsters. Therefore it is important to not only respect given guidelines but pro-actively look for ways to prevent possible attacks.
 
-We focused our work on two separate, but complementary approaches to reduce the fraud risk for a mobile payment company like SumUp.
-Thanks to implementing an in-depth check of new users during the sign-up process, we preventively reduced the risk of signing up a high risk account. After screening a new user, suspicious applications are flagged for manual inspection with the repsective information that caused the flagging. As this reduced the amount of accounts that have to be checked manually, we were able to reduce the amount of manual work per sign-up substantially.
+We focused our work on two separate, complementary approaches to reduce the fraud risk for a mobile payment company like SumUp.
+Thanks to implementing an in-depth check of new users during the sign-up process, we preventively reduced the risk of signing up a high risk account. After screening a new user, suspicious applications are flagged for manual inspection of the information that caused the flagging. As this reduced the amount of accounts that have to be checked manually, we were able to reduce the amount of manual work per sign-up substantially.
 Going forward, we refer to the preventive part of our work as "fraud prevention" and the reactive part as "fraud detection". We use the term "fraud protection" for findings that apply to both, fraud prevention and detection.
 
-
 Our second approach focused on reactive fraud detection and makes use of the most popular method to authorize credit card transactions in mobile payments: by signature.
-Authorization of credit card transactions can be done in various ways. Widely used are the three following methods:
+Authorization of credit card transactions can be done in various ways. They differ in terms of technical complexity and thus cost, speed at which a transaction can be processed and acceptance by card schemes. The most popular card schemes in Europe are MasterCard, VISA, American Express, Diner's Club and others. Widely used are the three following methods:
 
 \begin{itemize}
-\item Swipe and signature (SAS): The cardholder swipes card through card reader and transaction is confirmed by signature on the mobile device. Low technical complexity but easy to attack as the data on the magnet stripe is not encrypted. Main problem: cards can be copied while the card data is read. Widely deployed in the USA due to high acceptance by Card Schemes.
-\item Chip and signature (CAS): The cardholder inserts card into card reader and the encrypted data is read from the card's chip. The user authorizes the transaction by signature on the smartphone screen. Higher technical complexity than SAS. Currently most popular method to authorize payments in Europe on mobile devices. Biggest drawback: Visa Europe doesn't consider this method secure enough and therefore requires an extended flow that requires the client to confirm the transaction with a text message.
-\item Chip and pin (CAP): User inserts card into card reader and enters pin into pinpad to authorize the transaction. Only after the correct pin has been entered, the phone is able to read the necessary data to process the transaction. Biggest drawback: High technical complexity as well in the reader as well as on the server side and thus high costs incurred by the hardware and software. Although this process is accepted by most card schemes in Europe, the high cost make a widespread use unlikely.
+\item Swipe And Signature (SAS): The card holder swipes his card through a card reader and the transaction is confirmed by signature on the mobile device. Low technical complexity but easy to attack as the data on the magnetic stripe is not encrypted. Main problem: cards can be copied while the card data is read. Widely deployed in the USA due to high acceptance by Card Schemes.
+\item Chip And Signature (CAS): The card holder inserts his card into a card reader and the encrypted data is read from the card's chip. The user authorizes the transaction by signature on the smartphone screen. This is currently the most popular method to authorize payments in Europe on mobile devices. CAS' biggest drawback is that Visa Europe, even though the technical complexity for such readers is much higher, does not consider this method secure enough and therefore requires an extended flow that requires the client to confirm the transaction with a text message. Except from Visa Europe, all other card schemes consider CAS to be secure enough.
+\item Chip And Pin (CAP): A card holder inserts the card into a card reader and enters his Personal Identification Number (PIN) into the reader's pin pad to authorize the transaction. Only after the correct PIN has been entered, the phone is able to read the necessary data to process the transaction. The main drawback of this authorization method is its high technical complexity in the reader and on the server side and thus high costs incurred by the hardware and software. Although this process would allow to process any card schemes in Europe, the high cost make a widespread use in the short term unlikely.
 \end{itemize}
 
-Although authorization with CAS is a lenghty process with VISA cards in Europe, it is currently the best compromise between speed, cost and usability. SumUp provides merchants with SAS readers or CAS readers based on the merchant's profile. This means that currently, all signatures are authorized by signature. Also with other providers of the same service, authorization by signature stays the predominant way to authorize transactions.
+Although authorization with CAS is a lengthy process with VISA cards in Europe, it is currently the best compromise between speed, cost and an almost universal acceptance by card schemes. SumUp provides merchants with SAS readers or CAS readers based on the merchant's profile. This means that currently, all signatures are authorized by signature. Also with other providers of the same service, authorization by signature remains the predominant way to authorize transactions.
 
-We propose an automatic signature verification system based on global featuers, dynamic time warping (DTW) and hidden markov models (HMM) to make the authorization process more secure. As the signatures which are captured by finger, tend to have a high variability and unstable characteristics, our system has to account for false positive fraud detection. To account for that, we propose a system involving a feedback loop. Using the feedback loop, transactions are still possible even if a cardholder's signature could not be matched to her previous signatures.
+We propose an automatic signature verification system based on a set of global features, Dynamic Time Warping (DTW) and Hidden Markov Models (HMM) to make the authorization process more secure. As the signatures, which are captured by finger, tend to have a high variability and unstable characteristics, our system has to account for false positive matches. To account for that, we propose a system involving a feedback loop. With a feedback loop, transactions are still possible even if a card holder's signature could not be matched to previous signatures.
 
 
 
@@ -214,26 +213,26 @@ We propose an automatic signature verification system based on global featuers, 
 \section{SumUp - Mobile Payments for Everyone}
 \label{intro-sumup}
 
-Credit cards enjoy a huge popularity among consumers which is illustrated by the number of credit card holders in the USA only: In 2008 over 176.8 million people owned a credit card with average of 3.5 cards per cardholder. About 60 percent of consumers own a rewards credit card and approximately 51 percent of the U.S. population has at least two credit cards.\cite{woolsey2010credit}
+Credit cards enjoy a huge popularity among consumers which is illustrated by the number of credit card holders in the United States of America (USA) only: In 2008 over 176.8 million people owned a credit card with average of 3.5 cards per card holder. About 60 percent of consumers own a rewards credit card and approximately 51 percent of the USA's population owns at least two credit cards.\cite{woolsey2010credit}
 
 While credit cards are also very popular with consumers in Europe, far fewer businesses in Europe allow customers to pay by credit card than in the USA. This is mostly due to the following reasons:
 \begin{itemize}
-\item A european business initially pays between 200 to 500 Euro for a credit card terminal
-\item There is a monthly subscription fee from 20 to 50 Euros
-\item A percentage of each transaction goes to the credit card company. Usually, merchants pay between 2.75 and 5 percent to the card issuer.
+\item A European business initially pays between 200 EUR to 500 EUR for a credit card terminal
+\item There is a monthly subscription fee from 20 EUR to 50 EUR
+\item A percentage of each transaction goes to the credit card company. Usually, merchants pay between 2.75 and 5 percent to the card payment terminal provider.
 \end{itemize}
 
-It is likely that these costs are higher due to more complex regulations and more complex payment terminals that are required by the card schemes in Europe.
+It is likely that these costs are higher due to more complex regulations and more complex payment terminals required by the card schemes in Europe.
 
-SumUp's goal is to lower the barrier for merchants to accept credit card payments by providing a professional yet inexpensive solution for anyone to accept card payments. The company was founded in fall 2011 and has enjoyed a rapid growth since.
-in Berlin and Dublin and is today used actively by many thousand merchants in more than ten european countries. Today, SumUp's services are used by thousands of merchants in more than ten european countries.
-The business has been successful because it removed two of the above-mentioned three obstacles to a more widespread adoption: anyone who signs up with SumUp receives a free card reader for use with one's smartphone and there is no monthly subscription fee. As the merchant already owns the expensive hardware in form of a smartphone and pays for a data subscription anyway, the cost on both ends is much lower. This way, SumUp is able to finance itself through the 2.75 percent transaction fee. At its core, it competes with traditional Credit Card Terminal companies who require their users to pay a monthly fee for their terminal and the expensive initial charge for the device.
+SumUp's goal is to lower the barrier for merchants to accept credit card payments by providing a professional yet inexpensive solution for anyone to accept card payments. The company was founded in the fall of 2011 and has enjoyed a rapid growth since.
+Today, SumUp's services are used by thousands of merchants in more than ten European countries.
+The business has been successful because it removed two out of three of the previously mentioned obstacles to a more widespread adoption: anyone who signs up with SumUp receives a free card reader for use with a smartphone and there is no monthly subscription fee. As the merchant already owns the expensive hardware in form of a smartphone and most people already pay for a data subscription, the cost on both ends is much lower. This way, SumUp is able to finance itself through the 2.75 percent transaction fee. At its core, it competes with traditional Credit Card Terminal companies who require their users to pay a monthly fee for their terminal and the expensive initial charge for the device.
 
-Instead of building and selling expensive hardware, the only hardware required --- the card reader --- is shipped for free and the software is distributed for free via the Apple AppStore and Google Play Store.
-Payment through SumUp gives taxi drivers, market traderrs and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advante, in that mobile payments can now be processed right on the spot and without an initial financial investment.
+Instead of building and selling expensive hardware, the only hardware required --- the card reader --- is shipped at no charge and the software is distributed for free via the Apple AppStore and Google Play Store.
+Payment through SumUp gives taxi drivers, market traders and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advantage, in that mobile payments can now be processed right on the spot and without an initial financial investment.
 
 
-Processing a transaction with SumUp can be described with five simple steps as depicted in Fig \ref{fig:flow-customer}.
+Processing a transaction with SumUp is illustrated in five simple steps in Fig \ref{fig:flow-customer}.
 
 \begin{figure}
         \centering
@@ -339,16 +338,16 @@ We will mainly focus on the first fraud case and concentrate on identifying a ca
 Not only the pysical cards are at risk to be stolen, also the digital copy of the credit card data needs to be protected. This is one of the reasons SumUp only saves encrypted card information and is obliged to do so in a Payment Card Industry Data Security Standard (PCI DSS) environment. The policy entails a set of rules to reach these control objectives:
 \begin{itemize}
 \item Build and maintain a secure network
-\item Protect cardholder data
+\item Protect card holder data
 \item Maintain a vulnerability management program
 \item Implement strong access control measures
 \item Regularily monitor and test networks
 \item Maintain an information security policy
 \end{itemize}
 
-This has an impact on our work as the regulations connected to the object to protect cardholder data only allows SumUp to store card numbers and not names of card holders. The goal of this requirement is that even if someone would gain access to SumUp's database, he would not be able to retrieve all information to process a transaction. This has one disadvantage though: we cannot collude information of multiple cards used by a single customer and can therefore only build a signature model based on the signatures we collect per card, not per customer. As the majority of all US cardholders holds at least two credit cards \cite{woolsey2010credit}, being able to merge the signature databases from different cards of one cardholder, could significantly increase the accurateness of the signature model.
+This has an impact on our work as the regulations connected to the object to protect card holder data only allows SumUp to store card numbers and not names of card holders. The goal of this requirement is that even if someone would gain access to SumUp's database, he would not be able to retrieve all information to process a transaction. This has one disadvantage though: we cannot collude information of multiple cards used by a single customer and can therefore only build a signature model based on the signatures we collect per card, not per customer. As the majority of all US card holders holds at least two credit cards \cite{woolsey2010credit}, being able to merge the signature databases from different cards of one card holder, could significantly increase the accurateness of the signature model.
 
-It is impossible to be absolutely certain about the legitimacy of a transaction. In reality, the goal must be to filter out possible evidences of fraud from the available data using cost-effective mathematical algorithms in realtime.
+It is impossible to be absolutely certain about the legitimacy of a transaction. In reality, the goal must be to filter out possible evidences of fraud from the available data using cost-effective mathematical algorithms in real time.
 
 
 

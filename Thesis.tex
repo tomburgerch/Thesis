@@ -635,63 +635,52 @@ Traditionally, detection methods can be assigned to either feature- and function
 
 % Human signature verification (HSV) systems are usually built either on-line or off-line approaches, depending on the kind of data and application involved. On-line systems generally present a better performance than the off-line ones but require the necessary presence of the author during both the acquisition of the reference data and the verification process limiting its use of certain kind of applications.
 
-% Offline signature detection methods work based on the signature's static features like length and shape while online methods include the the dynamics of the how someone signs.
-
-% An offline signature verification method can classify a static image of a signature whereas an online signature verification method also con- siders the dynamics of the signing process.
-
-
 % A great deal of work has been done in the area of offline sig- nature verification over the past two decades. A recent paper by Guo et al. [11] includes an extensive overview of previous work. Numerous methods and approaches are summarised in a number of survey articles. The state of the art from 1993 to 2000 is discussed in a paper by Plamondon and Srihari [5]. The period from 1989 to 1993 is covered by Leclerc and Pla- mondon [19] and the period before 1989 by Plamondon and Lorette [20]. Another survey was published by Sabourin et al. in 1992 [21]. A review of online signature verification by Gupta and McCabe in 1998 also includes a summary of some earlier work on the offline case [22].
 % Earlier work on offline signature verification deals pri- marily with casual and random forgeries. Many researchers therefore found it sufficient to consider only the global fea- tures of a signature.
 
-% As signature databases became larger and researchers moved toward more difficult skilled forgery detection tasks,we saw a progression not only to more elaborate classifiers, but also to the increased use of local features and matching techniques.
-% We now briefly discuss some recent papers on offline sig- nature verification.
 
 
-% The features that are extracted from static signature im- ages can be classified as global or local features. Global fea- tures describe an entire signature and include the discrete Wavelet transform [7], the Hough transform [8], horizontal and vertical projections [9], and smoothness features [10]. Local features are extracted at stroke and substroke levels and include unballistic motion and tremor information in stroke segments [11], stroke “elements” [9], local shape descriptors [12], and pressure and slant features [13].
-
-
-\section{Feature-based Systems}
+\section{Global Systems}
 \label{sec:features}
 
-As introduced in chapter X (TODO), a features can be classified as a local or global feature. Global features describe the signature as a whole. Examples are the discrete Wavelet Transform (TODO: ref), thue Hough Transform (TODO: ref), horizontal and vertical projectsions (TODO: ref) and smoothness features (TODO: ref).
+Global systems, also called feature-based systems, are characterized by the fact that the feature vector consists of measurements that are based on the whole signature. Example features are listed in table \ref{fig:global-features}. Velocity, acceleration and position are usually looked at either combined or per dimension (usually $x/y$).
 
-Feature-based systems, also called global systems, are characterized by the fact that the feature vector consists of measurements that are based on the whole signature. Example features are listed in table (TODO: ref)
 
-Sequential Forward Feature Selection (SFFS) is one of the best performing methods (TODO: Jain and Zongker, 1997) but many have been proposed. The matching is usually done using statistical classifiers such as Parzen Windows (Martinez-Diaz et al, 2007), majority voting (Lee et al, 1996) Mahalanobis distancis (Galbally et al, 20007) or Guassian Mixture Models (Martinez-Diaz et al, 2007).
-
-Important features include: \cite{Gueler2008940}
 
 \begin{table}[tb]
-    \caption{Important features}
-    \label{fig:figurename}
     \begin{center}
         \begin{tabular}{p{6cm}|p{6cm}}
-Max acceleration & Avg. acceleration \\ \hdashline[0.5pt/3pt]
-Var. of acceleration & Avg. x acceleration \\ \hdashline[0.5pt/3pt]
-Avg. y acceleration & Total dots recorded \\ \hdashline[0.5pt/3pt]
-Time of second pen down & Avg. velocity \\ \hdashline[0.5pt/3pt]
-Max velocity & Avg. velocity ÷ max velocity \\ \hdashline[0.5pt/3pt]
-Avg. x velocity & Avg. y velocity \\ \hdashline[0.5pt/3pt]
-xy velocity correlation & Max x velocity \\ \hdashline[0.5pt/3pt]
-Max y velocity & Var. of x velocity \\ \hdashline[0.5pt/3pt]
-Num. pts. with positive x velocity & Var. of velocity \\ \hdashline[0.5pt/3pt]
-RMS velocity & Direction at first pen down, first pen up \\ \hdashline[0.5pt/3pt]
-First moment & Signature height (H) \\ \hdashline[0.5pt/3pt]
-Signature width (W) & W to H ratio \\ \hdashline[0.5pt/3pt]
-Pen down samples (D) & Time of max velocity÷D \\ \hdashline[0.5pt/3pt]
-Time of max x velocity÷D Point max. velocity÷D & Avg. azimuth \\ \hdashline[0.5pt/3pt]
-Avg. elevation & Number of pen ups and downs  \\ \hdashline[0.5pt/3pt]
-RMS acceleration & \\ \hline
 
-        \hline
+Maximum velocity & Minimum velocity \\ \hdashline[0.5pt/3pt]
+Average velocity & Variability of velocity  \\ \hdashline[0.5pt/3pt]
+Maximum acceleration & Minimum acceleration \\ \hdashline[0.5pt/3pt]
+Average acceleration & Variability of acceleration  \\ \hdashline[0.5pt/3pt]
+Total dots recorded & Time and Number of pen-ups and pen-downs \\ \hdashline[0.5pt/3pt]
+Signature height (H) & Signature width (W) \\ \hdashline[0.5pt/3pt]
+Num. pts. with positive x (y) velocity & Signature W to H ratio \\ \hdashline[0.5pt/3pt]
+\hline
         \end{tabular}
     \end{center}
+\caption{Important features}
+\label{fig:global-features}
 \end{table}
 
 
+Global features characterize the signature as a whole. A lot of research has been done in this area and the features can be simple measurements as those listed in Table \ref{fig:global-features} or more complicated characteristics obtained through techniques like the discrete Wavelet Transform \cite{ji2005signature}, the Hough Transform \cite{kaewkongka1999off}, horizontal and vertical projections \cite{fang2003off} or smoothness features \cite{fang2001offline}.
 
-\section{Function-based Systems}
+% Sequential Forward Feature Selection (SFFS) is one of the best performing methods (TODO: Jain and Zongker, 1997) but many have been proposed. The matching is usually done using statistical classifiers such as Parzen Windows (Martinez-Diaz et al, 2007), majority voting (Lee et al, 1996) Mahalanobis distancis (Galbally et al, 20007) or Guassian Mixture Models (Martinez-Diaz et al, 2007).
+
+% Important features include: \cite{Gueler2008940}
+
+
+
+
+
+\section{Local Systems}
 \label{sec:functions}
+
+% Local features are extracted at stroke and substroke levels and include unballistic motion and tremor information in stroke segments [11], stroke “elements” [9], local shape descriptors [12], and pressure and slant features [13].
+
 
 During the past 3 decades, a lot of work has been done on offline and online signature detection algorithms and many techniques exist.
 

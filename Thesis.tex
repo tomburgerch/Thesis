@@ -152,7 +152,7 @@ ETH Zurich}
 
 \begin{acknowledgements}
 
-  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Deck from the Institute for distributed computing at ETH Zurich for their help and support. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support and help.
+  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Decker from the Institute for distributed computing at ETH Zurich for their help and support. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support and help.
 
 \end{acknowledgements}
 
@@ -613,7 +613,7 @@ TODO: Add performance improvement/performance data in Experiments chapter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER Signature Recognition
 
-\chapter{Fraud Verification \\Signature Verification}
+\chapter{Fraud Detection \\Signature Verification}
 \label{chp:signature-verification}
 
 For centuries, being able to authenticate someone based on biometrics, has been important to conduct business, identify each other and connect written information with an author. In order to guarantee someone's identity, it has always been important to work towards more exact, more reliable means to measure someone's biometric properties. The characteristic properties of a handwritten signature help to prove a signer's identity. A signature has four legal properties: \cite{Hanmandlu05}
@@ -643,30 +643,21 @@ Traditionally, detection methods can be assigned to either feature- and function
 \section{Global Systems}
 \label{sec:features}
 
-Global systems, also called feature-based systems, are characterized by the fact that the feature vector consists of measurements that are based on the whole signature. Example features are listed in table \ref{fig:global-features}. Velocity, acceleration and position are usually looked at either combined or per dimension (usually $x/y$).
+Global systems, also called feature-based systems, are characterized by the fact that the feature vector consists of measurements that are based on the whole signature. Velocity, acceleration and position are usually looked at either combined or per dimension (usually $x/y$). Popular global features include:
+
+\begin{itemize}
+\item Signature length
+\item Total time to sign
+\item Maximum and average velocity
+\item Maximum and average acceleration
+\item Total dots recorded
+\item Number of segments
+\item Signature Heght (H), Width (W) and W to H-Ratio
+\item Number of points with positive $x$ ($y$) velocity
+\end{itemize}
 
 
-
-\begin{table}[tb]
-    \begin{center}
-        \begin{tabular}{p{6cm}|p{6cm}}
-
-Maximum velocity & Minimum velocity \\ \hdashline[0.5pt/3pt]
-Average velocity & Variability of velocity  \\ \hdashline[0.5pt/3pt]
-Maximum acceleration & Minimum acceleration \\ \hdashline[0.5pt/3pt]
-Average acceleration & Variability of acceleration  \\ \hdashline[0.5pt/3pt]
-Total dots recorded & Time and Number of pen-ups and pen-downs \\ \hdashline[0.5pt/3pt]
-Signature height (H) & Signature width (W) \\ \hdashline[0.5pt/3pt]
-Num. pts. with positive x (y) velocity & Signature W to H ratio \\ \hdashline[0.5pt/3pt]
-\hline
-        \end{tabular}
-    \end{center}
-\caption{Important features}
-\label{fig:global-features}
-\end{table}
-
-
-Global features characterize the signature as a whole. A lot of research has been done in this area and the features can be simple measurements as those listed in Table \ref{fig:global-features} or more complicated characteristics obtained through techniques like the discrete Wavelet Transform \cite{ji2005signature}, the Hough Transform \cite{kaewkongka1999off}, horizontal and vertical projections \cite{fang2003off} or smoothness features \cite{fang2001offline}.
+Global features are derived from the signature as a whole. A lot of research has been done in this area and the features can be simple measurements as those listed in Table \ref{fig:global-features} or more complicated characteristics obtained through techniques like the discrete Wavelet Transform \cite{ji2005signature}, the Hough Transform \cite{kaewkongka1999off}, horizontal and vertical projections \cite{fang2003off} or smoothness features \cite{fang2001offline}.
 
 % Sequential Forward Feature Selection (SFFS) is one of the best performing methods (TODO: Jain and Zongker, 1997) but many have been proposed. The matching is usually done using statistical classifiers such as Parzen Windows (Martinez-Diaz et al, 2007), majority voting (Lee et al, 1996) Mahalanobis distancis (Galbally et al, 20007) or Guassian Mixture Models (Martinez-Diaz et al, 2007).
 
@@ -681,49 +672,43 @@ Global features characterize the signature as a whole. A lot of research has bee
 
 % Local features are extracted at stroke and substroke levels and include unballistic motion and tremor information in stroke segments [11], stroke “elements” [9], local shape descriptors [12], and pressure and slant features [13].
 
+% During the past 3 decades, a lot of work has been done on offline and online signature detection algorithms and many techniques exist. Often used local features include:
 
-During the past 3 decades, a lot of work has been done on offline and online signature detection algorithms and many techniques exist.
+Function-based systems, also called local systems, are characterized by the fact that the feature vector consists of measurements on single points or groups of points of the signature.
 
-Among those techniques, there's been work on Dynamic Time Warping \cite{Herbst98onan} \cite{citeulike:891512}, Hidden Markov Models \cite{Justino00anoff-line}, directional pdf \cite{drouhard_1996_pr}, stroke extraction \cite{1047809}, synthetic discriminant functions \cite{Wilkinson:91}, granulometric size distributions \cite{615447}, neural classifiers \cite{Bajaj19971}, wavelets\cite{Ramesh1999217}, grid features\cite{Qi19941621} and elastic matching\cite{citeulike:941886} to name a few. \cite{PiyushShanker:2007:OSV:1274199.1274423}
+The most popular methods are Dynamic Time Warping (DTW) and Hidden Markov Models (HMM).
 
-We will concentrate on the first two in our experiments as they have proven to be most successful and also most popular in earlier work.
+\begin{itemize}
+\item Pressure
+\item Horizontal ($x$) and vertical ($y$) position
+\item Path tangent angle
+\item Velocity and acceleration in a particular dot
+\item Log radius of curvature
+\item Pen elevation and pen azimuth (not available in our case as signatures are captured by finger)
+\end{itemize}
 
-An overview over previous work was given in a paper by Guo et al. \cite{Justino20051377}
+Typically, a function vector has less or equal many elements as the signature vector. Matching two signatures means to find an algorithm to match
+\begin{itemize}
+\item two feature vectors
+\item or to match the vector of the test signature to a reference vector or model
+\end{itemize}
 
+Researchers have tried various techniques two match the two feature vectors. Among these techniques are: Dynamic Time Warping \cite{Herbst98onan} \cite{citeulike:891512}, Hidden Markov Models \cite{Justino00anoff-line}, directional pdf \cite{drouhard_1996_pr}, stroke extraction \cite{1047809}, synthetic discriminant functions \cite{Wilkinson:91}, granulometric size distributions \cite{615447}, neural classifiers \cite{Bajaj19971}, wavelets\cite{Ramesh1999217}, grid features\cite{Qi19941621} and elastic matching\cite{citeulike:941886} to name a few. \cite{PiyushShanker:2007:OSV:1274199.1274423}
 
-Function-based systems, also called local systems, are characterized by the fact that the feature vector consists of measurements on partial segments of the signature. Theses segments can be single points of groups of points. The most popular methods are Dynamic Time Warping (DTW) and Hidden Markov Models (HMM).
+% We will concentrate on the first two in our experiments as they have proven to be most successful and most popular in earlier work.
 
-Important functions include: \cite{Gueler2008940}
+% An overview over previous work was given in a paper by Guo et al. \cite{Justino20051377}
 
-\begin{table}[tb]
-    \caption{Important functions}
-    \label{fig:figurename}
-    \begin{center}
-        \begin{tabular}{p{6cm}|p{6cm}}
-        \hline
-Signature length  & Horizontal position  \\ \hdashline[0.5pt/3pt]
-Vertical position  & Normal pressure  \\ \hdashline[0.5pt/3pt]
-Path tangent angle & Initial direction Total velocity \\ \hdashline[0.5pt/3pt]
-x velocity & y velocity \\ \hdashline[0.5pt/3pt]
-Total acceleration & Pen elevation \\ \hdashline[0.5pt/3pt]
-x acceleration & y acceleration \\ \hdashline[0.5pt/3pt]
-Log radius of curvature Pen azimuth & \\ \hdashline[0.5pt/3pt]
-        \hline
-        \end{tabular}
-    \end{center}
-\end{table}
+Before trying one of these advanced techniques, one might try to compare two feature vectors in a simpler manner.
+The simplest approach of comparing two feature vectors element by element is to use linear correlation \cite{Plamondon1989107} and calculating the distance between each pair.
 
+This approach has two major drawbacks:
+\begin{itemize}
+\item It only works if the two vectors have equal length. As signatures always vary a bit, it is rarely the case that two signatures and thus the two feature vectors have equal length.
+\item Even if the overall path of the signature is very similar, very often there are parts that are distorted or additional in one of two signatures. Linear correlation isn't able to account for local distortions and would thus create a bad score even if the beginning and end of the signature's path were a perfect match.
+\end{itemize}
 
-\subsection{Comparison of time series}
-
-The most simple approach to compare two time signals that comes to mind, might be to use linear correlation \cite{Plamondon1989107} ie by comparing two time series dot by dot and calculating the distance between each pair.
-
-But as soon as the time signals are not of equal length or there is a non-linear distortion, this approach will not be valid anymore. As it is very likely that the same signer's signature will have different dynamics every time he signs, this is not a feasible approach.
-
-We discuss approaches that take these limitations into account in the next two sub-chapters.
-
-
-
+As both phenomenon are very characteristics for signature verification, more advanced techniques, including those mentioned, are developed. Our work concentrates on Dynamic Time Warping (DTW) and Hidden Markov Models (HMM) as these two models have shown most success --- especially combined --- in recent work.
 
 
 \subsection{Dynamic Time Warping}
@@ -745,41 +730,67 @@ We discuss approaches that take these limitations into account in the next two s
                 \label{fig:hmm1}
         \end{subfigure}%
 
-        \caption{DTW allows to match two time series even if they are stretched (left) or distorted (right) }
+        \caption{Two conceptual drawing of how DTW deals with the two main problems in signature recognition. The time series on the left are stretched but still matched thanks to DTW's ability to account for the scaling of segments or the signature as a whole. The drawing on the right is a representation of how DTW is still able to match two sequences even if one is distorted to a certain degree.}
         \label{fig:dtw-model}
 \end{figure}
 
 
 
-Dynamic Time Warping is a dynamic programming algorithm to measure the similarity between two time series which may vary in time or speed. This has been used for speech recognition and can also be used for signature detection to cope with the non-linear time distortions which one might see in the signals because a signer does not always sign with the same speed. It has shown to be a much more robust distance measure than the Euclidean distance \cite{Keogh:2000:SUD:347090.347153}\cite{1030918}\cite{1227706} due to it's ability to match similar shapes even if they are out of phase in the time axis.
+Dynamic Time Warping (DTW) is a dynamic programming algorithm to measure the similarity between two time series which may vary in time or speed. This has been used for speech recognition and can also be used for signature detection to cope with the non-linear time distortions which one might see in the signals because a signer does not always sign with the same speed. It has shown to be a much more robust distance measure than the Euclidean distance \cite{Keogh:2000:SUD:347090.347153}, \cite{1030918}, \cite{1227706} due to it's ability to match similar shapes even if they are out of phase in the time axis.
 
-Koegh et al. showed on a very large dataset that the mean error rate average over 1000 runs for DTW was an order of magnitude lower than the error rate for the Euclidian distance. However, the DTW algorithm also took approximately 230 times longer than the Euclidean distance. \cite{Keogh:2002:EID:1287369.1287405}
+Koegh et al. \cite{Keogh:2002:EID:1287369.1287405} showed that the mean error rate average over 1000 runs for DTW was an order of magnitude lower than the error rate for the Euclidean distance. However, the DTW algorithm also took approximately 230 times longer to evaluate than the Euclidean distance.
+It has first been applied to signatures in 1977 by Yasuhara and Oka \cite{yasuhara1977DTW} who concluded that is a very useful approach for online real-time signature verification. Yasuhara and Oka used an adaption of the algorithm that was originally proposed by Sakoe and Chiba \cite{1163055} and tuned the algorithm for the use on signature data.
 
-It has first been applied to signatures in 1977 by Yasuhara and Oka \cite{yasuhara1977DTW} who concluded that is a very useful approach for online real-time signature verification. Yasuhara and Oka used an adaption of the algorithm that was originally poposed by Sakoe and Chiba \cite{1163055}.
+As Figure \ref{fig:dtw-model} shows, DTW accounts for the two main difficulties when comparing two time series - stretching and distortion. This is of particular importance for our work, as we collect signatures on different devices with different sampling rates and even if a signer signs with the same speed but on two different devices, the two time series have very different length. Additionally, the different devices have different touchscreen sizes and surfaces and it is expected that people will not always complete the signature within the same speed due to different friction forces between the finger and touchscreen and length of the signature path due to a larger or smaller screen.
 
-DTW allows us to compare signatures even if the signer was signing slower at the beginning in one of the two signatures.
+% \textbf{The concept} behind DTW is a dynamic algorithm that finds the shortest path in a matrix of the distance between each pair of dots. DTW can be used to compare two time series with each other and it is therefore inter
 
-\textbf{Training} is done by computing the distance measure $dtw[n][m]$ for all signatures $n, m$ in the set of signatures for a certain user and selecting the signature $s$ with the smallest distance to all other signatures.
 
-\textbf{Classification} is done by computing the distance DTW distance $dtw[s][t]$ between the model signature $s$ and a test signature $t$.
+\textbf{Classification} is done by computing the distance DTW distance $dtw[s][t]$ between the model signature $s$ and a test signature $t$ which leads to a DTW score. If the score is below a certain threshold, we will consider the two signatures to match.
 
-\textbf{Algorithm} We have two Signatures $X,Y$ defined as follows:
+\textbf{Training} is done by computing the distance measure $dtw[n][m]$ for all signatures $n, m$ in the set of signatures for a certain user and selecting the signature $s$ with the smallest distance to all other signatures. While there are other techniques, including HMM, which allow to build and train a signature model based on all the reference signatures, DTW only allows to compare two time series at once. Our strategy is to run new test signatures against the signature that has the lowest average DTW score to each other signature in the training set.
+
+
+\textbf{Algorithm}: We have two signature vectors $X,Y$ containing data for each point of the signatures:
 
 $$X = x_1, x_2, ... , x_i, ... , x_I$$ $$Y = y_1, y_2, ..., y_j, ..., y_J$$
 
-and a distance measure defined as $$d(i,j) = ||x_i - y_i||$$
+And the distance between two vectors $i,j$ defined as the 2-norm: $$d(i,j) = ||x_i - y_i||$$
 
 We define a warping path $C$ as $$ C = c_1, c_2, ..., c_k, ..., c_K $$ where each element $c_k$ correspondes to a combination $(x_i, y_i)$.
 
-The algorithm is initialized with $$g_1 = g(1,1) = d(1,1) * w(1)$$ where $g_k$ is the accumulated distance after $k$ steps and $w(k)$ is a weighting function that has to be defined.
+The algorithm spans an $I \times J$ matrix $G$ between the two signature vectors. The matrix is initialized with $$g_1 = g(1,1) = d(1,1) * w(1)$$ where $g_k$ is the accumulated distance after $k$ steps and $w(k)$ is a weighting function that has to be defined.
 In each iteration, $g_k$ is computed as $$g_k = g(i,j) = \min\limits_{c_{k-1}} [g_{k-1}+d(c_k) * w(k)]$$ until both Signatures $X,Y$ have been traversed.
 
 The normalized distance of the two signatures is therefore: $$D(X,Y) = \frac{g_K}{\sum_{k=1}^K w(k)}$$ where $\sum w(k)$ compensates the effect of the length of the sequences.
 
-The definitionen of weighting factors $w_k$ defines the matching between the two signatures. The most common definitionen in literature is such that only three types of transitions - deletion, instertion and match - are allowed. The resulting $g_k$ becomes: $$g_k = g(i,j) = \min \left[\begin{array}{c}g(i,j-1) + d(i,j) \\g(i-1,j-1)+ 2 d(i,j) \\g(i-1,j) + d(i,j)\end{array}\right]$$
+The definitionen of weighting factors $w_k$ defines the matching between the two signatures. The most common definitionen in literature is one where three types of transitions - deletion, match and instertion - are allowed. The resulting $g_k$ becomes:
+$$g_k = g(i,j) = \min \left[\begin{array}{c}g(i,j-1) + d(i,j) \\g(i-1,j-1)+ 2 d(i,j) \\g(i-1,j) + d(i,j)\end{array}\right]$$
+
+The first line corresponds to the case of insertion, the second line to a match and the third line to an insertion. If in each step, there is a match, the path will go along the matrix' diagonal. Generally, the if the path is close to the diagonal, the signature's are similar and the score thus small.
 
 
-TODO: show image like 10.1007 s10115 page 362
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/dtw-graphic1.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+        \quad
+        \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/dtw-graphic2.eps}
+                % \caption{HMM1}
+                \label{fig:hmm1}
+        \end{subfigure}%
+
+        \caption{Put a good, extensive caption here}
+        \label{fig:dtw-matrix}
+\end{figure}
+
+
 
 Even though the DTW algorithm has been outperformed by more powerful algorithms like HMMs or SVMs in speech detection, it remains very effective in Signature detection as it deals well with small amounts of training data, which is typical for signature verification problems.
 
@@ -789,11 +800,11 @@ In general, DTW is known to have two drawbacks in signature verification:
 \item warping of forgeries
 \end{itemize}
 
-DTW causes heavy computational load becauseit does not obey the triangular inequality and thus indexing a set of signatures takes a lot of time. As soon as the pool of signatures for a signer get bigger, the computation costs raise because the test signature has to be compared to each of the signatures in the pool of confirmed signatures. Eamonn Keogh et al. presented a lower bounding method to index all samples without comparing each of them to each other. \cite{Keogh:2002:EID:1287369.1287405}
+DTW causes heavy computational load because it does not obey the triangular inequality and thus indexing a set of signatures takes a lot of time. As soon as the pool of signatures for a signer get bigger, the computation costs raise because the test signature has to be compared to each of the signatures in the pool of confirmed signatures. Eamonn Keogh et al. \cite{Keogh:2002:EID:1287369.1287405} presented a lower bounding method to index all samples without comparing each of them to each other.
 
-The second drawback can be addressed by looking at how straight or bended the warping path is. A straight warping path indicates that a genuine signature is more likely whereas a curvy warping path indicates a forgery. Work on this has been done \cite{Sato1982} but made comparison between different signatures harder because it introduce another dimension and thus made computation harder and has hence not found wide spread use.
+The second drawback can be addressed by looking at how straight or bended the warping path is. A straight warping path indicates that a genuine signature is more likely whereas a curvy warping path indicates a forgery. Work on this has been done by Y. Sato et al. \cite{Sato1982} but made comparison between different signatures more difficult because it introduces another dimension and thus made computation harder and has hence not found wide spread use.
 
-Hao Feng et al. proposed another extension of the DTW algorithm, called extreme points warping (EPW) which proved to be more adaptive in the field of signature verification than DTW and reduced the computation time by a factor of 11. \cite{Feng:2003:OSV:961320.961331} Instead of warping the signature as a whole, they only warp so called Extreme Points that are characteristic to a signer's signature and match the curves between those points linearly.
+Hao Feng et al. \cite{Feng:2003:OSV:961320.961331} proposed another extension of the DTW algorithm, called extreme points warping (EPW) which proved to be more adaptive in the field of signature verification than DTW and reduced the computation time by a factor of 11.  Instead of warping the signature as a whole, they only warp so called Extreme Points that are characteristic to a signer's signature and match the curves between those points linearly.
 
 
 
@@ -820,8 +831,7 @@ Hao Feng et al. proposed another extension of the DTW algorithm, called extreme 
 
 A Hidden Markov Model (HMM) is a stochastic process with an underlying Markov Model of which the states can not directly be observed but the only observations can be made. Each state transition emits a certain observation with a certain probability.
 
-Other than with a Markov Model, the states of a Hidden Markov Model can not directly be observed. Only Symbols, which are emitted from each state with a certain probability, can be observeed.
-
+Unlike with Markov Models, the states of a Hidden Markov Model can not directly be observed. Only the symbols emitted from Model's states may be observed. As each symbol may have been emitted by any state moving from state to state is hidden from the observer. If the signature is interpreted as a succession of observed symbols then we can, given an HMM, calculate the probability of each path through the states in the model. By training the HMM to math the signatures that are known to be genuine we can thus reconstruct a probability of the user matching.
 
 
 Markov Models can be modeled as Left-to-right, ... (TODO: name all types, show graph).
@@ -873,12 +883,14 @@ Markov Models can be modeled as Left-to-right, ... (TODO: name all types, show g
 
 
 
-While HMMs with a too small set of states and observations perform bad because they are too simple, too many states and observations make the model computational heavy and accuracy is reduced because of overfitting.
+While HMMs with a small set of states and observations perform bad because they are too simple, too many states and observations make the model computational heavy and accuracy is reduced because of overfitting.
 
 There are three fundamental problems for HMMs:
-Given the model parameters and observed data, estimate the optimal sequence of hidden states.
-Given the model parameters and observed data, calculate the likelihood of the data.
-Given just the observed data, estimate the model parameters.
+\begin{itemize}
+\item Given the model parameters and observed data, estimate the optimal sequence of hidden states.
+\item Given the model parameters and observed data, calculate the likelihood of the data.
+\item Given just the observed data, estimate the model parameters.
+\end{itemize}
 The first and the second problem can be solved by the dynamic programming algorithms known as the Viterbi algorithm and the Forward-Backward algorithm, respectively. The last one can be solved by an iterative Expectation-Maximization (EM) algorithm, known as the Baum-Welch algorithm.
 
 
@@ -901,11 +913,11 @@ The probabilities to go from one state to another are given by the Transition ma
 The probability that a system is a certain state when an certain symbol is observed, is defined by the emission matrix $B$ with elements
 $$b_j(v(t)) = P(v(t)|w_j(t))$$
 
-$A$ and $B$ fulfill the normalisation condition:
+$A$ and $B$ fulfill the normalization condition:
 $$\sum_k b_j(k) = 1, \sum_{j=1}^{N} a_{ij} = 1$$
 
 
-$\pi$ defines the initial probability distribution for a csystem to be in a certain state.
+Let $\pi$ be the initial probability distribution for a system to be in a certain state.
 
 To summarize, an HMM is defined by the transition matrix $A$, the emission matrix $B$ and the initial distribution $\pi$.
 
@@ -1013,13 +1025,13 @@ Therefore,
 
 \section{Challenges in Signature Detection Specific to Mobile Payments}
 
-A lot of work has been done on signature detection on static signatures and also on dynamic signatures. However, almost all work on dynamic signatures has been done on signatures that were captured using a pen on a digital tablet. In our case, signatures were captured on a wide range of different devices and with a user's finger instead of a pen. This has several implications.
+A lot of work has been done on signature detection on offline and online signatures. However, almost all work on dynamic signatures has been done on signatures that were captured using a pen on a digital tablet. In our case, signatures were captured on a wide range of different devices and with a user's finger instead of a pen.
 
-Our experiments in chapter X (TODO ref) will show to which extent known techniques are applicable to this type of signature and what future work might need to be done.
+% Our experiments in chapter X (TODO ref) will show to which extent known techniques are applicable to this type of signature and what future work might need to be done.
 
 \subsection{Signature are written with Finger}
 
-Our experience shows that people are not used to write their signature with their bare finger and the first few times they sign, their signature differs a lot. However, after just 10-15 times , the signature's shape seems to stabilize.
+Our experience shows that people are not used to write their signature with their bare finger and the first few times they sign, their signature differs a lot. However, after just 10-15 times, the signature's shape stabilizes.
 
 This means that it will be a lot harder to detect signatures based on the first few signatures than on later signatures, once a user got used to signing with her finger.
 
@@ -1035,7 +1047,7 @@ This means that we have to try and find a solution that works reasonably well wi
 
 \subsection{Device \& Software Fragmentation}
 
-Unlike the signature's that are captured on a digital tablet, our database of signatures is captured on a variety of devices with different properties. There are various factors that have an influence on the digital representation of the signature:
+Unlike signatures captured on a digital tablet, our database of signatures is captured on a variety of devices with different properties. There are various factors that have an influence on the digital representation of the signature:
 
 \begin{itemize}
 \item Different Manufacturer: Both, iOS and Android devices use a variety of manufacturers for their handsets and the touch screens used. Recent studies have shown the differences of how signals are captured on different screens (TODO: link reference)

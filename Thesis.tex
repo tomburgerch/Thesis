@@ -767,7 +767,7 @@ The normalized distance of the two signatures is therefore: $$D(X,Y) = \frac{g_K
 The definitionen of weighting factors $w_k$ defines the matching between the two signatures. The most common definitionen in literature is one where three types of transitions - deletion, match and instertion - are allowed. The resulting $g_k$ becomes:
 $$g_k = g(i,j) = \min \left[\begin{array}{c}g(i,j-1) + d(i,j) \\g(i-1,j-1)+ 2 d(i,j) \\g(i-1,j) + d(i,j)\end{array}\right]$$
 
-The first line corresponds to the case of insertion, the second line to a match and the third line to an insertion. If in each step, there is a match, the path will go along the matrix' diagonal. Generally, the if the path is close to the diagonal, the signature's are similar and the score thus small.
+The first case corresponds to the case of insertion, the second to a match and the third to an insertion. If in each step, there is a match, the path will go along the matrix' diagonal. Generally, the if the path is close to the diagonal, the signature's are similar and the score thus small.
 
 
 \begin{figure}
@@ -829,13 +829,18 @@ Hao Feng et al. \cite{Feng:2003:OSV:961320.961331} proposed another extension of
 
 % Hidden Markov Models (HMM) have been widely used by the speech recognition community (Ra- biner, 1989) as well as in many handwriting recognition applications (Dolfing, 1998). Sev- eral approaches using HMMs for dynamic signature verification have been proposed in the last years (Dolfing et al., 1998; Fierrez et al., 2007; Muramatsu and Matsumoto, 2003; Van et al., 2007; Yang et al., 1995). An HMM represents a double stochastic process, governed by an underlying Markov chain, with a finite number of states and random function set that gen- erate symbols or observations each of which is associated with one state (Yang et al., 1995). Observations are modeled with GMMs in most speech and handwriting recognition applica- tions. GMMs, which can be considered a single-state HMM, have been also successfully used for signature verification (Richiardi and Drygajlo, 2003).
 
-A Hidden Markov Model (HMM) is a stochastic process with an underlying Markov Model of which the states can not directly be observed but the only observations can be made. Each state transition emits a certain observation with a certain probability.
+A Hidden Markov Model (HMM) is a stochastic process with an underlying Markov Model.
+Unlike with Markov Models (MM), the states of a Hidden Markov Model can not directly be observed. Only the symbols emitted from Model's states may be observed. As each symbol may have been emitted by any state moving from state to state is hidden from the observer. If the signature is interpreted as a succession of observed symbols then we can, given an HMM, calculate the probability of each path through the states in the model. By training the HMM to math the signatures that are known to be genuine we can thus reconstruct a probability of the user matching.
 
-Unlike with Markov Models, the states of a Hidden Markov Model can not directly be observed. Only the symbols emitted from Model's states may be observed. As each symbol may have been emitted by any state moving from state to state is hidden from the observer. If the signature is interpreted as a succession of observed symbols then we can, given an HMM, calculate the probability of each path through the states in the model. By training the HMM to math the signatures that are known to be genuine we can thus reconstruct a probability of the user matching.
 
+THe underlying Markov model is modeled according to the application. The most common types are shown in Figure \ref{fig:markov-models}:
+\begin{itemize}
+\item Left-To-Right HMM (LTR HMM) are characterized by the fact that from each state only the same state or more right state can be reached. Once a state is left, it is never reached again. Depending on the application, no skipping of states (top left), skipping a single step (top right) or skipping an arbitrary number of states may be allowed (mid left). Which states can be reached from which state is defined by the initial transition matrix. TODO: Reference to our transition matrix which is a non-skipping HMM
+\item Parallel HMMs have parallel paths, only the states belonging to the same path can be reached once a path is chosen. They have similar properties to LTR Markov Models with the exception that there are multiple paths.
+\item Ergodic HMMs are the most generic form of Markov Models where a transition is possible from any state to any other state or the same state. The transition matrix of an ergodic Markov Model has only non-zero elements.
+\end{itemize}
 
-Markov Models can be modeled as Left-to-right, ... (TODO: name all types, show graph).
-
+In speech and signature recognition, a left-to-right Markov Model has proven to be a good choice. This can be interpreted as that a signer will never go back in his signature, which corresponds to the left-to-right analogy in the time series that corresponds to the signature.
 
 \begin{figure}
         \centering
@@ -878,23 +883,27 @@ Markov Models can be modeled as Left-to-right, ... (TODO: name all types, show g
 
 
 
-        \caption{Different Markov Models: a: ...}\label{fig:markov-models}
+        \caption{Different types of HMMs (from top left to bottom right): LTR HMM where skipping of states is not allowed, LRM with skipping of one step, LRM with allowed skipping, Parallel HMM, Ergodic HMM}\label{fig:markov-models}
 \end{figure}
 
 
 
 While HMMs with a small set of states and observations perform bad because they are too simple, too many states and observations make the model computational heavy and accuracy is reduced because of overfitting.
 
-There are three fundamental problems for HMMs:
+HMMs are applied in different fields, mostly to solve one of these three fundamental problems:
 \begin{itemize}
-\item Given the model parameters and observed data, estimate the optimal sequence of hidden states.
-\item Given the model parameters and observed data, calculate the likelihood of the data.
-\item Given just the observed data, estimate the model parameters.
+\item Given the model parameters and observed data, estimate the optimal sequence of hidden states. This is solved by the Viterbi algorithm.
+\item Given the model parameters and observed data, calculate the likelihood of the data. This is often solved with the Forward-Backward algorithm.
+\item Given just the observed data, estimate the model parameters. The Baum-Welch algorithm is used to estimate the model parameters.
 \end{itemize}
-The first and the second problem can be solved by the dynamic programming algorithms known as the Viterbi algorithm and the Forward-Backward algorithm, respectively. The last one can be solved by an iterative Expectation-Maximization (EM) algorithm, known as the Baum-Welch algorithm.
+
+The second and third case apply to our problem. We follow previous authors who used the discretized angle between two points of a signature as the symbols. Based on those symbols, we train our model using the Baum-Welch algorithm. After training signature models, we calculate the likelihood of a signature belonging to a certain card holder by using the Forward-Backward algorithm to compare the signature to this card holder's signature model.
 
 
-Baum-Welch-Algorithm
+\textbf{The symbols} are calculated as the discretized angle between two points in a signature.
+
+
+\textbf{The Baum-Welch-Algorithm} is used to train signature models.
 
 \begin{figure}[tb]
     \begin{center}
@@ -945,40 +954,6 @@ Therefore,
 % El-Yacoubi [17] uses HMMs and the cross-validation princi- ple for random forgery detection. A grid is superimposed on each signature image, segmenting it into local square cells. From each cell, the pixel density is computed so that each pixel density represents a local feature. Each signature im- age is therefore represented by a sequence of feature vectors, where each feature vector represents the pixel densities asso- ciated with a column of cells. The cross-validation principle involves the use of a subset (validation set) of each writer’s training set for validation purposes. Since this system aims to detect only random forgeries, subsets of other writers’ train- ing sets are used for impostor validation. Two experiments are conducted on two independent data sets, where each data set contains the signatures of 40 and 60 writers, respectively. Both experiments use 20 genuine signatures for training and 10 for validation. Both experiments use the forgeries of the first experiment for impostor validation. Each test signature is analyzed under several resolutions and the majority-vote rule is used to make a decision. AERs of 0.46% and 0.91% are reported for the respective data sets.
 % Justino [18] uses a discrete observation HMM to detect random, casual, and skilled forgeries. A grid segmentation scheme is used to extract three features: a pixel density fea- ture, a pixel distribution feature (extended-shadow-code), and an axial slant feature. A cross-validation procedure is used to dynamically define the optimal number of states for each model (writer). Two data sets are used. The first data set contains the signatures of 40 writers with 40 genuine signa- tures per writer. This data set is used to determine the opti- mal codebook size for detecting random forgeries. This op- timised system is then used to detect random, casual, and skilled forgeries in a second data set. The second data set contains the signatures of 60 writers with 40 training signa- tures, 10 genuine test signatures, 10 casual forgeries, and 10 skilled forgeries per writer. An FRR of 2.83% and an FAR of 1.44%, 2.50%, and 22.67% are reported for random, casual, and skilled forgeries, respectively.
 
-
-
-% \subsection{Neural networks}
-
-% Neural networks have also been used to build a system for detection of random forgeries. (TODO: explain random forgeries, list reference Baltzakis)
-% Baltzakis uses global features, grid features such as pixel densities and texture features such as cooccurrence matrices to represent each signature. A two-stage perceptron one-class-one-network (OCON) calssification is used for each feature set.
-% TODO: explain more when reference found
-
-
-
-% Baltzakis [16] developed a neural network-based system for the detection of random forgeries. The system uses global features, grid features (pixel densities), and texture features (cooccurrence matrices) to represent each signature. For each one of these feature sets, a special two-stage percep- tron one-class-one-network (OCON) classification structure is implemented. In the first stage, the classifier combines the decision results of the neural networks and the Euclidean dis- tance obtained using the three feature sets. The results of the first stage classifier feed a second-stage radial basis function (RBF) neural network structure, which makes the final de- cision. A database is used which contains the signatures of 115 writers, with between 15 and 20 genuine signatures per writer. An average FRR and FAR of 3% and 9.8%, respectively is obtained.
-% Kaewkongka [8] uses the Hough transform (general Radon transform) to extract the parameterised Hough space from a signature skeleton as a unique characteristic feature of a signature. A backpropagation neural network is used to evaluate the performance of the method. The system is tested with 70 signatures from different writers and a recognition rate of 95.24% is achieved.
-% Quek [13] investigates the feasibility of using a pseudo- outer product-based fuzzy neural network for skilled forgery detection. He uses global baseline features (i.e., the vertical and horizontal position in the signature image which corre- sponds to the peak in the frequency histogram of the vertical and horizontal projection of the binary image, respectively), pressure features (that correspond to high pressure regions in the signature), and slant features (which are found by ex- amining the neighbours of each pixel of the thinned signa- ture). He then conducts two types of experiments. The first group of experiments use genuine signatures and forgeries as training data, while the second group of experiments use only genuine signatures as training data. These experiments are conducted on the signatures of 15 different writers, that is, 5 writers from 3 different ethnic groups. For each writer, 5 genuine signatures and 5 skilled forgeries are submitted. When genuine signatures and forgeries are used as training data, the average of the individual EERs is 22.4%. Compa- rable results are obtained when only genuine signatures are used as training data.
-
-
-
-
-% \subsection{Template matching techniques}
-
-% Deng [7] developed a system that uses a closed contour trac- ing algorithm to represent the edges of each signature with several closed contours. The curvature data of the traced closed contours are decomposed into multiresolutional sig- nals using wavelet transforms. The zero crossings corre- sponding to the curvature data are extracted as features for matching. A statistical measurement is devised to decide sys- tematically which closed contours and their associated fre- quency data are most stable and discriminating. Based on these data, the optimal threshold value which controls the ac- curacy of the feature extraction process is calculated. Match- ing is done through dynamic time warping. Experiments are conducted independently on two data sets, one consisting of English signatures and the other consisting of Chinese sig- natures. For each experiment, twenty-five writers are used with ten training signatures, ten genuine test signatures, ten skilled forgeries, and ten casual forgeries per writer. When only the skilled forgeries are considered, AERs of 13.4% and 9.8% are reported for the respective data sets. When only the casual forgeries are considered, AERs of 2.8% and 3.0% are reported.
-% Fang [9] proposes two methods for the detection of skilled forgeries. These methods are evaluated on a database of 1320 genuine signatures from 55 writers and 1320 forg- eries from 12 forgers. In determining the FRR, the leave- one-out method was adopted to maximise the use of the available genuine signatures. The first method calculates one- dimensional projection profiles for each signature in both the horizontal and vertical directions. These profiles are then op- timally matched with reference profiles using dynamic pro- gramming. This method differs from previous methods in the sense that the distance between the warped projection profiles is not used in the decision. Instead, the positional distortion of each point of the sample profile, when warped onto a reference profile, is incorporated into a distance mea- sure. A Mahalanobis distance is used instead of a simple Euclidean distance. The leave-one-out covariance (LOOC) method is adopted for this purpose, but the unreliable off- diagonal elements of the covariance matrices are set to zero. When binary and gray-scale signatures are considered, the best AERs for this method are 20.8% and 18.1%, respectively. The second method matches the individual stroke segments of a two-dimensional test signature directly with those of a template signature using a two-dimensional elastic match- ing algorithm. The objective of this algorithm is to achieve maximum similarity between the “elements” of a test signa- ture and the “elements” of a reference signature, while min- imising the deformation of these signatures. A gradient de- scent procedure is used for this purpose. Elements are short straight lines that approximate the skeleton of a signature. A
-% Mahalanobis distance with the same restrictions as for the first method is used. An AER of 23.4% is achieved for this method.
-% Guo [11] approached the offline problem by establish- ing a local correspondence between a model and a ques- tioned signature. The questioned signature is segmented into consecutive stroke segments that are matched to the stroke segments of the model. The cost of the match is deter- mined by comparing a set of geometric properties of the corresponding substrokes and computing a weighted sum of the property value differences. The least invariant fea- tures of the least invariant substrokes are given the largest weights, thus emphasizing features that are highly writer de- pendant. Using the local correspondence between the model and a questioned signature, the writer dependant informa- tion embedded at the substroke level is examined and un- ballistic motion and tremor information in each stroke seg- ment are examined. Matching is done through dynamic time warping. A database with 10 writers is used with 5 train- ing signatures, 5 genuine test signatures, 20 skilled forgeries, and ten casual forgeries per writer. An AER of 8.8% is ob- tained when only skilled forgeries are considered and an AER of 2.7% is obtained when only casual forgeries are consid- ered.
-
-
-% \subsection{Minimum distance classifiers}
-
-% Fang [10] developed a system that is based on the assump- tion that the cursive segments of forged signatures are gener- ally less smooth than that of genuine ones. Two approaches are proposed to extract the smoothness feature: a crossing method and a fractal dimension method. The smoothness feature is then combined with global shape features. Verifi- cation is based on a minimum distance classifier. An itera- tive leave-one-out method is used for training and for testing genuine test signatures. A database with 55 writers is used with 24 training signatures and 24 skilled forgeries per writer. An AER of 17.3% is obtained.
-% Fang [14] also developed a system that uses an elastic matching method to generate additional samples. A set of peripheral features, which is useful in describing both the in- ternal and the external structures of signatures, is employed to represent a signature in the verification process. Verifica- tion is based on a Mahalanobis distance classifier. An itera- tive leave-one-out method is used for training and for test- ing genuine test signatures. The same database that was used in Fang’s previous paper [10] is again used here. The addi- tional samples generated by this method reduced the AER from 15.6% to 11.4%.
-% Mizukami [15] proposed a system that is based on a dis- placement extraction method. The optimum displacement functions are extracted for any pair of signatures using min- imization of a functional. The functional is defined as the sum of the squared Euclidean distance between two signa- tures and a penalty term that requires smoothness of the displacement function. A coarse-to-fine search method is applied to prevent the calculation from stopping at local minima. Based on the obtained displacement function, the
-% Offline Signature Verification Using the DRT and a HMM
-% 563
-% ￼dissimilarity between the questioned signature and the cor- responding authentic one is measured. A database with 20 writers is used with 10 training signatures, 10 genuine test signatures, and 10 skilled forgeries per writer. An AER of 24.9% is obtained.
-% Sabourin [12] uses granulometric size distributions for the definition of local shape descriptors in an attempt to characterise the amount of signal activity exciting each retina on the focus of an superimposed grid. He then uses a nearest neighbour and threshold-based classifier to detect random forgeries. A total error rate of 0.02% and 1.0% is reported for the respective classifiers. A database of 800 genuine sig- natures from 20 writers is used.
 
 
 

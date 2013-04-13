@@ -716,14 +716,14 @@ As both phenomenon are very characteristics for signature verification, more adv
 
 \begin{figure}
         \centering
-        \begin{subfigure}[b]{0.45\textwidth}
+        \begin{subfigure}[b]{0.30\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/dtw-stretch.eps}
                 % \caption{HMM1}
                 \label{fig:hmm1}
         \end{subfigure}%
         \quad
-        \begin{subfigure}[b]{0.45\textwidth}
+        \begin{subfigure}[b]{0.30\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/dtw-distort.eps}
                 % \caption{HMM1}
@@ -833,7 +833,36 @@ A Hidden Markov Model (HMM) is a stochastic process with an underlying Markov Mo
 Unlike with Markov Models (MM), the states of a Hidden Markov Model can not directly be observed. Only the symbols emitted from Model's states may be observed. As each symbol may have been emitted by any state moving from state to state is hidden from the observer. If the signature is interpreted as a succession of observed symbols then we can, given an HMM, calculate the probability of each path through the states in the model. By training the HMM to math the signatures that are known to be genuine we can thus reconstruct a probability of the user matching.
 
 
-THe underlying Markov model is modeled according to the application. The most common types are shown in Figure \ref{fig:markov-models}:
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=\textwidth]{figures/hmm-general-model.eps}
+    \end{center}
+    \caption{General representation of an HMM with states $w_1, w_2, w_3, ...$, observations $v_1, v_2, v_3, ...$, the state transition probabilities $a_{ij}$ and the observation emission probabilities $b_{ij}$}
+    \label{fig:hmm-general-model}
+\end{figure}
+
+
+An HMM as illustrated in Figure \ref{fig:hmm-general-model} is defined by:
+
+\begin{itemize}
+ \item $N$ hidden states $w_1, w_2, ..., w_N$
+ \item the alphabet of $M$ of symbols $v_1, v_2, ...$
+ \item the $N\times N$ transition matrix $A$, which fulfills
+ $$\forall i,\qquad \sum_{j=1}^{N} a_{ij} = 1$$
+ and which elements are defined by
+ $$a_{ij} \geq 0, \qquad a_{ij} = P(w_j(t+1)|w_i(t)), \qquad 1 \leq i,j \leq N$$
+
+ \item the $N \times M$ emission matrix $B$, which fulfills
+ $$\forall i,\qquad \sum_k b_j(k) = 1 $$
+ and which elements are defined by
+ $$b_j(v(t)) = P(v(t)|w_j(t))$$
+
+ \item the initial distribution $\pi$
+\end{itemize}
+
+
+
+The underlying Markov Model of an HMM is modeled according to the application. The most common types are shown in Figure \ref{fig:markov-models}:
 \begin{itemize}
 \item Left-To-Right HMM (LTR HMM) are characterized by the fact that from each state only the same state or more right state can be reached. Once a state is left, it is never reached again. Depending on the application, no skipping of states (top left), skipping a single step (top right) or skipping an arbitrary number of states may be allowed (mid left). Which states can be reached from which state is defined by the initial transition matrix. TODO: Reference to our transition matrix which is a non-skipping HMM
 \item Parallel HMMs have parallel paths, only the states belonging to the same path can be reached once a path is chosen. They have similar properties to LTR Markov Models with the exception that there are multiple paths.
@@ -844,14 +873,14 @@ In speech and signature recognition, a left-to-right Markov Model has proven to 
 
 \begin{figure}
         \centering
-        \begin{subfigure}[b]{0.45\textwidth}
+        \begin{subfigure}[b]{0.35\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr1.eps}
                 % \caption{HMM1}
                 \label{fig:hmm1}
         \end{subfigure}%
         \quad
-        \begin{subfigure}[b]{0.45\textwidth}
+        \begin{subfigure}[b]{0.35\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr2.eps}
                 % \caption{HMM1}
@@ -860,21 +889,21 @@ In speech and signature recognition, a left-to-right Markov Model has proven to 
 
         ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
           %(or a blank line to force the subfigure onto a new line)
-        \begin{subfigure}[b]{0.45\textwidth}
+        \begin{subfigure}[b]{0.35\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr3.eps}
                 % \caption{HMM1}
                 \label{fig:hmm1}
         \end{subfigure}%
         \quad
-        \begin{subfigure}[b]{0.45\textwidth}
+        \begin{subfigure}[b]{0.35\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr5.eps}
                 % \caption{HMM1}
                 \label{fig:hmm1}
         \end{subfigure}%
 
-        \begin{subfigure}[b]{0.30\textwidth}
+        \begin{subfigure}[b]{0.25\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr4.eps}
                 % \caption{HMM1}
@@ -890,54 +919,73 @@ In speech and signature recognition, a left-to-right Markov Model has proven to 
 
 While HMMs with a small set of states and observations perform bad because they are too simple, too many states and observations make the model computational heavy and accuracy is reduced because of overfitting.
 
-HMMs are applied in different fields, mostly to solve one of these three fundamental problems:
-\begin{itemize}
-\item Given the model parameters and observed data, estimate the optimal sequence of hidden states. This is solved by the Viterbi algorithm.
-\item Given the model parameters and observed data, calculate the likelihood of the data. This is often solved with the Forward-Backward algorithm.
-\item Given just the observed data, estimate the model parameters. The Baum-Welch algorithm is used to estimate the model parameters.
-\end{itemize}
+The following three problems and their solution are what make HMMs so useful for real world applications:
+\begin{enumerate}
+\item Evaluation: Given the model parameters and observed data, estimate the optimal sequence of hidden states. This problem is solved by applying the Forward-Backward algorithm to the model.
+\item Decoding: Given the model parameters and observed data, calculate the likelihood of the data. This is often solved with the Viterbi algorithm.
+\item Training: Given just the observed data, estimate the model parameters. The Baum-Welch algorithm is used to estimate the model parameters.
+\end{enumerate}
 
-The second and third case apply to our problem. We follow previous authors who used the discretized angle between two points of a signature as the symbols. Based on those symbols, we train our model using the Baum-Welch algorithm. After training signature models, we calculate the likelihood of a signature belonging to a certain card holder by using the Forward-Backward algorithm to compare the signature to this card holder's signature model.
+We're interested in the Evaluation of an observed sequence to match a test signature to one of the signature models and we are interested in the training to train the signature models with the signatures we collect from a card holder. We follow previous authors who used the discretized angle between two points of a signature as the symbols. Based on those symbols, we train our model using the Baum-Welch algorithm. After training signature models, we calculate the likelihood of a signature belonging to a certain card holder by using the Forward-Backward algorithm to compare the signature to this card holder's signature model.
 
-
-\textbf{The symbols} are calculated as the discretized angle between two points in a signature.
-
-
-\textbf{The Baum-Welch-Algorithm} is used to train signature models.
+\textbf{The symbols} are calculated as the discretized angle between two points in a signature as illustrated in Figure \ref{fig:hmm-symbol-creation}. We use an alphabet of 4, 8 and 16 symbols in our experiment as described in TODO: ref to experiments section.
 
 \begin{figure}[tb]
     \begin{center}
-        \includegraphics[width=\textwidth]{figures/hmm-general-model.eps}
+        \includegraphics[width=0.6\textwidth]{figures/symbol-creation.eps}
     \end{center}
-    \caption{General representation of an HMM with states $w_1, w_2, 2_3, ...$ and observations $v_1, v_2, v_3, ...$}
-    \label{fig:hmm-general-model}
+    \caption{Our symbols are defined as the discretized tangular angle. The left image represents a close up look of a signature and the dots that define it. The drawing in the middle shows a zoomed version of the boxed segment on the right and the tangular angle for the two dots in this area. The right drawing shows the discretized $\gamma\prime$ for an alphabet of 8 symbols.}
+    \label{fig:hmm-symbol-creation}
 \end{figure}
 
-\textbf{Algorithm}: An HMM is defined by the following elements:
 
-The HMM consists of $N$ states $w_1, w_2, ..., w_N$, each of which cannot be directly observed. Each of the states emits a symbol at time $t$ which can be observed. Therefore, after going through $T$ time steps, the System emits the sequence $$V^T = \{ v(1), v(2), ..., v(T)\}$$
+\textbf{Evaluation: The Forward-Backward algorithm} is a recursive solution. A first approach to evaluate, which model has produced a certain set of observations might be the following:
+\begin{enumerate}
+\item For all possible observation sequences, calculate the probability of going from the first to the last state while emitting that sequence
+\item These probabilities sum up to the total probability $P(V^T)$
+$$P(V^T) = \sum\limits_{r=1}^{r_\text{max}} P(V^T | w_r^T)P(w_r^T)$$
+\item For all possible sequences in $w_r^T = w(1), w(2), ..., w(T)$ within $T$ time intervals we get
+$$P(V^T) = \sum\limits_{r=1}^{r_\text{max}} \prod\limits_{t=1}^T  P(v(t) | w_(t)) P(w(t)|w(t-1))$$
+\end{enumerate}
+The problem with this approach is that it is of complexity $\mathcal{O}(N^TT$ and therefore unfeasible even for small values of N and T. E.g. for $N=5$ States and $T=100$ observations, there are on the order of $100 * 5^100 \approx 10^{72}$ computations.
 
-The probabilities to go from one state to another are given by the Transition matrix $A$ with elements $$a_{ij} = P(w_j(t+1)|w_i(t))$$
+Clearly, a more efficient way is required. Fortunately, there's The Forward-Backward algorithm is a recursive approach to approximate the solution.
+\begin{enumerate}
+\item We define the forward-backward variable which is the probability that a model is currently in state $i$ and has already produced the first $t$ elements of $V^T$
+$$a_i(t) = \begin{cases} \pi_i b_i(v(0)), & \mbox{t = 0 } \\ \sum_{j=1}^N a_j(t-1)a_{ij}b_j (v(t))& \mbox{t \ne } \end{cases}$$
 
-The probability that a system is a certain state when an certain symbol is observed, is defined by the emission matrix $B$ with elements
-$$b_j(v(t)) = P(v(t)|w_j(t))$$
+\item So for $t=0$ we initialize $a$
+$$a_i(0) = \pi_i b_i (v(0))$$
 
-$A$ and $B$ fulfill the normalization condition:
-$$\sum_k b_j(k) = 1, \sum_{j=1}^{N} a_{ij} = 1$$
+\item We compute $a$ for all states $i$ at all times $t$
+\item The total probability that a model $M$ generated the sequence $V^T$ results from the sum of all $a_i(T)$
 
-
-Let $\pi$ be the initial probability distribution for a system to be in a certain state.
-
-To summarize, an HMM is defined by the transition matrix $A$, the emission matrix $B$ and the initial distribution $\pi$.
+$$P(V^T|M) = \sum\limits_{i=1}^N a_i(T)$$
+\end{enumerate}
 
 
-Therefore,
 
+\textbf{Training: The Baum-Welch-Algorithm} is used to train signature model. A detailed description is given by Rabiner et al. in \ref{rabiner1989tutorial}. The algorithm's output is the transition matrix $A$ that is most likely to generate the given sequence of observations. The following needs to be known to start the algorithm:
 \begin{itemize}
-\item Number of (hidden) States: $N$
-\item Number of Symbols per State: $M$
-\item Probability transition matrix $A = \{a_{ij}\}$ which defines the probability of going from one state to any other state or itself and holds $\sum_{j=1}^{N} a_{ij} = 1$ for all states $i$
+ \item the number of hidden states $N$
+ \item one or multiple observations sequences $V_1, V_2, ...$
+ \item the initial transition Matrix $A$, that defines the HMM's structure
+ \item the initial distribution $\pi$
 \end{itemize}
+
+In our case, we chose to work with an LTR HMM that doesn't allow to skip any states which leads to a transition matrix $A$ of the form:
+
+$$A = \left[\begin{array}{ccccc}a_{11} & a_{12} & 0 & \hdots & 0 \\0 & a_{22} & a_{23} & \cdots & 0 \\\vdots & \vdots & \vdots & \ddots & 0 \\0 & 0 & 0 & a_{(N-1)(N-1)} & a_{(N-1)N} \\0 & 0 & 0 & 0 & a_{NN}\end{array}\right]$$
+
+We also chose to work with a LTR HMM that doesn't skip any states and we chose $\pi$ such that the system starts in the first state:
+$$\pi = \left[\begin{array}{cccc}1 & 0 & \cdots & 0\end{array}\right]$$
+
+
+
+
+
+
+
 
 
 

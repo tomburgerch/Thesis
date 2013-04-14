@@ -926,7 +926,15 @@ The following three problems and their solution are what make HMMs so useful for
 \item Training: Given just the observed data, estimate the model parameters. The Baum-Welch algorithm is used to estimate the model parameters.
 \end{enumerate}
 
-We're interested in the Evaluation of an observed sequence to match a test signature to one of the signature models and we are interested in the training to train the signature models with the signatures we collect from a card holder. We follow previous authors who used the discretized angle between two points of a signature as the symbols. Based on those symbols, we train our model using the Baum-Welch algorithm. After training signature models, we calculate the likelihood of a signature belonging to a certain card holder by using the Forward-Backward algorithm to compare the signature to this card holder's signature model.
+We're interested in the Evaluation of an observed sequence to match a test signature to one of the signature models and we are interested in the training to train the signature models with the signatures we collect from a card holder. We follow previous authors who used the discretized angle between two points of a signature as the symbols. Based on those symbols, we train our model using the Baum-Welch algorithm. After training signature models, we calculate the likelihood of a signature belonging to a certain card holder by using the Forward-Backward algorithm to compare the signature to this card holder's signature model. A detailed description of all three problems and their solutions is given by Rabiner et al. in \ref{rabiner1989tutorial}.
+
+In our case, we chose to work with an LTR HMM that doesn't allow to skip any states which leads to a transition matrix $A$ of the form:
+
+$$A = \left[\begin{array}{ccccc}a_{11} & a_{12} & 0 & \hdots & 0 \\0 & a_{22} & a_{23} & \cdots & 0 \\\vdots & \vdots & \vdots & \ddots & 0 \\0 & 0 & 0 & a_{(N-1)(N-1)} & a_{(N-1)N} \\0 & 0 & 0 & 0 & a_{NN}\end{array}\right]$$
+
+We also chose to work with a LTR HMM that doesn't skip any states and we chose $\pi$ such that the system starts in the first state:
+$$\pi = \left[\begin{array}{cccc}1 & 0 & \cdots & 0\end{array}\right]$$
+
 
 \textbf{The symbols} are calculated as the discretized angle between two points in a signature as illustrated in Figure \ref{fig:hmm-symbol-creation}. We use an alphabet of 4, 8 and 16 symbols in our experiment as described in TODO: ref to experiments section.
 
@@ -939,7 +947,7 @@ We're interested in the Evaluation of an observed sequence to match a test signa
 \end{figure}
 
 
-\textbf{Evaluation: The Forward-Backward algorithm} is a recursive solution. A first approach to evaluate, which model has produced a certain set of observations might be the following:
+\textbf{Evaluation: The Forward-Backward algorithm} is a recursive solution. Before looking at the algorithm in detail, we discuss a direct approach to evaluate the probability. A first approach to evaluate which model has produced a certain set of observations might be the following:
 \begin{enumerate}
 \item For all possible observation sequences, calculate the probability of going from the first to the last state while emitting that sequence
 \item These probabilities sum up to the total probability $P(V^T)$
@@ -947,25 +955,32 @@ $$P(V^T) = \sum\limits_{r=1}^{r_\text{max}} P(V^T | w_r^T)P(w_r^T)$$
 \item For all possible sequences in $w_r^T = w(1), w(2), ..., w(T)$ within $T$ time intervals we get
 $$P(V^T) = \sum\limits_{r=1}^{r_\text{max}} \prod\limits_{t=1}^T  P(v(t) | w_(t)) P(w(t)|w(t-1))$$
 \end{enumerate}
-The problem with this approach is that it is of complexity $\mathcal{O}(N^TT$ and therefore unfeasible even for small values of N and T. E.g. for $N=5$ States and $T=100$ observations, there are on the order of $100 * 5^100 \approx 10^{72}$ computations.
+The problem with this approach is that it is of complexity $\mathcal{O}(N^TT)$ and therefore unfeasible even for small values of N and T. E.g. for $N=5$ States and $T=100$ observations, there are on the order of $100 * 5^100 \approx 10^{72}$ computations.
 
 Clearly, a more efficient way is required. Fortunately, there's The Forward-Backward algorithm is a recursive approach to approximate the solution.
+
 \begin{enumerate}
 \item We define the forward-backward variable which is the probability that a model is currently in state $i$ and has already produced the first $t$ elements of $V^T$
-$$a_i(t) = \begin{cases} \pi_i b_i(v(0)), & \mbox{t = 0 } \\ \sum_{j=1}^N a_j(t-1)a_{ij}b_j (v(t))& \mbox{t \ne } \end{cases}$$
+$$\alpha_i(t) = \begin{cases} \pi_i b_i(v(0)) & t = 0 \\ \sum_{j=1}^N \alpha_j(t-1)a_{ij}b_j (v(t))& t \ne 0 \end{cases}$$
 
-\item So for $t=0$ we initialize $a$
-$$a_i(0) = \pi_i b_i (v(0))$$
+\item For $t=0$ we initialize $a$
+$$\alpha_i(0) = \pi_i b_i (v(0))$$
 
-\item We compute $a$ for all states $i$ at all times $t$
-\item The total probability that a model $M$ generated the sequence $V^T$ results from the sum of all $a_i(T)$
+\item We compute $\alpha$ for all states $i$ at all times $t$
+\item The total probability that a model $M$ generated the sequence $V^T$ results from the sum of all $\alpha_i(T)$
 
-$$P(V^T|M) = \sum\limits_{i=1}^N a_i(T)$$
+$$P(V^T|M) = \sum\limits_{i=1}^N \alpha_i(T)$$
 \end{enumerate}
 
+This algorithm is only of complexity $\mathcal{0}(N^2T)$ which results in our example to $5^2 * 100 = 2500$ computations. Compared to the $10^72$, a saving of about 69 orders of magnitude.
+
+In a similar way, we can consider a backward variable $\beta_i(t)$ defined as
+$$\beta_i(t) = \begin{cases} 1 & t = T \\ \sum_{j=1}^N \beta_j(t+1)a_{ij}b_j (v(t+1))& t \ne T \end{cases}$$
+The backward variable $\beta$ defines the probability of the partial observation sequence from $t+1$ to the end. In analogy to $\alpha$, we get the same computational complexity to compute $\beta$.
 
 
-\textbf{Training: The Baum-Welch-Algorithm} is used to train signature model. A detailed description is given by Rabiner et al. in \ref{rabiner1989tutorial}. The algorithm's output is the transition matrix $A$ that is most likely to generate the given sequence of observations. The following needs to be known to start the algorithm:
+\textbf{Training: The Baum-Welch algorithm} is used to train signature model. The problem to adjust the model parameters $(A,B, \pi)$ to maximize the probability of the observed sequences is by by far the most difficult of the three. There is no analytical way to solve for the model which maximizes the probability. We can, however, find a local maximum with an iterative procedure such as the Baaum-Welch algorithm.
+The algorithm's output is the transition matrix $A$ that is most likely to generate the given sequence of observations. The following needs to be known about the model $M$ to start the algorithm:
 \begin{itemize}
  \item the number of hidden states $N$
  \item one or multiple observations sequences $V_1, V_2, ...$
@@ -973,23 +988,38 @@ $$P(V^T|M) = \sum\limits_{i=1}^N a_i(T)$$
  \item the initial distribution $\pi$
 \end{itemize}
 
-In our case, we chose to work with an LTR HMM that doesn't allow to skip any states which leads to a transition matrix $A$ of the form:
 
-$$A = \left[\begin{array}{ccccc}a_{11} & a_{12} & 0 & \hdots & 0 \\0 & a_{22} & a_{23} & \cdots & 0 \\\vdots & \vdots & \vdots & \ddots & 0 \\0 & 0 & 0 & a_{(N-1)(N-1)} & a_{(N-1)N} \\0 & 0 & 0 & 0 & a_{NN}\end{array}\right]$$
+In order to get to an iterative solution, we proceed as follows:
+\begin{enumerate}
+\item We first define the probability of being in state $w_i$ at time $t-1$ and being in state $w_j$ at time $t$ as
+$$
+\xi_{ij} (t) = P(w_i(t), w_j(t+1)| V^T, M)
+\\= \frac{\alpha_i(t)a_{ij}b_j(v(t+1))\beta_j(t+1)}{P(V^T|M)}
+$$ $$\\= \frac{\alpha_i(t)a_{ij}b_j(v(t+1))\beta_j(t+1)}{\sum_k = 1^N \sum_l = 1^N \alpha_k(t)a_{kl}b_l(v(t+1))\beta_l(t+1)}
+$$
 
-We also chose to work with a LTR HMM that doesn't skip any states and we chose $\pi$ such that the system starts in the first state:
-$$\pi = \left[\begin{array}{cccc}1 & 0 & \cdots & 0\end{array}\right]$$
+\item By summing over $j$ we get the probability to be in state $w_i$ at time $t$ as
+$$\gamma_i(t) = \sum\limits_{j=1}^N \xi_{ij}(t)$$
+
+\item With that, we can calculate the number of transitions from $w_i$ to $w_j$ as
+$$\sum\limits_{t=1}^{T-1} \xi_{ij}(t)$$
+and the expected number of transitions to any other state as
+$$\sum\limits_{t=1}^{T-1} \gamma{i}(t)$$
+\item And we get the expected number of times in one state from
+$$\sum\limits_{t=1}^T\gamma_i(t)$$
+\item With that we can calculate:
+\begin{itemize}
+\item Expected Frequency (number of times) in state $w_i$ at time $t=0$ $\overline{\pi_i}= \gamma_i(0)$
+\item $\overline{a_{ij}} = \frac{\mbox{expected number of transitions from state $w_i$ to state $w_j$}}{\mbox{expected number of transitions from state $w_i$}} = \frac{\sum_{t=1}^{T-1}\xi_{ij}(t)}{\sum_{t=1}^{T-1} \gamma_i(t)}$
+\item $\overline{b_j(k)} = \frac{\mbox{expected number of times in state $w_i$ and observing symbol $k$}}{\mbox{expected number of times in state $j$}} = \frac{\sum_{t=1}^T \gamma_i(t)b_i(k)}{\sum_{t=1}^T \gamma_i(t)}$
+
+\end{itemize}
+
+\item Through repeated execution of this algorithm, a local maximum will be found.
+
+\end{enumerate}
 
 
-
-
-
-
-
-
-
-
-\textbf{Training}:
 
 
 
@@ -1082,14 +1112,35 @@ Unlike signatures captured on a digital tablet, our database of signatures is ca
 We will consider these factors when applying our algorithm in Chapter X (TODO)
 
 
+
+
+
+
 \section{Feedback Loop}
 
+Due to the mentioned challenges, our systems are likely not to perform as well as the same systems on traditional signatures captured by pen on a digital tablet. We are likely to get results with a higher Equal Error Rate (EER) which would hurt SumUp's business if we declined transactions because of false positive matches.
+
+To eliminate the risk of blocking transactions because of a false positive match, we propose to use a feedback loop along with our signature verification system.
+
+Traditionally, the system would work as shown in Figure TODO
 
 
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{figures/fb-loop1.eps}
+    \end{center}
+    \caption{Simplified illustration of processing a transaction without the feedback loop. When the transaction object is received, the signature is extracted and analyzed. The score is compared with a threshold and if too low, the transaction is blocked. In case of a false positive match, this transaction is lost which we need to avoid.}
+    \label{fig:fb-loop1}
+\end{figure}
 
 
-
-
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{figures/fb-loop2.eps}
+    \end{center}
+    \caption{Simplified illustration of processing a transaction with the feedback loop. If the signature check does not reach the acceptance level, a request is sent to the merchant to confirm the card holder's signature. After a positive confirmation, the transaction is processed, otherwised blocked.}
+    \label{fig:fb-loop2}
+\end{figure}
 
 
 

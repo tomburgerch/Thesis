@@ -226,10 +226,10 @@ It is likely that these costs are higher due to more extensive regulations which
 
 SumUp's goal is to lower the barrier for merchants to accept credit card payments by providing a professional yet inexpensive solution for anyone to accept card payments. The company was founded in the fall of 2011 and has enjoyed a rapid growth since.
 Today, SumUp's services are used by thousands of merchants in more than ten European countries.
-The business has been successful because it removed two out of three of the previously mentioned obstacles to a more widespread adoption: anyone who signs up with SumUp receives a free card reader for use with a smartphone and there is no monthly subscription fee. As the merchant already owns the expensive hardware in form of a smartphone and most people already pay for a data subscription, the cost on both ends is much lower. This way, SumUp is able to finance itself through the 2.75 percent transaction fee. At its core, it competes with traditional Credit Card Terminal companies who require their users to pay a monthly fee for their terminal and the expensive initial charge for the device.
+The business has been successful because it removed two out of three of the previously mentioned obstacles to a more widespread adoption: anyone who signs up with SumUp receives a free card reader for use with a smartphone and there is no monthly subscription fee. As the merchant already owns the expensive hardware in form of a smartphone and most people already pay for a data subscription, the cost on both ends is reduced substantially. This way, SumUp is able to finance itself through the 2.75 percent transaction fee. At its core, it competes with traditional credit card terminal providers who require their clients to pay a monthly fee for their terminal and the expensive initial charge for the device.
 
 Instead of building and selling expensive hardware, the only hardware required --- the card reader --- is shipped at no charge and the software is distributed for free via the Apple AppStore and Google Play Store.
-Payment through SumUp gives taxi drivers, market traders and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advantage, in that mobile payments can now be processed right on the spot and without an initial financial investment.
+Payment through SumUp gives taxi drivers, market traders and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advantage. Card payments can now be processed right on the spot and without an initial financial investment.
 
 
 Processing a transaction with SumUp is illustrated in five simple steps in Fig \ref{fig:flow-customer}.
@@ -279,18 +279,18 @@ Processing a transaction with SumUp is illustrated in five simple steps in Fig \
 
 \begin{enumerate}
 \setcounter{enumi}{-1}
-    \item Once the merchant has registered a SumUp Account and provided identification documents, he receives a free card reader and can accept payments.
+    \item Once the merchant has registered a SumUp Account and provided identification documents, he receives a free card reader and can accept payments
     \item The purchase amount can be entered manually into the mobile application or via previously created products
-    \item Debit cards and credit cards like Visa and MasterCard are supported and can be chosen by clicking on the respective logo.
-    \item After reading the card, the mobile application shows a confirmation of the card type and number.
-    \item The customer confirms the transaction with a signature written onto the screen of the smartphone or tablet.
-    \item After successful completion, the customer can have the receipt sent to their email account or via SMS to their phone.
+    \item Debit cards and credit cards like Visa and MasterCard are supported and can be chosen by clicking on the respective logo
+    \item After reading the card, the mobile application shows a confirmation of the card type and number
+    \item The customer confirms the transaction with a signature written onto the screen of the smartphone or tablet
+    \item After successful completion, the customer can have the receipt sent to their email account or via text message to their phone
 \end{enumerate}
 
 
-Depending on the authorization method, a number of requests are made towards the SumUp servers and from there to other components of the transaction authorization chain, including acquirers, issuing banks and credit card institutions. Internally, a request is sent to SumUp's fraud server which performs a variety of checks and analysis to decide whether or not the transaction is accepted or declined. There's currently no established third party provider for fraud detection in this area and all rules are custom made by each company. The signature is part of the data that is exchanged with the fraud server and the signature verification process as described in Chapter \ref{chp:signature-verification} is an integral part of the  authorization process.
+Depending on the authorization method, a number of requests are made to the SumUp servers and from there to other components of the transaction authorization chain, including acquirers, issuing banks and credit card institutions. Internally, a request is sent to SumUp's fraud server which performs a variety of checks and analysis to decide whether the transaction is accepted or declined. There's currently no established third party provider for fraud detection in this area and all rules are custom made by each company. The signature is part of the data that is exchanged with the fraud server and the signature verification process, as described in Chapter \ref{chp:signature-verification}, is an integral part of the  authorization process.
 
-Along with simplicity, quick setup time and low cost, SumUp's advantage over its competitors is that it deducts a relatively low fee per transaction of 2.75\%. From that fee, it also pays the other parties in the value chain. To build a sustainable business model, SumUp will enable customers to also process other types of mobile payments, alongside credit card transactions. The Consumer-To-Business credit card transactions will only be one part of all mobile payment transactions. A long term strategy is to implement all payment schemes as listed by the European Payments Council (EPC). Mobile payments may at one point replace all current payment methods for Business-to-Consumer (B2C) transactions as well as Business-to-Business (B2B), Consumer-to-Business (C2B) and Consumer-to-Consumer (C2C) transactions as listed with examples in Table \ref{fig:mp-applications}. The EPC predicts this will happen due to the availability and convenience of mobile devices paired with the user's perception of having full control over it. This creates an environment of trust and convenience for conducting payments. \cite{mpwhitepaper}
+Along with simplicity, quick setup time and low cost, SumUp's advantage over its competitors is that it deducts a relatively low fee per transaction of 2.75\%. From that fee, it also pays the other parties in the value chain. To build a sustainable business model, SumUp will enable customers to also process other types of mobile payments, alongside credit card transactions. The Consumer-To-Business (C2B) credit card transactions will only be one part of all mobile payment transactions. A long term strategy is to implement all payment schemes as listed by the European Payments Council (EPC). Mobile payments may at one point replace all current payment methods for Business-to-Consumer (B2C) transactions as well as Business-to-Business (B2B), Consumer-to-Consumer (C2C) and C2B transactions as listed in Table \ref{fig:mp-applications}. The EPC predicts this will happen due to the availability and convenience of mobile devices paired with the user's perception of having full control over it. This creates an environment of trust and convenience for conducting payments \cite{mpwhitepaper}.
 
 
 \begin{figure}
@@ -316,11 +316,11 @@ B2B & Pay for Business Lunch \\ \hline
 
 \section{Fraud}
 
-Fraud, as defined by Phua et al. ~\cite{5522816}, refers to the abuse of a profit organization's system without necessarily leading to direct legal consequences. Fraud detection, as part of the overall fraud control, has become one of the most established applications of data mining.
+Fraud, as defined by Phua et al. ~\cite{5522816}, refers to the abuse of a profit organization's system without necessarily leading to direct legal consequences. Fraud detection, as part of the overall fraud protection, has become one of the most established applications of data mining.
 
-The large volume of transactions processed each day by SumUp make a manual verification of each transaction impossible. As such, SumUp has to rely on automated systems to process and validate transactions. At time of this research, there is no established provider of anti-fraud software in this field. However, companies like \fnurl{Sift Science}{http://siftscience.com}, a company that specializes in providing a fraud control service as a third party, has recently raised more than four millions USD from leading venture capital firms.
+The large volume of transactions processed each day by SumUp make a manual verification of each transaction impossible. As such, SumUp has to rely on automated systems to process and validate transactions. At time of this research, there is no established provider of anti-fraud software in this field. However, companies like \fnurl{Sift Science,}{http://siftscience.com} a company that specializes in providing a fraud control service as a third party, has recently raised more than four millions USD from leading venture capital firms.
 
-At the time of this work, SumUp has internal research to implement, train and tweak its own fraud rules. An internal assessment has shown that the four most popular fraud scenarios are the following:
+At the time of this work, SumUp has internal research to implement, train and tweak its own fraud rules. An internal assessment has shown that the four most popular fraud scenarios are:
 
 % As credit cards are historically a very unsafe payment method, special attention has to be paid when dealing with credit card information and processing credit card transactions.
 % A fact that is reflected by looking at how many papers were written about fraud detection in which area. As shown in Figure \ref{fig:fraud-literature-count}.

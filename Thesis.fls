@@ -114,6 +114,8 @@ INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/etex-pkg/etex.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/etex-pkg/etex.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/arydshln/arydshln.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/arydshln/arydshln.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/titlesec/titlesec.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/titlesec/titlesec.sty
 INPUT Thesis.aux
 INPUT Thesis.aux
 OUTPUT Thesis.aux
@@ -205,6 +207,7 @@ INPUT /usr/local/texlive/2012/texmf-dist/fonts/vf/adobe/courier/pcrr7t.vf
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/base/omscmr.fd
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT figures/flow1.png
 INPUT ./figures/flow1.png
@@ -385,4 +388,5 @@ INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb

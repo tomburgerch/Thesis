@@ -349,6 +349,15 @@ INPUT ./figures/fb-loop2.eps
 INPUT ./figures/fb-loop2-eps-converted-to.pdf
 INPUT ./figures/fb-loop2-eps-converted-to.pdf
 INPUT ./figures/fb-loop2-eps-converted-to.pdf
+INPUT figures/chart_total.png
+INPUT ./figures/chart_total.png
+INPUT ./figures/chart_total.png
+INPUT figures/chart_pep.png
+INPUT ./figures/chart_pep.png
+INPUT ./figures/chart_pep.png
+INPUT figures/chart_har.png
+INPUT ./figures/chart_har.png
+INPUT ./figures/chart_har.png
 INPUT Thesis.bbl
 INPUT Thesis.bbl
 OUTPUT Thesis.thm

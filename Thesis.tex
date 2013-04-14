@@ -1205,7 +1205,62 @@ Each request must be triggered via a POST request. Depending on the user object 
 
 \subsection{Results}
 
-Show how many false positives/false negatives were collected before switch to new component and after switch.
+The new component was released to production on March 4th, 2013, beginning of calendar week 10. At the same time, the old component was discontinued. Every new user was automatically checked during the sign-up process. In addition to that, Business Officers and Owners were checked manually through SOAP by the Operations Team.
+
+Chart \ref{fig:pep-hra-charts}
+
+
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/chart_total.png}
+                % \caption{HMM1}
+                \label{fig:chart-total}
+        \end{subfigure}%
+
+        \begin{subfigure}[b]{\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/chart_pep.png}
+                % \caption{HMM1}
+                \label{fig:chart-pep}
+        \end{subfigure}%
+
+        ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
+          %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{figures/chart_har.png}
+                % \caption{HMM1}
+                \label{fig:chart-har}
+        \end{subfigure}%
+
+        \caption{Different types of HMMs (from top left to bottom right): LTR HMM where skipping of states is not allowed, LRM with skipping of one step, LRM with allowed skipping, Parallel HMM, Ergodic HMM}
+        \label{fig:pep-hra-charts}
+\end{figure}
+
+
+Number of PEP/Sanction Hits (need review by ops)
+December:  283
+January: 463
+February: 853
+March:125
+April to Date:  9
+
+Operations Man hours:
+Note: If changes hadn't been implemented, man hours would significantly increase in line with increase in sign ups.
+
+December:  10 hours
+January: 16 hours
+February: 29 hours
+March:4 hours
+April to Date: 0. 3 hours
+
+
+Positive Hits -  40
+Unable to discount due to lack of information on merchant account - further docs requested : 170
+False Positive - 1523
+
 
 
 
@@ -1310,35 +1365,10 @@ We also collected three forgeries for each person. The forgeries were created by
 
 list different packages that are available and why we chose to work with matlab
 
-\subsubsection{Model}
-
-% We chose a discrete HMM to model each signer’s charac- teristics [15]. This avoids making assumptions on the form of the underlying distribution, specially when there is not much data as it is the case in signature verification. A sig- nature is modeled by a left-to-right HMM in order to take into account the regularities appearing in the sequence rep- resenting a signature. The number of states in each signer’s HMM is between 6 and 12, depending on the average length of his signature. The topology only authorizes transitions between each state to itself and to its immediate right-hand neighbors. The K-Means algorithm is used during training to create a codebook of 100 centers for each signer. This was judged a good trade-off between the number of cen- ters describing the space of the signer, and the number of observation vectors collected in the training database of the signer, corresponding to 15 signatures. By means of the Nearest Neighbors rule, each signature is encoded as a se- quence of symbols, that are the centers of the signer’s space.
-
-\subsubsection{Training}
-% For each signer 􏰠, HMM learning is done only on genuine signatures of 􏰐 􏰠􏰫 (15 signatures). The Baum-Welch algo- rithm was used during training
+Implementations: We ...
 
 
-\subsubsection{Evaluation/Matching}
-% For each signer 􏰠, HMM learning is done only on genuine signatures of 􏰐 􏰠􏰫 (15 signatures). The Baum-Welch algo- rithm was used during training, and the Viterbi algorithm during the verification phase to approximate the likelihood of the signature given the model [15]. As done in previous works [4, 5, 7, 16], we have used the Viterbi log-likelihood score divided by the number of points in the signature in order to perform verification.
 
-
-% As in [4], signature verification for signer 􏰠 was first per-formed using an adaptive threshold 􏰆 􏰮􏰞􏰮􏰣􏰥 􏰶􏰠􏰷 􏰭 􏰴􏰡 􏰶􏰠􏰷 􏰰 􏰨 where 􏰴􏰡 􏰶􏰠􏰷 denotes the average normalized log-likelihood score on the training database of signer 􏰠 and 􏰨 denotes an offset that is common to all signers. The decision is made on whether the pretended signature of signer 􏰠 is authentic or forged comparing the normalized log-likelihood score to this threshold. Two types of error are characteristic of the signature verification problem: false rejection (􏰏 􏰗 ), that is when an authentic signature is rejected, and false accep- tance (􏰏 􏰋), that is when a forgery is accepted. The level of these two error rates depends on the offset chosen; tradition- ally, the value of 􏰨 is chosen such as to realize the Equal Er- rorRate􏰎 􏰎 􏰗 (􏰏 􏰋 􏰭 􏰏 􏰗 ).Inordertoestimatetheoffset, we minimize the quadratic criterion 􏰶􏰏 􏰋􏰶􏰨􏰷 􏰰 􏰏 􏰗 􏰶􏰨􏰷􏰷 􏰬 on 􏰌 􏰋 (2330 signatures), which contains only genuine signa- tures and forgeries from signers of 􏰘 􏰫 (see Table 1). Then, we test the decision threshold on 􏰌 􏰙 (1365 signatures - same scheme for signers of 􏰘 􏰬 ).
-
-
-% \subsection{MLP}
-% http://en.wikipedia.org/wiki/Multilayer_perceptron
-
-% In opposition to the sequential and generative approach characteristic of the HMM expert, we have privileged here, for more complementarity, a discriminating model based on global features. Table 4 presents these features. No pre- liminary filtering was necessary for computing these fea- tures because the noise effect was neglectable since they result of a summation over the entire signature. Vari- ables􏰦 􏰨 􏰈 􏰦􏰩 􏰈 􏰂􏰈 Æ 􏰂􏰈 􏰄􏰨 and􏰄 􏰩 havebeenpreviouslydefined in sections 3.1 and 3.2. The four histograms (parameters 11-26) of Table 4 count the angles (􏰂􏰈 Æ 􏰂􏰈 􏰄 􏰨 􏰈 􏰄􏰩 ) which be- long to quadrants 1,2,3,4. This choice of features seems to be discriminant, according to [6], even if the importance of a feature depends strongly on the signer. This number of features may seem important, but as we deal with a great number of signers we need several features to characterize the signers’ variability. Moreover, our learning procedure
-
-% will allow a - specific to each signer - elimination of unnec- essary features.
-% 4.2. The MLP training and testing phase
-% We have designed one MLP expert for each signer. Due to the important number of MLPs, we have automated the training procedure: each MLP has 26 inputs, 5 hidden neu- ral units, and two sigmoidal outputs. Each training database consists in 15 genuine signatures and 15 ”other” signatures (􏰌 􏰋􏰔 , see Table 1) , because in real situations, the use of forgeries for training is not possible as they may not always be available. We train the MLP with a regularization tech- nique as described in [10], which reduces the complexity of the network and enables us to use small training-databases (30 examples). We have tested the networks on 􏰌 􏰙 and 􏰌 􏰙 􏰔 databases (see Table 1). As can be seen on Table 5, in both cases this network gives excellent performance for 􏰏 􏰗 rate, because MLPs manage to separate completely the class of the signer with the ”rest of the world”. On database 􏰌 􏰙 conversely, performance on forgeries are very poor, which was expected, because MLPs did not learn any forg- eries during the training phase. On 􏰌 􏰙 􏰔 database, perfor- mance on others (􏰕 􏰋 for Others Accepted) are better than forgeries on 􏰌 􏰙 , but not neglectable because we had too few examples (only 15) of ”other” signatures to build the separator between genuine signatures of a given signer and the ”rest of the world”. Note that in Table 5 no 􏰏 􏰋 rate is provided on 􏰌 􏰙 􏰔 which has no forgeries. Finally we have observed that the estimated effective number of param- eters [10] was always less than 40, which is less important than the initial 147 of each MLP expert.
-
-
-\section{Evaluation}
-% Throughout this paper, the false rejection rate (FRR), the false acceptance rate (FAR), the equal error rate (EER), and the average error rate (AER) are used as quality performance measures. The FRR is the ratio of the number of genuine test signatures rejected to the total number of genuine test sig- natures submitted. The FAR is the ratio of the number of forgeries accepted to the total number of forgeries submitted. When the decision threshold is altered so as to decrease the FRR, the FAR will invariably increase, and vice versa. When a certain threshold is selected, the FRR is equal to the FAR. This error rate is called the EER and the corresponding threshold may be called the equal error threshold. The average of the FRR and FAR is called the AER. When a threshold is used,
-
-% that is, close to the equal error threshold, the FRR and FAR will not differ much. In this case the AER is approximately equal to the EER.
 
 
 \subsection{Computational Requirements}
@@ -1352,22 +1382,16 @@ list different packages that are available and why we chose to work with matlab
 % Since the states in our HMM are organised in a ring and the dissimilarity value in (8) is based on an Euclidean distance measure, the number of flops required to match an obser- vation sequence with an HMM is on the order of T(Nl + d). Therefore, despite the high dimensionality of the feature vec- tors, relatively few flops are required to match an observation sequence with an HMM. With d = 512, T = 256, N = 64, and l = 1, on the order of only 147 456 flops are required. With these parameters, an EER of 17.9% is achieved when only skilled forgeries from the Stellenbosch data set are con- sidered. With d = 256, T = 128, N = 32 and l = 1, on the order of only 36 864 flops are required. With these parame- ters, an EER of 18.4% is achieved when only skilled forgeries from the Stellenbosch data set are considered (see Table 2).
 
 
+
+
+\section{Evaluation}
+% Throughout this paper, the false rejection rate (FRR), the false acceptance rate (FAR), the equal error rate (EER), and the average error rate (AER) are used as quality performance measures. The FRR is the ratio of the number of genuine test signatures rejected to the total number of genuine test sig- natures submitted. The FAR is the ratio of the number of forgeries accepted to the total number of forgeries submitted. When the decision threshold is altered so as to decrease the FRR, the FAR will invariably increase, and vice versa. When a certain threshold is selected, the FRR is equal to the FAR. This error rate is called the EER and the corresponding threshold may be called the equal error threshold. The average of the FRR and FAR is called the AER. When a threshold is used,
+
+% that is, close to the equal error threshold, the FRR and FAR will not differ much. In this case the AER is approximately equal to the EER.
+
+
 \subsection{Modi}
 
-
-
-
-
-
-\section{Discussion and conclusions}
-
-\subsection{Signature Detection}
-
-\subsection{Feedback Loop}
-
-\subsection{Future Work}
-
-- use lower bound proposed by Keogh et al.\cite{Keogh:2002:EID:1287369.1287405} to make DTW faster on large datasets
 
 
 
@@ -1385,11 +1409,13 @@ list different packages that are available and why we chose to work with matlab
 
 \chapter{Conclusions}
 
+\section{Fraud Prevention}
 
+\section{Fraud Detection}
 
+\section{Outlook}
 
-
-
+- use lower bound proposed by Keogh et al.\cite{Keogh:2002:EID:1287369.1287405} to make DTW faster on large datasets
 
 
 

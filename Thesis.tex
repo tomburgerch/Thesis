@@ -665,7 +665,7 @@ Global systems, also called feature-based systems, are characterized by the fact
 \item Signature length
 \item Total time to sign
 \item Maximum and average velocity
-\item Maximum and average acceleration
+\item Maximum acceleration
 \item Total dots recorded
 \item Number of segments
 \item Signature Heght (H), Width (W) and W to H-Ratio
@@ -1312,10 +1312,8 @@ The operation department reports that the number of man hours was reduced since 
 \subsection{Database}
 
 As there don't seem to be any publicly available databases of signatures that were collected with a finger on a mobile device, we collected our own database and forgeries.
-
-Between 8 and 80 Signatures per person were collected from 11 people on 4 different days on four different devices. In total, a set of 487 signatures was collected.
-
-The devices used to collect the signatures are listed in Table \ref{tbl:signatures-devices}.
+Between 8 and 80 Signatures per person were collected from 11 people on 4 different days on four different devices. This is an approximation of the reality in terms of how many signatures we have for one card holder and on how many different devices signatures for one card holder were collected. In total, a set of 487 signatures was collected. However, for most of our results, the signatures captured on the Android device were neglected due to a bug in the capturing software.
+The devices used to collect the signatures are listed in Table \ref{tbl:signatures-devices} and were all used equally often.
 
 \begin{table}[tb]
     \begin{center}
@@ -1339,7 +1337,7 @@ The devices used to collect the signatures are listed in Table \ref{tbl:signatur
     \caption{The four devices used to collect signatures, ordered by screen size}
 \end{table}
 
-We also collected three forgeries for each person. The forgeries were created by an untrained person in the following modi.
+We also collected three forgeries for each person. The forgeries are created by an untrained person and of the following kind:
 
 \begin{itemize}
 \item \textbf{Spontaneous Forgery}: A random signature from the set of one person's signatures was shown the imposter for 5 secs. The imposter was only allowed to forge the signature after the five seconds.
@@ -1347,13 +1345,116 @@ We also collected three forgeries for each person. The forgeries were created by
 \item \textbf{Knowledgable Forgery}: The imposter had unlimited access to all of one person's signatures to forge the signature.
 \end{itemize}
 
-\subsubsection{Pre-Alignment and Normalization}
-
-% \section{Databases}
-% most available signature DB are pen/tablet signatures
 
 
-\subsection{Forgeries}
+\subsection{Pre-Alignment and Normalization}
+
+
+
+\subsection{Global Features}
+Our solution uses the following global features, as listed in Section \ref{sec:features}:
+
+\begin{itemize}
+\item Signature length in pixels $l$
+\item Total time to sign in milliseconds $t$
+\item Maximum and average velocity $v_\text{max}, \bar{v}$
+\item Maximum acceleration $a_\text{max}$
+\item Number of segments $n$
+\item Width to height ration $r$
+\end{itemize}
+
+Other common features, e.g.\ the total number of dots recorded, are irrelevant for our experiments as those features are device specific and can thus not be used to calculate the similarity between signatures.
+Table \ref{tbl:global-features-results-avg} shows our results for the average of these features for each person's signature set.
+
+\begin{table}[tb]
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c|c|c|c}
+        \hline
+        \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+        \hline
+        0 & 1316.81 & 1640.0 & 2.27 & 0.8 & 1.11 & 2.0 & 0.0 \\ \hdashline[0.5pt/3pt]
+        1 & 998.84 & 1015.0 & 1.78 & 0.98 & 0.77 & 1.0 & 0.0 \\ \hdashline[0.5pt/3pt]
+        2 & 827.09 & 1373.0 & 1.5 & 0.6 & 0.58 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+        3 & 839.37 & 1445.0 & 1.71 & 0.58 & 0.7 & 2.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+        4 & 1434.08 & 2250.0 & 2.22 & 0.64 & 1.49 & 3.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+        5 & 669.82 & 1122.0 & 1.79 & 0.6 & 0.49 & 1.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+        6 & 924.78 & 1856.0 & 1.14 & 0.5 & 0.64 & 2.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+        7 & 1281.41 & 1399.0 & 2.49 & 0.92 & 1.53 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+        8 & 843.17 & 1424.0 & 1.13 & 0.59 & 0.48 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+        9 & 639.14 & 1209.0 & 1.7 & 0.53 & 0.73 & 1.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+        10 & 1299.5 & 5467.0 & 0.79 & 0.24 & 0.41 & 4.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+        \hline
+        \end{tabular}
+    \end{center}
+    \label{tbl:global-features-results-min}
+    \caption{The minimum values for each signature set and all global features}
+\end{table}
+
+\begin{table}[tb]
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c|c|c|c}
+        \hline
+        \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+        \hline
+        0 & 1701.69 & 1942.75 & 15.5 & 0.88 & 16.93 & 2.13 & 0.5 \\ \hdashline[0.5pt/3pt]
+        1 & 221249.7 & 1418.95 & 4986.88 & 155.93 & 12093.85 & 2.04 & 1.38 \\ \hdashline[0.5pt/3pt]
+        2 & 1235.27 & 1773.95 & 11.24 & 0.7 & 13.36 & 2.0 & 1.93 \\ \hdashline[0.5pt/3pt]
+        3 & 1206.72 & 1762.06 & 10.22 & 0.68 & 18.96 & 3.11 & 2.33 \\ \hdashline[0.5pt/3pt]
+        4 & 2565.76 & 3217.96 & 17.62 & 0.8 & 27.72 & 5.58 & 2.42 \\ \hdashline[0.5pt/3pt]
+        5 & 1104.21 & 1588.11 & 8.1 & 0.7 & 9.58 & 3.43 & 2.81 \\ \hdashline[0.5pt/3pt]
+        6 & 1308.19 & 3047.47 & 5.23 & 0.43 & 8.25 & 8.0 & 2.3 \\ \hdashline[0.5pt/3pt]
+        7 & 2480.3 & 2102.87 & 13.71 & 1.18 & 16.89 & 3.87 & 2.04 \\ \hdashline[0.5pt/3pt]
+        8 & 1260.28 & 2194.41 & 6.79 & 0.57 & 9.41 & 2.64 & 2.07 \\ \hdashline[0.5pt/3pt]
+        9 & 1311.1 & 1574.98 & 11.18 & 0.83 & 15.12 & 2.6 & 1.47 \\ \hdashline[0.5pt/3pt]
+        10 & 2047.7 & 6953.81 & 3.95 & 0.29 & 5.04 & 12.19 & 2.4 \\ \hdashline[0.5pt/3pt]
+        \hline
+        \end{tabular}
+    \end{center}
+    \label{tbl:global-features-results-avg}
+    \caption{The average values for each signature set and all global features}
+\end{table}
+
+\begin{table}[tb]
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c|c|c|c}
+        \hline
+        \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+        \hline
+        0 & 2571.75 & 2282.0 & 54.42 & 1.13 & 73.35 & 3.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+        1 & 20214773.31 & 2537.0 & 457608.0 & 7967.98 & 1110987.0 & 4.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+        2 & 2048.9 & 2957.0 & 82.49 & 0.69 & 139.0 & 2.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+        3 & 2069.97 & 2117.0 & 52.35 & 0.98 & 105.95 & 5.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+        4 & 4673.42 & 9370.0 & 104.48 & 0.5 & 180.54 & 8.0 & 4.0 \\ \hdashline[0.5pt/3pt]
+        5 & 2041.9 & 2914.0 & 63.79 & 0.7 & 99.93 & 5.0 & 4.0 \\ \hdashline[0.5pt/3pt]
+        6 & 2425.82 & 4694.0 & 41.11 & 0.52 & 48.09 & 11.0 & 4.0 \\ \hdashline[0.5pt/3pt]
+        7 & 4388.68 & 3633.0 & 75.89 & 1.21 & 134.83 & 5.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+        8 & 1958.88 & 4349.0 & 65.51 & 0.45 & 92.97 & 8.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+        9 & 2146.82 & 2749.0 & 65.46 & 0.78 & 112.3 & 4.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+        10 & 3428.25 & 8083.0 & 20.12 & 0.42 & 33.69 & 17.0 & 9.0 \\ \hdashline[0.5pt/3pt]
+        \hline
+        \end{tabular}
+    \end{center}
+    \label{tbl:global-features-results-max}
+    \caption{The maximum values for each signature set and all global features}
+\end{table}
+
+
+\subsection{Dynamic Time Warping}
+
+
+
+\subsection{Fusion of the Scores}
+
+
+
+\subsection{Results}
+
+Computational feasibility
+
+
+
+
+% \subsection{Forgeries}
 % A signature verification system typically focuses on the detection of one or more category of forged signatures. A skilled forgery is produced when the forger has unrestricted
 % access to one or more samples of the writer’s actual signa- ture (see Figure 1b). A casual forgery or a simple forgery (see Figure 1c) is produced when the forger is familiar with the writer’s name, but does not have access to a sample of the ac- tual signature—stylistic differences are therefore prevalent. A random forgery or zero-effort forgery (see Figure 1d) can be any random scribble or a signature of another writer, and may even include the forger’s own signature. The genuine signatures and high quality forgeries for other writers are usually considered to be forgeries of this type.
 % Skilled forgeries can be subdivided into amateur and pro- fessional forgeries. A professional forgery is produced by an in- dividual who has professional expertise in handwriting anal- ysis. They are able to circumvent obvious problems and ex- ploit their knowledge to produce high-quality, spacial forg- eries (see Figure 2b).
@@ -1385,9 +1486,9 @@ We also collected three forgeries for each person. The forgeries were created by
 
 
 
-\subsection{Experiment Setup}
+% \subsection{Experiment Setup}
 
-\subsubsection{Feature Extraction}
+% \subsubsection{Feature Extraction}
 
 % From 01030918.pdf:
 % Like in [2], in order to estimate the speed at time 􏰥, we consider the point visited at time 􏰥, 􏰖 􏰶􏰥􏰷 􏰭 􏰶􏰨􏰶􏰥􏰷􏰈 􏰩 􏰶􏰥􏰷􏰷 and its two neighbors in the se-
@@ -1399,20 +1500,13 @@ We also collected three forgeries for each person. The forgeries were created by
 % include also for motion direction 􏰂􏰶􏰥􏰷 and Æ 􏰂􏰶􏰥􏰷 under the form of their cosine and sine.1 Besides these 5 dynamic features, we keep the axial pressure and the pen-tilt. Fur- thermore, following the principle in [11], we extract a low resolution image (of 9 values) around each point in order to introduce spatial information. As shown in Fig. 1, a 􏰺 􏰱 􏰺 window centered on each point of this sequence permits to compute a ”context bitmap” as follows: when the window is centered on a pen-down, the number of pen-down points in each of the 9 rectangles are computed; when the win- dow is centered on a pen-up, the 9 values representing the low resolution image of spatial context are all set to zero. This permits to introduce rough variations in such parame- ters when a pen-up appears in the sequence. The window shifts along the trajectory described by the pen, point per point. Therefore, 17 parameters are extracted on each point of the sequence: 8 dynamic and 9 static.
 
 
-\subsubsection{Dynamic Time Warping}
+% \subsubsection{Dynamic Time Warping}
 
 
-\subsubsection{Hidden Markov Models}
-
-list different packages that are available and why we chose to work with matlab
-
-Implementations: We ...
+% \subsubsection{Hidden Markov Models}
 
 
-
-
-
-\subsection{Computational Requirements}
+% \subsection{Computational Requirements}
 % An automatic signature verification system can only be eco- nomically viable when the processing requirements are feasi- ble. The practicality of our system as a real-time application depends on the number of floating point operations (flops) required to verify a test signature. The bulk of these flops are
 % required to calculate the DRT. Much less flops are required to match a set of feature vectors (which represents a test signa- ture) with the HMM of the claimed writer’s signature.
 
@@ -1425,13 +1519,13 @@ Implementations: We ...
 
 
 
-\section{Evaluation}
+% \section{Evaluation}
 % Throughout this paper, the false rejection rate (FRR), the false acceptance rate (FAR), the equal error rate (EER), and the average error rate (AER) are used as quality performance measures. The FRR is the ratio of the number of genuine test signatures rejected to the total number of genuine test sig- natures submitted. The FAR is the ratio of the number of forgeries accepted to the total number of forgeries submitted. When the decision threshold is altered so as to decrease the FRR, the FAR will invariably increase, and vice versa. When a certain threshold is selected, the FRR is equal to the FAR. This error rate is called the EER and the corresponding threshold may be called the equal error threshold. The average of the FRR and FAR is called the AER. When a threshold is used,
 
 % that is, close to the equal error threshold, the FRR and FAR will not differ much. In this case the AER is approximately equal to the EER.
 
 
-\subsection{Modi}
+% \subsection{Modi}
 
 
 

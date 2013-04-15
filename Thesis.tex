@@ -588,7 +588,7 @@ The third task, answering requests from the sign-up flow is done via a REST inte
 
 \begin{figure}[tb]
     \begin{center}
-        \includegraphics[width=0.8\textwidth]{figures/fraud-arch.eps}
+        \includegraphics[width=\textwidth]{figures/fraud-arch2.eps}
     \end{center}
     \caption{The simplified architecture and strucutre of a PEP/HRA check request}
     \label{fig:fraud-arch}
@@ -605,9 +605,6 @@ A request is triggered and answered with the following steps:
 \item The result is returned to the sign-up component with information of whether or not the user can continue the sign-up flow
 \item The respective KYC actions and statuses are set in the database.
 \end{enumerate}
-
-TODO: Add performance improvement/performance data in Experiments chapter
-
 
 
 

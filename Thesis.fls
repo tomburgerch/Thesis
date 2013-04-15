@@ -116,6 +116,10 @@ INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/arydshln/arydshln.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/arydshln/arydshln.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/titlesec/titlesec.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/titlesec/titlesec.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/multirow/multirow.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/multirow/multirow.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/rotating/rotating.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/rotating/rotating.sty
 INPUT Thesis.aux
 INPUT Thesis.aux
 OUTPUT Thesis.aux

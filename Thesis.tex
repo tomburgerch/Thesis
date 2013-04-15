@@ -120,6 +120,15 @@
 \usepackage{titlesec}
 \newcommand{\sectionbreak}{\clearpage}
 
+% more space in tables
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.2}
+
+% make a cell span over multiple rows
+\usepackage{multirow}
+% and to rotate them
+\usepackage{rotating}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DOCUMENT METADATA
 
@@ -869,7 +878,7 @@ An HMM as illustrated in Figure \ref{fig:hmm-general-model} is defined by:
 
 The underlying Markov Model of an HMM is modeled according to the application. The most common types are shown in Figure \ref{fig:markov-models}:
 \begin{itemize}
-\item Left-To-Right HMM (LTR HMM) are characterized by the fact that from each state only the same state or more right state can be reached. Once a state is left, it is never reached again. Depending on the application, no skipping of states (top left), skipping a single step (top right) or skipping an arbitrary number of states may be allowed (mid left). Which states can be reached from which state is defined by the initial transition matrix. TODO: Reference to our transition matrix which is a non-skipping HMM
+\item Left-To-Right HMM (LTR HMM) are characterized by the fact that from each state only the same state or more right state can be reached. Once a state is left, it is never reached again. Depending on the application, no skipping of states (top left), skipping a single step (top right) or skipping an arbitrary number of states may be allowed (mid left). Which states can be reached from which state is defined by the initial transition matrix. We define our transition matrix in Equation \ref{eq:hmm-transition-matrix} as an LTR model where no states can be skipped.
 \item Parallel HMMs have parallel paths, only the states belonging to the same path can be reached once a path is chosen. They have similar properties to LTR Markov Models with the exception that there are multiple paths.
 \item Ergodic HMMs are the most generic form of Markov Models where a transition is possible from any state to any other state or the same state. The transition matrix of an ergodic Markov Model has only non-zero elements.
 \end{itemize}
@@ -934,8 +943,11 @@ The following three problems and their solution are what make HMMs so useful for
 We're interested in the Evaluation of an observed sequence to match a test signature to one of the signature models and we are interested in the training to train the signature models with the signatures we collect from a card holder. We follow previous authors who used the discretized angle between two points of a signature as the symbols. Based on those symbols, we train our model using the Baum-Welch algorithm. After training signature models, we calculate the likelihood of a signature belonging to a certain card holder by using the Forward-Backward algorithm to compare the signature to this card holder's signature model. A detailed description of all three problems and their solutions is given by Rabiner et al. in \ref{rabiner1989tutorial}.
 
 In our case, we chose to work with an LTR HMM that doesn't allow to skip any states which leads to a transition matrix $A$ of the form:
+\begin{equation}
+A = \left[\begin{array}{ccccc}a_{11} & a_{12} & 0 & \hdots & 0 \\0 & a_{22} & a_{23} & \cdots & 0 \\\vdots & \vdots & \vdots & \ddots & 0 \\0 & 0 & 0 & a_{(N-1)(N-1)} & a_{(N-1)N} \\0 & 0 & 0 & 0 & a_{NN}\end{array}\right]
+\label{eq:hmm-transition-matrix}
+\end{equation}
 
-$$A = \left[\begin{array}{ccccc}a_{11} & a_{12} & 0 & \hdots & 0 \\0 & a_{22} & a_{23} & \cdots & 0 \\\vdots & \vdots & \vdots & \ddots & 0 \\0 & 0 & 0 & a_{(N-1)(N-1)} & a_{(N-1)N} \\0 & 0 & 0 & 0 & a_{NN}\end{array}\right]$$
 
 We also chose to work with a LTR HMM that doesn't skip any states and we chose $\pi$ such that the system starts in the first state:
 $$\pi = \left[\begin{array}{cccc}1 & 0 & \cdots & 0\end{array}\right]$$
@@ -1160,7 +1172,7 @@ Traditionally, the system would work as shown in Figure TODO
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER EXPERIMENTS
-\chapter{Experiments}
+\chapter{Implementation and Evaluation}
 \label{chp:experiments}
 % offline vs online
 % using dynamic features: speed, acceleration
@@ -1221,19 +1233,28 @@ It is too early to say whether the ratio of false positives per matches was also
 
 \begin{table}[tb]
     \begin{center}
-        \begin{tabular}{c|c|c|c}week & Matches & False Positives & Ratio \\ \hline
-        13-15 & 3,29 & 1,39 & 42\% \\ \hdashline[0.5pt/3pt]
-        13-14 & 25,36 & 1,40 & 6\% \\ \hdashline[0.5pt/3pt]
-        13-13 & 1,77 & 0.98 & 56\% \\ \hdashline[0.5pt/3pt]
-        13-12 & 2,84 & 0,95 & 33\% \\ \hdashline[0.5pt/3pt]
-        13.11 & 2,20 & 2,42 & 110\% \\ \hdashline[0.5pt/3pt]
-        13-10 & 2,64 & 6,71 & 255\% \\ \hline \hline
-        13-09 & 64,33 & 58,91 & 92\% \\ \hdashline[0.5pt/3pt]
-        13-08 & 60,71 & 53,99 & 89\% \\ \hdashline[0.5pt/3pt]
-        13-07 & 55,89 & 55,89 & 100\% \\ \hdashline[0.5pt/3pt]
-        13-06 & 77,83 & 77,83 & 100\% \\ \hdashline[0.5pt/3pt]
-        13-05 & 65,10 & 36,86 & 57\% \\ \hdashline[0.5pt/3pt]
-        13-04 & 71,00 & 68,73 & 97\% \\ \hline
+        \begin{tabular}{cc|c|c|c}
+        & week  & Matches   & False Positives   & Ratio \\ \cline{2-5}
+\multirow{6}{*}{
+\begin{sideways}
+after release
+\end{sideways}
+}  & 13-15 & 3,29      & 1,39              & 42\%  \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-14 & 25,36     & 1,40              & 6\%   \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-13 & 1,77      & 0.98              & 56\%  \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-12 & 2,84      & 0,95              & 33\%  \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13.11 & 2,20      & 2,42              & 110\% \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-10 & 2,64      & 6,71              & 255\% \\ \cline{2-5}\cline{2-5}
+\multirow{6}{*}{
+\begin{sideways}
+before release
+\end{sideways}
+       }  & 13-09 & 64,33     & 58,91             & 92\%  \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-08 & 60,71     & 53,99             & 89\%  \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-07 & 55,89     & 55,89             & 100\% \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-06 & 77,83     & 77,83             & 100\% \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-05 & 65,10     & 36,86             & 57\%  \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-04 & 71,00     & 68,73             & 97\%  \\ \cline{2-5}
         \end{tabular}
     \end{center}
     \label{tbl:hra-pep-results}

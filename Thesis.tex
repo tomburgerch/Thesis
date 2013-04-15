@@ -218,11 +218,19 @@ Credit cards enjoy a huge popularity among consumers which is illustrated by the
 While credit cards are also very popular with consumers in Europe, far fewer businesses in Europe allow customers to pay by credit card than in the USA. This is mostly due to the following reasons:
 \begin{itemize}
 \item A European business initially pays between 200 EUR and 500 EUR for a credit card terminal
-\item There is a monthly subscription fee from 20 EUR to 50 EUR
+\item There is a monthly subscription fee of 20 EUR to 50 EUR
 \item A percentage of each transaction goes to the credit card company. Usually, merchants pay between 2.75 and 5 percent to the card payment terminal provider. Often, a minimal fee is charged for small transactions.
 \end{itemize}
 
-It is likely that these costs are higher due to more extensive regulations which require more operational effort. Also, the CAS and CAP devices are more complex than SAS devices and the hardware costs therefore higher in Europe.
+It is likely that these costs are higher due to more extensive regulations which require more operational effort. Also, the CAS and CAP devices are more complex than SAS devices and the hardware costs therefore higher in Europe. The simplified mechanics behind a credit card transaction are shown in Figure \ref{fig:credit-card-flow}.
+
+\begin{figure}[tb]
+    \begin{center}
+        \includegraphics[width=\textwidth]{figures/credit-card-flow.png}
+    \end{center}
+    \caption{The simplified flow of a single credit card transaction starting with the SumUp CAS credit card reader}
+    \label{fig:credit-card-flow}
+\end{figure}
 
 SumUp's goal is to lower the barrier for merchants to accept credit card payments by providing a professional yet inexpensive solution for anyone to accept card payments. The company was founded in the fall of 2011 and has enjoyed a rapid growth since.
 Today, SumUp's services are used by thousands of merchants in more than ten European countries.
@@ -318,23 +326,23 @@ B2B & Pay for Business Lunch \\ \hline
 
 Fraud, as defined by Phua et al. ~\cite{5522816}, refers to the abuse of a profit organization's system without necessarily leading to direct legal consequences. Fraud detection, as part of the overall fraud protection, has become one of the most established applications of data mining.
 
-The large volume of transactions processed each day by SumUp make a manual verification of each transaction impossible. As such, SumUp has to rely on automated systems to process and validate transactions. At time of this research, there is no established provider of anti-fraud software in this field. However, companies like \fnurl{Sift Science,}{http://siftscience.com} a company that specializes in providing a fraud control service as a third party, has recently raised more than four millions USD from leading venture capital firms.
+The large volume of transactions processed each day by SumUp makes a manual verification of each transaction impossible. As such, SumUp has to rely on automated systems to process and validate transactions. At time of this research, there is no established provider of anti-fraud software in this field. However, companies like \fnurl{Sift Science,}{http://siftscience.com} a company which specializes in providing a fraud control service as a third party, has recently raised more than four million USD from leading venture capital firms.
 
-At the time of this work, SumUp has internal research to implement, train and tweak its own fraud rules. An internal assessment has shown that the four most popular fraud scenarios are:
+At the time of this work, SumUp does its own internal research to implement, train and tweak its own fraud rules. An internal assessment has shown that the four most popular fraud scenarios are:
 
 % As credit cards are historically a very unsafe payment method, special attention has to be paid when dealing with credit card information and processing credit card transactions.
 % A fact that is reflected by looking at how many papers were written about fraud detection in which area. As shown in Figure \ref{fig:fraud-literature-count}.
 
 \begin{itemize}
-    \item Copied or stolen cards
     \item Money laundry
-    \item Impersonators transferring money under someone else's name
-    \item Illegal money being transferred through SumUp's system
+    \item Copied or stolen cards
+    % \item Impersonators transferring money under someone else's name
+    % \item Illegal money being transferred through SumUp's system
 \end{itemize}
 
-We will mainly focus on the first fraud case and concentrate on identifying a card holder by signature. After a card has been used a certain amount of times, the goal is to  build a reliable signature model to verify it's the same person signing the next time the card is used.
+Our fraud prevention mechanisms focus on preventing money laundry while our fraud detection measurements will help to identify a card holder by signature and thereby make it hard for fraudsters to use stolen cards. After a card has been used a certain amount of times, the goal is to  build a reliable signature model to verify it's the same person signing the next time the card is used.
 
-Not only the physical cards are at risk to be stolen, also the digital copy of the credit card data needs to be protected. This is one of the reasons SumUp only saves encrypted card information and is obliged to do so according to the Payment Card Industry Data Security Standard (PCI DSS) and in an environment defined by the standard. The standard defines a set of rules to reach these control objectives:
+Not only are physical cards at risk to be stolen, also the digital copy of the credit card data needs to be protected. This is one of the reasons SumUp only saves encrypted card information and is obliged to do so according to the Payment Card Industry Data Security Standard (PCI DSS) and in an environment defined by the standard. The standard defines a set of rules to reach these control objectives:
 \begin{itemize}
 \item Build and maintain a secure network
 \item Protect card holder data
@@ -344,7 +352,7 @@ Not only the physical cards are at risk to be stolen, also the digital copy of t
 \item Maintain an information security policy
 \end{itemize}
 
-This has an impact on our work as the regulations connected to  protecting card holder data only allows storing card numbers and not names of card holders. The goal of this requirement is that even if someone would gain access to SumUp's database, it would not be possible to retrieve all information needed to process a transaction. This has one disadvantage though: we cannot collude information of multiple cards used by a single customer and can therefore only build a signature model based on the signatures we collect per card, not per customer. As the majority of all US card holders holds at least two credit cards \cite{woolsey2010credit}, being able to merge the signature databases from different cards of one card holder, could significantly increase the accurateness of the signature model.
+This has an impact on our work as the regulations connected to  protecting card holder data only allow storing card numbers and not names of card holders. The goal of this requirement is that even if someone would gain access to SumUp's database, it would not be possible to retrieve all information needed to process a transaction. This however, bears one disadvantage: we cannot collude information of multiple cards used by a single customer and can therefore only build a signature model based on the signatures we collect per card, not per customer. As the majority of all US card holders holds at least two credit cards \cite{woolsey2010credit}, being able to merge the signature databases from different cards of one card holder, could significantly increase the accuracy of the signature model.
 
 It is impossible to be absolutely certain about the legitimacy of a transaction. In reality, the goal must be to filter out possible evidences of fraud from the available data using cost-effective algorithms in real time.
 
@@ -364,17 +372,17 @@ It is impossible to be absolutely certain about the legitimacy of a transaction.
 
 \section{Signature Verification}
 
-Most previous work has been done on signature verification with signatures captured with a pen on paper or on a digital tablet. When a signature was captured on paper, it was afterwards digitalized using a scanner. The dynamic characteristics of a signature are lost in that process and the algorithms that can be applied to the signature information are very different. Therefore it is common to divide signature verification methods into two methods:
+Most previous work on signature detection has been done with signatures captured with a pen on paper or on a digital tablet. When a signature is captured on paper, it was afterwards digitalized using a scanner. The dynamic characteristics of a signature are lost in that process and the algorithms that can be applied to the signature information are very different. Therefore it is common to divide signature verification into two methods:
 
 \begin{itemize}
 \item \textbf{Offline signature verification} performs recognition algorithms based on static features of a signature, mainly shape and length.
-\item \textbf{Online signature verification} performs algorithms on the dynamic features of a signature as well. These analyze the speed, the acceleration, the angular acceleration, the pressure and many other local properties of a signature.
+\item \textbf{Online signature verification} performs algorithms on the dynamic features of a signature. These analyze the speed, the acceleration, the angular acceleration, the pressure and many other local properties of a signature.
 \end{itemize}
 
 Since digital tablets, touchscreens interfaces and smartphones became affordable and widely deployed, it became feasible to capture dynamic features of a signature. In Chapter \ref{chp:signature-verification} we look at the common techniques in both areas, offline and online, to verify signatures.
 
 The high accuracy and resolution of current digitizing tablets and smartphone screens enables to capture signature data in high resolution and precision on relatively cheap devices.
-Traditionally, digital signatures were captured on a digital tablet with a pen. Signatures captured by SumUp however, are collected on a variety of mobile devices and have fundamentally different characteristics than signatures captured on a digital tables. The main reasons for these differences are:
+Traditionally, digital signatures were captured on a digital tablet with a pen. However, signatures captured by SumUp are collected on a variety of mobile devices and have fundamentally different characteristics than signatures captured on digital tablets. The main reasons for these differences are:
 
 \begin{itemize}
     \item The signatures are captured by finger instead of a pen which is not how people are accustomed to sign. This leads to higher variability and less stable signature models.
@@ -382,7 +390,7 @@ Traditionally, digital signatures were captured on a digital tablet with a pen. 
     \item The signatures are captured on a lot of different devices with different screen sizes, resolutions, sensor densities and other device specific characteristics.
 \end{itemize}
 
-We have to verify signatures within a fraction of a second to give instant feedback whether or not a transaction will be authorized. This limits not only the number of algorithms we can use in parallel but also the complexity of our models and our dataset.
+We have to verify signatures in real time to give instant feedback whether or not a transaction will be authorized. This limits not only the number of algorithms we can use in parallel but also the complexity of our models and our dataset.
 We discuss our strategies to overcome the listed difficulties in Chapter \ref{chp:signature-verification}.
 
 % How to approach that without the complicated and expensive chip\&pin device?
@@ -414,10 +422,10 @@ We discuss our strategies to overcome the listed difficulties in Chapter \ref{ch
 
 \chapter{Fraud Prevention \\PEP \& HRA Detection}
 
-The fraud prevention is applied during the sign-up process of a new user and with the goal to keep high risk users from gaining access to the system.
+Fraud prevention is applied during the sign-up process of a new user and with the goal to keep high risk users from gaining access to the system.
 Any financial institution has a high interest to implement as many anti-fraud mechanisms as possible. With the financial industry being a strictly regulated industry, many precautions are mandatory and described by the governing financial authority. Yet, more mechanisms are added on top of the mandated ones as they provide a competitive advantage.
 
-The financial authority governing SumUp's operations is the United Kingdom (UK) Financial Services Authority (FSA) and the regulatory environment is specified in the Money Laundry Regulations (MLR) from 2007 ~\cite{website:aml-regulations-2007}. Chapter 2 of the MLR specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
+The financial authority governing SumUp's operations is the United Kingdom (UK) Financial Services Authority (FSA) and the regulatory environment is specified in the Money Laundry Regulations (MLR) from 2007 \cite{website:aml-regulations-2007}. Chapter 2 of the MLR specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
 
 \begin{itemize}
 \item \textbf{Politically Exposed Persons} (PEP) are people who hold a prominent political function. In the United Kingdom this is defined as a national position. Also a PEP's spouse and children are included in this category.
@@ -426,15 +434,15 @@ The financial authority governing SumUp's operations is the United Kingdom (UK) 
 
 \end{itemize}
 
-We will refer to the combination of PEP and HRA as "high risk clients". Any new client needs to be checked against both lists at sign-up and regularily after the initial sign-up.
+We will refer to the combination of PEP and HRA as "high risk clients". Any new client needs to be checked against existing lists for both types at sign-up and regularly after the initial sign-up.
 If the algorithm returns a positive match with either a PEP or an HRA, a flag is raised in the SumUp Operations Admin Panel (SOAP) and the match has to be confirmed or falsified manually. If the match can be falsified, nothing more needs to be done and the user will continue the sign-up flow. However, if there is a positive PEP or HRA match, different procedures have to be followed.
 
-For an identified PEP match, additional due diligence needs to be done to onboard the client. Additional documents need to be collected that give detail information about the wealth and assets of said person. After performing the additional due diligence, a client can be onboarded but settlements need to be blocked.
-A positive match with the HRA list means that the subject cannot be onboarded and a Suspicious Act Report (SAR) needs to be filed with the Serious Organized Crime Agency (SOCA). All HRAs are banned from conducting business with any financial institution.
+For an identified PEP match, additional due diligence needs to be done to sign up the client. Additional documents need to be collected that give detailed information about the wealth and assets of said client. After performing the additional due diligence, a client can be signed up but settlements need to be blocked.
+A positive match with the HRA list means that the subject cannot be signed up and a Suspicious Act Report (SAR) needs to be filed with the Serious Organized Crime Agency (SOCA). All HRAs are banned from conducting business with any financial institution.
 
-Previous to our work, a test based on only first and last name was already in place but produced a lot of false positives. This required a lot of manual work to falsify matches. Our goal was to create a fast, reliable check requiring as little manual input as possible. Chapter \ref{chp:experiments} lists our results.
+Previous to our work, a test based on only first and last name was already in place but produced a numerous false positive matches. This required a lot of manual work to falsify matches. Our goal was to create a fast, reliable check, requiring as little manual input as possible. Chapter \ref{chp:experiments} lists our results.
 
-In the next section we'll present the data of the two databases and their origin before talking about the way we structured the lookup and implementation of our solution.
+In the next section we will present the data of the two databases and their origin before talking about the way we structured the lookup and implementation of our solution.
 
 % two strat agains aml: identify customer, get id \& proof of address
 % 2nd mitigating strategy: monitor patterns, activity, ...
@@ -573,7 +581,7 @@ The PEP \& HAR check was implemented as a \fnurl{Sinatra}{http://www.sinatrarb.c
 It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a \fnurl{CentOS}{http://www.centos.org/} Linux environment and the linux \fnurl{Crontab Tool}{http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5/} is used to run the first two tasks in a constant interval:
 \begin{itemize}
 \item \textbf{daily:} Each day, the incremental update and delete file are downloaded from World-Check to keep the database up to date.
-\item \textbf{weekly:} On a weekly base, each user is screened against the updated database and new hits raise a flag in SOAP.
+\item \textbf{weekly:} On a weekly base, each user is screened against the updated database and new hits raise a flag in the operations team's panel for further inspection.
 \end{itemize}
 
 The third task, answering requests from the sign-up flow is done via a REST interface. Chapter \ref{chp:experiments} goes into greater detail of how the requests are structured. The system topology is shown in Figure \ref{fig:fraud-arch}.

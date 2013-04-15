@@ -209,6 +209,10 @@ INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT figures/credit-card-flow.png
+INPUT ./figures/credit-card-flow.png
+INPUT ./figures/credit-card-flow.png
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
 INPUT figures/flow1.png
 INPUT ./figures/flow1.png
 INPUT ./figures/flow1.png
@@ -224,7 +228,6 @@ INPUT ./figures/flow5.png
 INPUT figures/flow6.png
 INPUT ./figures/flow6.png
 INPUT ./figures/flow6.png
-INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
 INPUT figures/fraud-arch.eps
 INPUT ./figures/fraud-arch.eps
 INPUT ./figures/fraud-arch.eps

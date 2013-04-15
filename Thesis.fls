@@ -296,6 +296,14 @@ INPUT ./figures/hmm-ltr1.eps
 INPUT ./figures/hmm-ltr1-eps-converted-to.pdf
 INPUT ./figures/hmm-ltr1-eps-converted-to.pdf
 INPUT ./figures/hmm-ltr1-eps-converted-to.pdf
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/latex-fonts/lasy10.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/public/latex-fonts/lasy7.tfm
 INPUT figures/hmm-ltr2.eps
 INPUT ./figures/hmm-ltr2.eps
 INPUT ./figures/hmm-ltr2.eps

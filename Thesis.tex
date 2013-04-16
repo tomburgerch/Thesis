@@ -131,6 +131,11 @@
 % and to rotate them
 \usepackage{rotating}
 
+% add support for checkmark
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DOCUMENT METADATA
 
@@ -171,7 +176,7 @@ ETH Zurich}
 
 
 \begin{abstract}
-    Mobile payments have seen a lot of traction recently and a set of companies have emerged around the opportunity of payments processed from mobile devices. We've conducted this work in collaboration with a company that allows merchants to process credit card transactions on their smartphone by using a mobile application and hardware dongle.
+    Mobile payments have seen a lot of traction recently and a set of companies have emerged around the opportunity of payments processed from mobile devices. We've conducted this work in collaboration with a company that allows merchants to process credit card transactions on their smartphone by using a mobile application and a hardware credit card reader that send transactions to the backend (XX).
 
     The innovative technology has opened up many new beneficial opportunities for both, merchants and clients. It has also opened new opportunities for fraud in the area of credit card transactions. Being historically prone to fraud, the credit card industry is highly regulated. But as existing anti-fraud regulations are specified for the traditional credit card business, the advances in technology call for new anti-fraud measures.
 
@@ -813,7 +818,7 @@ In general, DTW is known to have two drawbacks in signature verification:
 \item warping of forgeries
 \end{itemize}
 
-DTW causes heavy computational load because it does not obey the triangular inequality and thus indexing a set of signatures takes a lot of time. As soon as the pool of signatures for a signer get bigger, the computation costs raise because the test signature has to be compared to each of the signatures in the pool of confirmed signatures. Eamonn Keogh et al.~\cite{Keogh:2002:EID:1287369.1287405} presented a lower bounding method to index all samples without comparing each of them to each other.
+DTW causes heavy computational load because it does not obey the triangular inequality and thus indexing a set of signatures takes a lot of time. As soon as the pool of signatures for a signer get bigger, the computation costs raise because the test signature has to be compared to each of the signatures in the pool of confirmed signatures. Eamonn Keogh et al.~\cite{Keogh:2002:EID:1287369.1287405} presented a lower bounding method to index all samples without comparing each of them to each other. This is important was we analyze signatures in real time.
 
 The second drawback can be addressed by looking at how straight or bended the warping path is. A straight warping path indicates that a genuine signature is more likely whereas a curvy warping path indicates a forgery. Work on this has been done by Y. Sato et al.~\cite{Sato1982} but made comparison between different signatures more difficult because it introduces another dimension and thus made computation harder and has hence not found wide spread use.
 
@@ -1356,6 +1361,23 @@ With each technique in our work, we gatheres statistics about two use cases:
 
 \subsection{Pre-Alignment and Normalization}
 
+In order to compare the signatures, we normalized some of the properties before comparing the signatures.
+\begin{itemize}
+\item \textbf{Sampling rate}: Because we collected the signatures on touchscreen devices with event-based sampling, we got very different sampling rates. In order to compare signatures, we normalize the sampling rate to 20 Hz for all signatures, what is about half of the typical sampling of a signature which is collected on an iPhone 4s.
+\item \textbf{Size and length}: The different screen size and pixel density between the devices caused very different height, width and length for the signatures. In order to compare them, we normalized the signatures height and width. Of course, when we used the width-to-height ratio as a global feature, we collected this value before normalization.
+\item \textbf{Time}: As more screen estate also means longer distances to draw a signature, we also adjusted the timestamps when we normalized the size of a signature.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
 
 
 \subsection{Global Features}
@@ -1377,6 +1399,7 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
     \centering
     \begin{subfigure}[b]{\textwidth}
             \centering
+            \small
             \begin{tabular}{c|c|c|c|c|c|c|c}
             \hline
             \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
@@ -1399,6 +1422,7 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
 
     \begin{subfigure}[b]{\textwidth}
             \centering
+            \small
             \begin{tabular}{c|c|c|c|c|c|c|c}
             \hline
             \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
@@ -1423,6 +1447,7 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
       %(or a blank line to force the subfigure onto a new line)
     \begin{subfigure}[b]{\textwidth}
             \centering
+            \small
             \begin{tabular}{c|c|c|c|c|c|c|c}
             \hline
             \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
@@ -1455,7 +1480,9 @@ $$G = [s_l, s_t, s_{v_\text{max}}, s_{\bar{v}}, s_{a_\text{max}}, s_n, s_r]$$
 We assume that not all of the global features are of the same significance. We therefore define a  weigthing vector $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r]$$
 
 Our similarity score is calculated as
-$$S = G \times W$$
+$$S_{GF} = G \times W$$
+
+As this approach includes every signature every collected and thereby possibly enlarges the windows where other signatures are matched, a sliding window should be used for larger datasets. As we were are working with less than 30 signatures per card holder, we did not implement a sliding window mechanism for this work.
 
 \textbf{Fitness function $\mathbb{F}_{GF}$}\\
 We run each signature against each of the eleven signature models, defined by global features maxima and minima of a system. The fitness function tries to reduce the number of signatures which receive the highes possible similarity score for a given weighting vector $W$.
@@ -1480,18 +1507,107 @@ end
 
 
 \textbf{Classification of Signatures}\\
-We defined the start vecor $W = [0,0,0,0,0,0,0]$ and let the fitness function permutate the vector until a local minimum was found for all $W$ consisting of $\{0,1,2\}$. The local minima was reached for $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [1, 1, 1, 1, 0, 0, 0]$$
-At the local minimum, there are 1007 signatures with the highest score which is 696 more than in the ground truth set that we used for this technique.
+We defined the start vecor $W = [0,0,0,0,0,0,0]$ and let the fitness function permutate the vector until a local minimum was found for all $W$ consisting of $\{0,1,2\}$. The local minima was reached for $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [0, 1, 0, 1, 0, 1, 1]$$
+At the local minimum, there are 755 signatures with the highest score which is 478 more than in the ground truth (278) that we used for this approach.
 
-If we extend our search and include the two groups with the highes occurrencies, we get
+We conclude that time $t$, average velocity $\bar{v}$, the number of segments $n$ and the width-to-height ratio $r$ should be used to compare signatures.
+
+If we extend our search and include the two groups with the highest occurrences, we get still get 840 signatures included in the highest and second highest score and the weighting vector:
+$$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [0, 2, 0, 2, 0, 2, 1]$$
 
 
 \textbf{Detection of forgeries}\\
-We used the previously found vector to test the robustness of this approach against forgeries. We set $$W = [1, 1, 1, 1, 0, 0, 0]$$
+We used the previously found vector to test the robustness of this approach against forgeries. We set $$W = [0, 1, 0, 1, 0, 1, 1]$$
 and ran all the forgeries against the previously trained signature models given by the minimum and maximum values.
 
+We computed these four values for each of the found global features, $t, \bar{v}, n$ and $r$. We then checked whether they lie within the bounds for that feature for each person. The results can be seen in Figure \ref{fig:global-features-forgeries}. The tables first list the min/max for each feature, the value found for the forgery and whether or not it was a hit.
 
-SLIDING WINDOW ERWAEHNEN!
+A hit means that the test value lies within the reference min/max for all four features.
+We notice that most of the matches were falsified mostly because the impostor took too long to sign ($t$ too high) or because he didn't sign fast enough ($\bar{v}$ too little). Out of the 30 forgeries, only one of the simple forgeries was a hit. This corresponds to an error rate of 3.33 percent.
+
+\textbf{Computational complexity}\\
+Computing the features for a signature and comparing them to the previously computed min/max values takes less than a tenth of a second and the approach is therefore feasible in realtime. In addition, by using a sliding window, the computational complexity of computing the min/max values will stay at a predictable level even though the total signature set may grow very large.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+            \centering
+            \tabcolsep 4pt
+            \small
+            \begin{tabular}{c|cccc||cccc||c}
+            \hline
+            \textbf{P} & $t_r$ & $\bar{v}_r$ & $n_r$ & $r_r$ & $t_f$ & $\bar{v}_f$ & $n_f$ & $r_f$ & Hit \\
+            \hline
+            0 & [1640.0, 2282.0] & [0.8, 1.13] & [2.0, 3.0] & [0.0,1.0] & 13782.0 & 0.14 & 2.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            1 & [1373.0, 2957.0] & [0.6, 0.69] & [2.0, 2.0] & [1.0,3.0] & 5229.0 & 0.29 & 1.0 & 2.0 & \xmark\\ \hdashline[0.5pt/3pt]
+            2 & [1445.0, 2117.0] & [0.58, 0.98] & [2.0, 5.0] & [2.0,3.0] & 4141.0 & 0.29 & 5.0 & 2.0 & \xmark\\ \hdashline[0.5pt/3pt]
+            3 & [2250.0, 9370.0] & [0.5, 0.64] & [3.0, 8.0] & [2.0,4.0] & 3252.0 & 0.34 & 2.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            4 & [1122.0, 2914.0] & [0.6, 0.7] & [1.0, 5.0] & [2.0,4.0] & 8743.0 & 0.15 & 3.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            5 & [1856.0, 4694.0] & [0.5, 0.52] & [2.0, 11.0] & [2.0,4.0] & 3658.0 & 0.39 & 4.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            6 & [1399.0, 3633.0] & [0.92, 1.21] & [2.0, 5.0] & [1.0,3.0] & 2815.0 & 0.53 & 2.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            7 & [1424.0, 4349.0] & [0.59, 0.45] & [2.0, 8.0] & [1.0,3.0] & 3978.0 & 0.48 & 2.0 & 2.0 & \cmark \\ \hdashline[0.5pt/3pt]
+            8 & [1209.0, 2749.0] & [0.53, 0.78] & [1.0, 4.0] & [1.0,2.0] & 10863.0 & 0.19 & 4.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            9 & [5467.0, 8083.0] & [0.24, 0.42] & [4.0, 17.0] & [1.0,9.0] & 24910.0 & 0.08 & 18.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            \hline
+            \end{tabular}
+            \label{tbl:global-features-forg-spontaneous}
+            \caption{The results for spontaneous forgeries}
+    \end{subfigure}%
+
+    \begin{subfigure}[b]{\textwidth}
+            \centering
+            \tabcolsep 4pt
+            \small
+            \begin{tabular}{c|cccc||cccc||c}
+            \hline
+            \textbf{P} & $t_r$ & $\bar{v}_r$ & $n_r$ & $r_r$ & $t_f$ & $\bar{v}_f$ & $n_f$ & $r_f$ & Hit \\
+            \hline
+            0 & [1640.0, 2282.0] & [0.8, 1.13] & [2.0, 3.0] & [0.0,1.0] & 4477.0 & 0.38 & 3.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            1 & [1373.0, 2957.0] & [0.6, 0.69] & [2.0, 2.0] & [1.0,3.0] & 7835.0 & 0.22 & 2.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            2 & [1445.0, 2117.0] & [0.58, 0.98] & [2.0, 5.0] & [2.0,3.0] & 10237.0 & 0.16 & 5.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            3 & [2250.0, 9370.0] & [0.5, 0.64] & [3.0, 8.0] & [2.0,4.0] & 11261.0 & 0.17 & 3.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            4 & [1122.0, 2914.0] & [0.6, 0.7] & [1.0, 5.0] & [2.0,4.0] & 5508.0 & 0.2 & 3.0 & 3.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            5 & [1856.0, 4694.0] & [0.5, 0.52] & [2.0, 11.0] & [2.0,4.0] & 2465.0 & 0.54 & 3.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            6 & [1399.0, 3633.0] & [0.92, 1.21] & [2.0, 5.0] & [1.0,3.0] & 7338.0 & 0.22 & 2.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            7 & [1424.0, 4349.0] & [0.59, 0.45] & [2.0, 8.0] & [1.0,3.0] & 9386.0 & 0.19 & 2.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            8 & [1209.0, 2749.0] & [0.53, 0.78] & [1.0, 4.0] & [1.0,2.0] & 15633.0 & 0.1 & 8.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            9 & [5467.0, 8083.0] & [0.24, 0.42] & [4.0, 17.0] & [1.0,9.0] & 11826.0 & 0.12 & 16.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            \hline
+            \end{tabular}
+            \label{tbl:global-features-forg-sample}
+            \caption{The results for sample forgeries}
+    \end{subfigure}%
+
+    \begin{subfigure}[b]{\textwidth}
+            \centering
+            \tabcolsep 4pt
+            \small
+            \begin{tabular}{c|cccc||cccc||c}
+            \hline
+            \textbf{P} & $t_r$ & $\bar{v}_r$ & $n_r$ & $r_r$ & $t_f$ & $\bar{v}_f$ & $n_f$ & $r_f$ & Hit \\
+            \hline
+            0 & [1640.0, 2282.0] & [0.8, 1.13] & [2.0, 3.0] & [0.0,1.0] & 10799.0 & 0.16 & 2.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            1 & [1373.0, 2957.0] & [0.6, 0.69] & [2.0, 2.0] & [1.0,3.0] & 3896.0 & 0.55 & 2.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            2 & [1445.0, 2117.0] & [0.58, 0.98] & [2.0, 5.0] & [2.0,3.0] & 9016.0 & 0.27 & 4.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            3 & [2250.0, 9370.0] & [0.5, 0.64] & [3.0, 8.0] & [2.0,4.0] & 6731.0 & 0.24 & 2.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            4 & [1122.0, 2914.0] & [0.6, 0.7] & [1.0, 5.0] & [2.0,4.0] & 5506.0 & 0.29 & 2.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            5 & [1856.0, 4694.0] & [0.5, 0.52] & [2.0, 11.0] & [2.0,4.0] & 3442.0 & 0.41 & 3.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            6 & [1399.0, 3633.0] & [0.92, 1.21] & [2.0, 5.0] & [1.0,3.0] & 9328.0 & 0.17 & 2.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            7 & [1424.0, 4349.0] & [0.59, 0.45] & [2.0, 8.0] & [1.0,3.0] & 6295.0 & 0.26 & 2.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            8 & [1209.0, 2749.0] & [0.53, 0.78] & [1.0, 4.0] & [1.0,2.0] & 7133.0 & 0.24 & 6.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            9 & [5467.0, 8083.0] & [0.24, 0.42] & [4.0, 17.0] & [1.0,9.0] & 9138.0 & 0.17 & 17.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
+            \hline
+            \end{tabular}
+            \label{tbl:global-features-forg-knowledgable}
+            \caption{The results for knowledgable forgeries}
+    \end{subfigure}%
+
+
+    \caption{The minimum, average and maximum values we obtained for all global features for each subject's set of signatures.}
+    \label{fig:global-features-forgeries}
+\end{figure}
+
+
 
 % Findings:
 % -ration is a very weak indicator

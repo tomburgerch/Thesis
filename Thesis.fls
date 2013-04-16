@@ -120,6 +120,14 @@ INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/rotating/rotating.sty
 INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/rotating/rotating.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/psnfss/pifont.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/psnfss/pifont.sty
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/psnfss/upzd.fd
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/psnfss/upzd.fd
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/psnfss/upsy.fd
+INPUT /usr/local/texlive/2012/texmf-dist/tex/latex/psnfss/upsy.fd
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/adobe/symbol/psyr.tfm
 INPUT Thesis.aux
 INPUT Thesis.aux
 OUTPUT Thesis.aux
@@ -376,6 +384,7 @@ INPUT ./figures/chart_pep.png
 INPUT figures/chart_har.png
 INPUT ./figures/chart_har.png
 INPUT ./figures/chart_har.png
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm
 INPUT Thesis.bbl
 INPUT Thesis.bbl
 OUTPUT Thesis.thm
@@ -392,12 +401,14 @@ INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cmextra/cme
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb
@@ -406,3 +417,4 @@ INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pf
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
 INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb
+INPUT /usr/local/texlive/2012/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb

@@ -1227,6 +1227,7 @@ Due to high amount of manual work that was required to reject or approve a match
 
 Typically, about 50 to 100 matches were generated per 1000 new users with the old component. Almost all of those were false positives and therefore cause manual work that wouldn't have been necessary. With the new component, we were able to drastically reduce the amount of manual work required. After introduction of the new check to the system, the typical amount of matches per 1000 new sign ups after the release of the new component is below 10. The peak in calendar week 14 was caused by a system migration where a lot of accounts were checked again. However, as these accounts had been previously rejected, they did not cause any additional manual work.
 
+Umformulieren! die ration muss kleiner werden!!!
 It is too early to say whether the ratio of false positives per matches was also significantly reduced due to the backlog of false positives that were cleared within the first weeks after the new component's release. However, the numbers in Table \ref{tbl:hra-pep-results} indicate a trend towards a lower amount of false positives per total amount of matches.
 
 \begin{table}[tb]
@@ -1239,7 +1240,7 @@ after release
 \end{sideways}
 }  & 13-15 & 3,29      & 1,39              & 42\%  \\ \cdashline{2-5}[0.5pt/3pt]
        & 13-14 & 25,36     & 1,40              & 6\%   \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-13 & 1,77      & 0.98              & 56\%  \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-13 & 1,77      & 0,98              & 56\%  \\ \cdashline{2-5}[0.5pt/3pt]
        & 13-12 & 2,84      & 0,95              & 33\%  \\ \cdashline{2-5}[0.5pt/3pt]
        & 13.11 & 2,20      & 2,42              & 110\% \\ \cdashline{2-5}[0.5pt/3pt]
        & 13-10 & 2,64      & 6,71              & 255\% \\ \cline{2-5}\cline{2-5}
@@ -1256,7 +1257,7 @@ before release
         \end{tabular}
     \end{center}
     \label{tbl:hra-pep-results}
-    \caption{The requests received by the PEP/HAR component}
+    \caption{The requests received by the PEP/HAR component. Ratio: Erwaehnen von backlog! false positive beinhalten backlog}
 \end{table}
 
 \begin{figure}
@@ -1289,6 +1290,8 @@ before release
 \end{figure}
 
 The operation department reports that the number of man hours was reduced since the release of the new component. It is still early but the numbers in Table \ref{tbl:man-hours} indicate that one to two full days of manual work were saved by introducing the new component.
+
+Erwaehnen dass es absolute Zahlen sind in der Tabelle!
 
 \begin{table}[tb]
     \begin{center}
@@ -1345,7 +1348,11 @@ We also collected three forgeries for each person. The forgeries are created by 
 \item \textbf{Knowledgable Forgery}: The imposter had unlimited access to all of one person's signatures to forge the signature.
 \end{itemize}
 
-
+With each technique in our work, we gatheres statistics about two use cases:
+\begin{itemize}
+\item \textbf{Classification of signatures}: Our goal is to measure how well the algorithm performs in connecting a signature with its card holder. This part runs the ground truth agains itself.
+\item \textbf{Detection of forgeries}: Our goal is to measure how well the algorithm is at detecting forgeries. The set of forgeries is run against this perticular card holder's set of confirmed signatures.
+\end{itemize}
 
 \subsection{Pre-Alignment and Normalization}
 
@@ -1366,90 +1373,184 @@ Our solution uses the following global features, as listed in Section \ref{sec:f
 Other common features, e.g.\ the total number of dots recorded, are irrelevant for our experiments as those features are device specific and can thus not be used to calculate the similarity between signatures.
 Table \ref{tbl:global-features-results-avg} shows our results for the average of these features for each person's signature set.
 
-\begin{table}[tb]
-    \begin{center}
-        \begin{tabular}{c|c|c|c|c|c|c|c}
-        \hline
-        \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
-        \hline
-        0 & 1316.81 & 1640.0 & 2.27 & 0.8 & 1.11 & 2.0 & 0.0 \\ \hdashline[0.5pt/3pt]
-        1 & 998.84 & 1015.0 & 1.78 & 0.98 & 0.77 & 1.0 & 0.0 \\ \hdashline[0.5pt/3pt]
-        2 & 827.09 & 1373.0 & 1.5 & 0.6 & 0.58 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
-        3 & 839.37 & 1445.0 & 1.71 & 0.58 & 0.7 & 2.0 & 2.0 \\ \hdashline[0.5pt/3pt]
-        4 & 1434.08 & 2250.0 & 2.22 & 0.64 & 1.49 & 3.0 & 2.0 \\ \hdashline[0.5pt/3pt]
-        5 & 669.82 & 1122.0 & 1.79 & 0.6 & 0.49 & 1.0 & 2.0 \\ \hdashline[0.5pt/3pt]
-        6 & 924.78 & 1856.0 & 1.14 & 0.5 & 0.64 & 2.0 & 2.0 \\ \hdashline[0.5pt/3pt]
-        7 & 1281.41 & 1399.0 & 2.49 & 0.92 & 1.53 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
-        8 & 843.17 & 1424.0 & 1.13 & 0.59 & 0.48 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
-        9 & 639.14 & 1209.0 & 1.7 & 0.53 & 0.73 & 1.0 & 1.0 \\ \hdashline[0.5pt/3pt]
-        10 & 1299.5 & 5467.0 & 0.79 & 0.24 & 0.41 & 4.0 & 1.0 \\ \hdashline[0.5pt/3pt]
-        \hline
-        \end{tabular}
-    \end{center}
-    \label{tbl:global-features-results-min}
-    \caption{The minimum values for each signature set and all global features}
-\end{table}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+            \centering
+            \begin{tabular}{c|c|c|c|c|c|c|c}
+            \hline
+            \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+            \hline
+            0 & 1316.81 & 1640.0 & 2.27 & 0.8 & 1.11 & 2.0 & 0.0 \\ \hdashline[0.5pt/3pt]
+            1 & 827.09 & 1373.0 & 1.5 & 0.6 & 0.58 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+            2 & 839.37 & 1445.0 & 1.71 & 0.58 & 0.7 & 2.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+            3 & 1434.08 & 2250.0 & 2.22 & 0.64 & 1.49 & 3.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+            4 & 669.82 & 1122.0 & 1.79 & 0.6 & 0.49 & 1.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+            5 & 924.78 & 1856.0 & 1.14 & 0.5 & 0.64 & 2.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+            6 & 1281.41 & 1399.0 & 2.49 & 0.92 & 1.53 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+            7 & 843.17 & 1424.0 & 1.13 & 0.59 & 0.48 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+            8 & 639.14 & 1209.0 & 1.7 & 0.53 & 0.73 & 1.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+            9 & 1299.5 & 5467.0 & 0.79 & 0.24 & 0.41 & 4.0 & 1.0 \\
+            \hline
+            \end{tabular}
+            \label{tbl:global-features-results-min}
+            \caption{The minimum values for each signature set and all global features}
+    \end{subfigure}%
 
-\begin{table}[tb]
-    \begin{center}
-        \begin{tabular}{c|c|c|c|c|c|c|c}
-        \hline
-        \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
-        \hline
-        0 & 1701.69 & 1942.75 & 15.5 & 0.88 & 16.93 & 2.13 & 0.5 \\ \hdashline[0.5pt/3pt]
-        1 & 221249.7 & 1418.95 & 4986.88 & 155.93 & 12093.85 & 2.04 & 1.38 \\ \hdashline[0.5pt/3pt]
-        2 & 1235.27 & 1773.95 & 11.24 & 0.7 & 13.36 & 2.0 & 1.93 \\ \hdashline[0.5pt/3pt]
-        3 & 1206.72 & 1762.06 & 10.22 & 0.68 & 18.96 & 3.11 & 2.33 \\ \hdashline[0.5pt/3pt]
-        4 & 2565.76 & 3217.96 & 17.62 & 0.8 & 27.72 & 5.58 & 2.42 \\ \hdashline[0.5pt/3pt]
-        5 & 1104.21 & 1588.11 & 8.1 & 0.7 & 9.58 & 3.43 & 2.81 \\ \hdashline[0.5pt/3pt]
-        6 & 1308.19 & 3047.47 & 5.23 & 0.43 & 8.25 & 8.0 & 2.3 \\ \hdashline[0.5pt/3pt]
-        7 & 2480.3 & 2102.87 & 13.71 & 1.18 & 16.89 & 3.87 & 2.04 \\ \hdashline[0.5pt/3pt]
-        8 & 1260.28 & 2194.41 & 6.79 & 0.57 & 9.41 & 2.64 & 2.07 \\ \hdashline[0.5pt/3pt]
-        9 & 1311.1 & 1574.98 & 11.18 & 0.83 & 15.12 & 2.6 & 1.47 \\ \hdashline[0.5pt/3pt]
-        10 & 2047.7 & 6953.81 & 3.95 & 0.29 & 5.04 & 12.19 & 2.4 \\ \hdashline[0.5pt/3pt]
-        \hline
-        \end{tabular}
-    \end{center}
-    \label{tbl:global-features-results-avg}
-    \caption{The average values for each signature set and all global features}
-\end{table}
+    \begin{subfigure}[b]{\textwidth}
+            \centering
+            \begin{tabular}{c|c|c|c|c|c|c|c}
+            \hline
+            \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+            \hline
+            0 & 1701.69 & 1942.75 & 15.5 & 0.88 & 16.93 & 2.13 & 0.5 \\ \hdashline[0.5pt/3pt]
+            1 & 1235.27 & 1773.95 & 11.24 & 0.7 & 13.36 & 2.0 & 1.93 \\ \hdashline[0.5pt/3pt]
+            2 & 1206.72 & 1762.06 & 10.22 & 0.68 & 18.96 & 3.11 & 2.33 \\ \hdashline[0.5pt/3pt]
+            3 & 2565.76 & 3217.96 & 17.62 & 0.8 & 27.72 & 5.58 & 2.42 \\ \hdashline[0.5pt/3pt]
+            4 & 1104.21 & 1588.11 & 8.1 & 0.7 & 9.58 & 3.43 & 2.81 \\ \hdashline[0.5pt/3pt]
+            5 & 1308.19 & 3047.47 & 5.23 & 0.43 & 8.25 & 8.0 & 2.3 \\ \hdashline[0.5pt/3pt]
+            6 & 2480.3 & 2102.87 & 13.71 & 1.18 & 16.89 & 3.87 & 2.04 \\ \hdashline[0.5pt/3pt]
+            7 & 1260.28 & 2194.41 & 6.79 & 0.57 & 9.41 & 2.64 & 2.07 \\ \hdashline[0.5pt/3pt]
+            8 & 1311.1 & 1574.98 & 11.18 & 0.83 & 15.12 & 2.6 & 1.47 \\ \hdashline[0.5pt/3pt]
+            9 & 2047.7 & 6953.81 & 3.95 & 0.29 & 5.04 & 12.19 & 2.4 \\
+            \hline
+            \end{tabular}
+            \label{tbl:global-features-results-avg}
+            \caption{The average values for each signature set and all global features}
+    \end{subfigure}%
 
-\begin{table}[tb]
-    \begin{center}
-        \begin{tabular}{c|c|c|c|c|c|c|c}
-        \hline
-        \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
-        \hline
-        0 & 2571.75 & 2282.0 & 54.42 & 1.13 & 73.35 & 3.0 & 1.0 \\ \hdashline[0.5pt/3pt]
-        1 & 20214773.31 & 2537.0 & 457608.0 & 7967.98 & 1110987.0 & 4.0 & 3.0 \\ \hdashline[0.5pt/3pt]
-        2 & 2048.9 & 2957.0 & 82.49 & 0.69 & 139.0 & 2.0 & 3.0 \\ \hdashline[0.5pt/3pt]
-        3 & 2069.97 & 2117.0 & 52.35 & 0.98 & 105.95 & 5.0 & 3.0 \\ \hdashline[0.5pt/3pt]
-        4 & 4673.42 & 9370.0 & 104.48 & 0.5 & 180.54 & 8.0 & 4.0 \\ \hdashline[0.5pt/3pt]
-        5 & 2041.9 & 2914.0 & 63.79 & 0.7 & 99.93 & 5.0 & 4.0 \\ \hdashline[0.5pt/3pt]
-        6 & 2425.82 & 4694.0 & 41.11 & 0.52 & 48.09 & 11.0 & 4.0 \\ \hdashline[0.5pt/3pt]
-        7 & 4388.68 & 3633.0 & 75.89 & 1.21 & 134.83 & 5.0 & 3.0 \\ \hdashline[0.5pt/3pt]
-        8 & 1958.88 & 4349.0 & 65.51 & 0.45 & 92.97 & 8.0 & 3.0 \\ \hdashline[0.5pt/3pt]
-        9 & 2146.82 & 2749.0 & 65.46 & 0.78 & 112.3 & 4.0 & 2.0 \\ \hdashline[0.5pt/3pt]
-        10 & 3428.25 & 8083.0 & 20.12 & 0.42 & 33.69 & 17.0 & 9.0 \\ \hdashline[0.5pt/3pt]
-        \hline
-        \end{tabular}
-    \end{center}
-    \label{tbl:global-features-results-max}
-    \caption{The maximum values for each signature set and all global features}
-\end{table}
+    ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
+      %(or a blank line to force the subfigure onto a new line)
+    \begin{subfigure}[b]{\textwidth}
+            \centering
+            \begin{tabular}{c|c|c|c|c|c|c|c}
+            \hline
+            \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+            \hline
+            0 & 2571.75 & 2282.0 & 54.42 & 1.13 & 73.35 & 3.0 & 1.0 \\ \hdashline[0.5pt/3pt]
+            1 & 2048.9 & 2957.0 & 82.49 & 0.69 & 139.0 & 2.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+            2 & 2069.97 & 2117.0 & 52.35 & 0.98 & 105.95 & 5.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+            3 & 4673.42 & 9370.0 & 104.48 & 0.5 & 180.54 & 8.0 & 4.0 \\ \hdashline[0.5pt/3pt]
+            4 & 2041.9 & 2914.0 & 63.79 & 0.7 & 99.93 & 5.0 & 4.0 \\ \hdashline[0.5pt/3pt]
+            5 & 2425.82 & 4694.0 & 41.11 & 0.52 & 48.09 & 11.0 & 4.0 \\ \hdashline[0.5pt/3pt]
+            6 & 4388.68 & 3633.0 & 75.89 & 1.21 & 134.83 & 5.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+            7 & 1958.88 & 4349.0 & 65.51 & 0.45 & 92.97 & 8.0 & 3.0 \\ \hdashline[0.5pt/3pt]
+            8 & 2146.82 & 2749.0 & 65.46 & 0.78 & 112.3 & 4.0 & 2.0 \\ \hdashline[0.5pt/3pt]
+            9 & 3428.25 & 8083.0 & 20.12 & 0.42 & 33.69 & 17.0 & 9.0 \\
+            \hline
+            \end{tabular}
+            \label{tbl:global-features-results-max}
+            \caption{The maximum values for each signature set and all global features}
+    \end{subfigure}%
 
+    \caption{The minimum, average and maximum values we obtained for all global features for each subject's set of signatures.}
+    \label{fig:global-features}
+\end{figure}
+
+\textbf{Similarity score $S_{GF}$}\\
+We use our knowledge about the minimum, average and maximum value for each of the sigature sets for a specific card holder to create a similarity score.
+We compute the seven global features for a test signature and we assign a point for each of the features if the test value lies between the minimum and maximum that we computed earlier. This gives us the score vector
+$$G = [s_l, s_t, s_{v_\text{max}}, s_{\bar{v}}, s_{a_\text{max}}, s_n, s_r]$$
+
+We assume that not all of the global features are of the same significance. We therefore define a  weigthing vector $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r]$$
+
+Our similarity score is calculated as
+$$S = G \times W$$
+
+\textbf{Fitness function $\mathbb{F}_{GF}$}\\
+We run each signature against each of the eleven signature models, defined by global features maxima and minima of a system. The fitness function tries to reduce the number of signatures which receive the highes possible similarity score for a given weighting vector $W$.
+As all signatures will score a perfect score at least once, the fitness function's goal is to come as close to the number of signatures in the ground truth set as possible.
+
+The definition of $\mathbb{F}$ is given in pseudo code in Listing \ref{lst:global-features-fitness-function}.
+
+
+\begin{lstlisting}[caption={The fitness function for global features tries to reduce the number of signatures with the hightes possible score for a given weighting vector $W$},label={lst:global-features-fitness-function}]
+
+until fitness == #signatures_in_groundtruth
+
+    fitness = calculate_globabl_features w
+
+    if fitness < previous_fitness
+        save w
+    end
+
+    permutate w
+end
+\end{lstlisting}
+
+
+\textbf{Classification of Signatures}\\
+We defined the start vecor $W = [0,0,0,0,0,0,0]$ and let the fitness function permutate the vector until a local minimum was found for all $W$ consisting of $\{0,1,2\}$. The local minima was reached for $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [1, 1, 1, 1, 0, 0, 0]$$
+At the local minimum, there are 1007 signatures with the highest score which is 696 more than in the ground truth set that we used for this technique.
+
+If we extend our search and include the two groups with the highes occurrencies, we get
+
+
+\textbf{Detection of forgeries}\\
+We used the previously found vector to test the robustness of this approach against forgeries. We set $$W = [1, 1, 1, 1, 0, 0, 0]$$
+and ran all the forgeries against the previously trained signature models given by the minimum and maximum values.
+
+
+SLIDING WINDOW ERWAEHNEN!
+
+% Findings:
+% -ration is a very weak indicator
+% - v_avg is ok
+% - vmax weak
+% - amax weak
 
 \subsection{Dynamic Time Warping}
 
+Calculating the DTW score between two signatures takes about one tenth of a second on a modern computer which is by far fast enough to fulfill our real time requirement.
+
+\textbf{Similarity score $S_{DTW}$}\\
+We define the similarity score as the DTW score.
+
+Distance function erwaehnen
+
+\textbf{Fitness function $\mathbb{F}_{DTW}$}\\
+
+Reduce EER
 
 
-\subsection{Fusion of the Scores}
+\textbf{Classification of Signatures}\\
+Results
+
+Graph of all Signatures
+
+Graph of first 10 Signatures vs last 10 Signatures of a Person
+
+\textbf{Detection of forgeries}\\
+
+Resulting EER with the param we found above
 
 
+\subsection{Hidden Markov Models}
 
-\subsection{Results}
+\textbf{Similarity score $S_{HMM}$}\\
 
-Computational feasibility
+Problem: hier koennen wir keinen Schwellenwert definieren so wie die Resultate aussehen
+
+\textbf{Fitness function $\mathbb{F}_{HMM}$}\\
+
+\textbf{Classification of Signatures}\\
+
+\textbf{Detection of forgeries}\\
+
+
+% \subsection{Results}
+
+% Computational feasibility
+
+\subsection{Fusion of scores}
+
+How correlated are the three scores?
+
+Which tool can i use for this?
+
+Wenn schlecht korreliert: Fusion ein guter Ansatz
+
+Fusion-Techniken: 1/3 Score each oder 2 lowest oder 2 highest oder anderes weighting
 
 
 
@@ -1528,30 +1629,28 @@ Computational feasibility
 % \subsection{Modi}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER CONCLUSIONS
 
 \chapter{Conclusions}
 
-\section{Fraud Prevention}
+Wie lang soll conclusion in etwa sein?
 
-\section{Fraud Detection}
+1 Seite
 
-\section{Outlook}
+\textbf{Fraud Prevention}
+Zeitersparnis bei Ops
 
-- use lower bound proposed by Keogh et al.\cite{Keogh:2002:EID:1287369.1287405} to make DTW faster on large datasets
+Business kann weiter skalieren was ohne fast nicht moeglich waere
 
+Ersparnis von Resourcen
+
+\textbf{Fraud Detection}
+
+Detection rate nicht so gut wie bei vergleichbaren Arbeiten mit Pen captured signatures
+
+Aber: Feedback loop erlaubt das Reduzieren von False Positives und das Training der Signatur-Modelle
+
+Was soll da rein in etwa damit es nicht 'future work' wird?
 
 
 

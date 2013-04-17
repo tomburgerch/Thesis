@@ -77,13 +77,13 @@
 \usepackage{caption}
 \DeclareCaptionFont{white}{\color{white}}
 \DeclareCaptionFont{black}{\color{black}}
-\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{#1#2#3}}}
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
 \captionsetup{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
 
 
 \usepackage{subcaption}
-\DeclareCaptionFormat{subformat}{\colorbox[cmyk]{0,0,0,0}{\parbox{\textwidth}{#1#2#3}}}
+\DeclareCaptionFormat{subformat}{\colorbox[cmyk]{0,0,0,0}{\parbox{\textwidth}{#1\hspace{5pt} #2#3}}}
 \captionsetup[sub]{format=subformat,labelfont=black,textfont=black}
 
 
@@ -1348,9 +1348,9 @@ The devices used to collect the signatures are listed in Table \ref{tbl:signatur
 We also collected three forgeries for each person. The forgeries are created by an untrained person and of the following kind:
 
 \begin{itemize}
-\item \textbf{Spontaneous Forgery}: A random signature from the set of one person's signatures was shown the imposter for 5 secs. The imposter was only allowed to forge the signature after the five seconds.
-\item \textbf{Sample Forgery}: A random signature from the set of one person's signatures was shown to the imposter for an indefinite amount of time and the imposter was able to look at the signature while forging the signature.
-\item \textbf{Knowledgable Forgery}: The imposter had unlimited access to all of one person's signatures to forge the signature.
+\item \textbf{Spontaneous Forgery $\mathcal{F}_1$}: A random signature from the set of one person's signatures was shown the imposter for 5 secs. The imposter was only allowed to forge the signature after the five seconds.
+\item \textbf{Sample Forgery $\mathcal{F}_2$}: A random signature from the set of one person's signatures was shown to the imposter for an indefinite amount of time and the imposter was able to look at the signature while forging the signature.
+\item \textbf{Knowledgable Forgery $\mathcal{F}_3$}: The imposter had unlimited access to all of one person's signatures to forge the signature.
 \end{itemize}
 
 With each technique in our work, we gatheres statistics about two use cases:
@@ -1367,11 +1367,6 @@ In order to compare the signatures, we normalized some of the properties before 
 \item \textbf{Size and length}: The different screen size and pixel density between the devices caused very different height, width and length for the signatures. In order to compare them, we normalized the signatures height and width. Of course, when we used the width-to-height ratio as a global feature, we collected this value before normalization.
 \item \textbf{Time}: As more screen estate also means longer distances to draw a signature, we also adjusted the timestamps when we normalized the size of a signature.
 \end{itemize}
-
-
-
-
-
 
 
 
@@ -1472,7 +1467,7 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
     \label{fig:global-features}
 \end{figure}
 
-\textbf{Similarity score $S_{GF}$}\\
+\noindent\textbf{Similarity score $S_{GF}$}\\
 We use our knowledge about the minimum, average and maximum value for each of the sigature sets for a specific card holder to create a similarity score.
 We compute the seven global features for a test signature and we assign a point for each of the features if the test value lies between the minimum and maximum that we computed earlier. This gives us the score vector
 $$G = [s_l, s_t, s_{v_\text{max}}, s_{\bar{v}}, s_{a_\text{max}}, s_n, s_r]$$
@@ -1484,7 +1479,7 @@ $$S_{GF} = G \times W$$
 
 As this approach includes every signature every collected and thereby possibly enlarges the windows where other signatures are matched, a sliding window should be used for larger datasets. As we were are working with less than 30 signatures per card holder, we did not implement a sliding window mechanism for this work.
 
-\textbf{Fitness function $\mathbb{F}_{GF}$}\\
+\noindent\textbf{Fitness function $\mathbb{F}_{GF}$}\\
 We run each signature against each of the eleven signature models, defined by global features maxima and minima of a system. The fitness function tries to reduce the number of signatures which receive the highes possible similarity score for a given weighting vector $W$.
 As all signatures will score a perfect score at least once, the fitness function's goal is to come as close to the number of signatures in the ground truth set as possible.
 
@@ -1506,7 +1501,7 @@ end
 \end{lstlisting}
 
 
-\textbf{Classification of Signatures}\\
+\noindent\textbf{Classification of Signatures}\\
 We defined the start vecor $W = [0,0,0,0,0,0,0]$ and let the fitness function permutate the vector until a local minimum was found for all $W$ consisting of $\{0,1,2\}$. The local minima was reached for $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [0, 1, 0, 1, 0, 1, 1]$$
 At the local minimum, there are 755 signatures with the highest score which is 478 more than in the ground truth (278) that we used for this approach.
 
@@ -1516,7 +1511,7 @@ If we extend our search and include the two groups with the highest occurrences,
 $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [0, 2, 0, 2, 0, 2, 1]$$
 
 
-\textbf{Detection of forgeries}\\
+\noindent\textbf{Detection of forgeries}\\
 We used the previously found vector to test the robustness of this approach against forgeries. We set $$W = [0, 1, 0, 1, 0, 1, 1]$$
 and ran all the forgeries against the previously trained signature models given by the minimum and maximum values.
 
@@ -1525,7 +1520,7 @@ We computed these four values for each of the found global features, $t, \bar{v}
 A hit means that the test value lies within the reference min/max for all four features.
 We notice that most of the matches were falsified mostly because the impostor took too long to sign ($t$ too high) or because he didn't sign fast enough ($\bar{v}$ too little). Out of the 30 forgeries, only one of the simple forgeries was a hit. This corresponds to an error rate of 3.33 percent.
 
-\textbf{Computational complexity}\\
+\noindent\textbf{Computational complexity}\\
 Computing the features for a signature and comparing them to the previously computed min/max values takes less than a tenth of a second and the approach is therefore feasible in realtime. In addition, by using a sliding window, the computational complexity of computing the min/max values will stay at a predictable level even though the total signature set may grow very large.
 
 \begin{figure}
@@ -1551,7 +1546,7 @@ Computing the features for a signature and comparing them to the previously comp
             \hline
             \end{tabular}
             \label{tbl:global-features-forg-spontaneous}
-            \caption{The results for spontaneous forgeries}
+            \caption{The results for spontaneous forgeries $\mathcal{F}_1$}
     \end{subfigure}%
 
     \begin{subfigure}[b]{\textwidth}
@@ -1575,7 +1570,7 @@ Computing the features for a signature and comparing them to the previously comp
             \hline
             \end{tabular}
             \label{tbl:global-features-forg-sample}
-            \caption{The results for sample forgeries}
+            \caption{The results for sample forgeries $\mathcal{F}_2$}
     \end{subfigure}%
 
     \begin{subfigure}[b]{\textwidth}
@@ -1599,7 +1594,7 @@ Computing the features for a signature and comparing them to the previously comp
             \hline
             \end{tabular}
             \label{tbl:global-features-forg-knowledgable}
-            \caption{The results for knowledgable forgeries}
+            \caption{The results for knowledgable forgeries $\mathcal{F}_3$}
     \end{subfigure}%
 
 
@@ -1617,42 +1612,202 @@ Computing the features for a signature and comparing them to the previously comp
 
 \subsection{Dynamic Time Warping}
 
-Calculating the DTW score between two signatures takes about one tenth of a second on a modern computer which is by far fast enough to fulfill our real time requirement.
+\noindent\textbf{Similarity score $S_{DTW}$}\\
+The similarity score is given as the DTW's output.
+We have evaluated two kinds of distances
+\begin{itemize}
+\item the 2-Norm of the $x,y$-vector
+\item the 2-Norm of the $x,y,t$-vector which includes the timestamp for each point
+\end{itemize}
 
-\textbf{Similarity score $S_{DTW}$}\\
-We define the similarity score as the DTW score.
+We have tested combinations of the following inputs:
+\begin{itemize}
+\item \textbf{Age}: We do not use the full signature set for every card holder to reduce the computation time. We therefore choose a subset of signatures. We test recent signatures, i.e.\ chronologically the last 5, 10 or 20 signatures, or old signatures, i.e.\ the first 5, 10, 20 signatures ever recorded by a card holder.
+\item \textbf{Amount of signatures}: For computation reasons we restrict the set of signatures to a subset. We obtain the results for 5, 10 and 20 signatures. We also run one full experiment with up to 50 signatures for each card holder.
+\item \textbf{Lengh}: We noted that the variability of a signature is often higher towards the end than at the beginning and therefore perform experiments using the full, i.e.\ including all points of a signature, or only a subset, which we annotate as partial.
+\item \textbf{Vector}: We calculate the distance between two points during the DTW algorithm as either between the geometric position $x,y$ or the geometric position including the time $x,y,t$.
+\end{itemize}
 
-Distance function erwaehnen
+\noindent\textbf{Fitness function $\mathbb{F}_{DTW}$}\\
 
-\textbf{Fitness function $\mathbb{F}_{DTW}$}\\
+The fitness function $\mathbb{F}_{DTW}$ is defined as the Equal Error Rate (EER) during the classification phase. It is used to determine the optimal threshold to accept/reject a signature.
 
-Reduce EER
+We are also interested in the computation time to compute the EER to know whether or not a combination is feasible for real time evaluation.
+
+\begin{figure}
+    \centering
+    \tabcolsep 4pt
+    \begin{tabular}{l|cccc|cccc|c}
+    \hline
+    Experiment & Age & Nr Sig & Length & Vector & Time [s] & Threshold & \textbf{EER}\\
+    \hline
+         1 & recent & 5   & full      & xyt   & 249   & 0.02  & 0.29 \\ \hdashline[0.5pt/3pt] % 1366148189
+         2 & recent & 5   & full      & xy    & 222   & 0.07  & 0.32 \\ \hdashline[0.5pt/3pt] % 1366148141
+         3 \ref{fig:dtw-exp3} & recent & 5   & partial   & xyt   & 45    & 0.23  & 0.19 \\ \hdashline[0.5pt/3pt]
+         4 \ref{fig:dtw-exp1} & recent & 5   & partial   & xy    & 40    & 0.30  & 0.12 \\ \hdashline[0.5pt/3pt] % 1366147505
+         5 & recent & 10  & full      & xyt   & 782   & 0.02  & 0.33 \\ \hdashline[0.5pt/3pt] %1366146140
+         6 & recent & 10  & full      & xy    & 762   & 0.06  & 0.29 \\ \hdashline[0.5pt/3pt] %1366146150
+         7 & recent & 10  & partial   & xyt   & 189   & 0.22  & 0.29 \\ \hdashline[0.5pt/3pt] %1366146759
+         8 \ref{fig:dtw-exp2} & recent & 10  & partial   & xy    & 171   & 0.30  & 0.14 \\ \hdashline[0.5pt/3pt]
+         9 & recent & 20  & partial   & xyt   & 728   & 0.16  & 0.37 \\ \hdashline[0.5pt/3pt] % 1366149232
+         10 & recent & 20  & partial   & xy    & 661   & 0.28  & 0.20 \\ \hdashline[0.5pt/3pt] % 1366149159
+         11 & old & 10  & full      & xyt   & 944   & 0.01  & 0.39 \\ \hdashline[0.5pt/3pt] %1366151221
+         12 & old & 10  & full      & xy    & 866   & 0.05  & 0.30 \\ \hdashline[0.5pt/3pt] %1366151125
+         13 \ref{fig:dtw-exp4} & recent & 50 & partial & xy & 2137 & 0.26 & 0.33 \\ \hdashline[0.5pt/3pt] %1366153811
+
+    \hline
+    \end{tabular}
+    \label{tbl:dtw-experiments1}\caption{Results of DTW experiments}
+\end{figure}
+
+\noindent\textbf{Classification of Signatures}\\
+The results of our experiments are listed in Figure \ref{tbl:dtw-experiments1}.
+We found that:
+\begin{itemize}
+\item The algorithm performs better on distance vectors that exclude time information.
+\item The algorithm is faster with less signatures per card holder and for a distance vector which excludes time information.
+\item More recent signatures perform better than older signatures. This motivates the use of a sliding window.
+\item Partial information of the signature vector is not only a lot faster but can also perform a lot better than full information. This is due to the higher variability in the signatures towards the end.
+\item Signtaure classification in general is very time consuming and could not be done in real time.
+\end{itemize}
+
+The best performing combination is found to be
+\begin{itemize}
+\item Recent signatures
+\item Five signatures per card holder
+\item Partial information of the signature vector
+\item No time information in the distance function
+\end{itemize}
+
+Experiment 4 produces an EER of 0.12 with a threshold of 0.3. Computing the similarity score $S_{DTW}$ for the cross product of all signatures took 40 seconds, which also makes it the fastes approach. The graphic representation is shown in Figure \ref{fig:dtw-exp1}. We use this setup to detect forgeries.
 
 
-\textbf{Classification of Signatures}\\
-Results
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{\textwidth}
+                \centering
+                \includegraphics[width=0.8\textwidth]{figures/dtw-exp1.png}
+                \caption{DTW with five recent signatures per card holder, partial information about each signature and excluding time information}
+                \label{fig:dtw-exp1}
+        \end{subfigure}%
 
-Graph of all Signatures
+        \begin{subfigure}[b]{\textwidth}
+                \centering
+                \includegraphics[width=0.8\textwidth]{figures/dtw-exp2.png}
+                \caption{DTW with ten recent signatures per card holder, partial information about each signature and excluding time information}
+                \label{fig:dtw-exp2}
+        \end{subfigure}%
 
-Graph of first 10 Signatures vs last 10 Signatures of a Person
+        ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
+          %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{\textwidth}
+                \centering
+                \includegraphics[width=0.8\textwidth]{figures/dtw-exp3.png}
+                \caption{DTW with five recent signatures per card holder, partial information about each signature and including time information}
+                \label{fig:dtw-exp3}
+        \end{subfigure}%
 
-\textbf{Detection of forgeries}\\
+        \begin{subfigure}[b]{\textwidth}
+                \centering
+                \includegraphics[width=0.8\textwidth]{figures/dtw-exp4.png}
+                \caption{DTW with up to 50 recent signatures per card holder, partial information about each signature and excluding time information}
+                \label{fig:dtw-exp3}
+        \end{subfigure}%
 
-Resulting EER with the param we found above
+        \caption{EER and Heatmap of the three best performing and the longtest DTW experiments}\label{fig:dtw-experiments2}
+\end{figure}
+
+\noindent\textbf{Detection of forgeries}\\
+We calculate the distance between each forgery and each signature of a card holder's ground truth and use majority voting to decide whether a signature is accepted or rejected. The vote of two signatures counts as a positive vote if $S_{DTW}$ is higher than the found threshold of 0.30.
+
+The maximum score we found in the previous experiment was 241881, the threshold of 0.3 therefore corresponds to $241881 \cdot 0.3 = 72564.2$.
+In the 30 forgeries, we got 11 false positives as shown in Figure \ref{tbl:dtw-forgeries-results-tbl}. That corresponds to an error rate of 36 percent.
+
+
+
+\begin{figure}
+    \centering
+
+    \begin{subfigure}[b]{0.3\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{figures/dtw_forgeries_1.png}
+            \caption{}
+            \label{fig:dtw-forgeries1}
+    \end{subfigure}%
+    \qquad
+    \begin{subfigure}[b]{0.3\textwidth}
+            \centering
+            \includegraphics[width=0.8\textwidth]{figures/dtw_forgeries_2.png}
+            \caption{}
+            \label{fig:dtw-forgeries2}
+    \end{subfigure}%
+    \qquad
+    \begin{subfigure}[b]{0.3\textwidth}
+            \centering
+            \tabcolsep 4pt
+            \small
+            \begin{tabular}{c|cccc||cccc||c}
+            \hline
+            \textbf{P} & $\mathcal{F}_1$ & $\mathcal{F}_2$ & $\mathcal{F}_3$ \\
+            \hline
+            1 & \xmark & \cmark & \xmark \\ \hdashline[0.5pt/3pt]
+            2 & \cmark & \cmark & \cmark \\ \hdashline[0.5pt/3pt]
+            3 & \cmark & \cmark & \xmark \\ \hdashline[0.5pt/3pt]
+            4 & \xmark & \xmark & \xmark \\ \hdashline[0.5pt/3pt]
+            5 & \xmark & \xmark & \xmark \\ \hdashline[0.5pt/3pt]
+            6 & \xmark & \cmark & \xmark \\ \hdashline[0.5pt/3pt]
+            7 & \xmark & \xmark & \xmark \\ \hdashline[0.5pt/3pt]
+            8 & \xmark & \xmark & \cmark \\ \hdashline[0.5pt/3pt]
+            9 & \xmark & \xmark & \cmark \\ \hdashline[0.5pt/3pt]
+            10 & \xmark & \cmark & \cmark \\ \hdashline[0.5pt/3pt]
+            \hline
+            \end{tabular}
+            \label{tbl:dtw-forgeries-results-tbl}
+            \caption{}
+    \end{subfigure}%
+
+
+
+    \caption{The heatmap (a), the discretized heatmap after applying the threshold (b) and the false positives after applying majority voting (c)}
+    \label{fig:dtw-forgeries-results}
+\end{figure}
+
+
+
+
+\noindent\textbf{Computational complexity}\\
+Calculating the DTW score between two signatures takes about one tenth of a second on a modern computer which is by far fast enough to fulfill our real time requirements. However, computing the threshold requires longer computation and should be implemented in a background process.
+
+
+
+
+
+
+
+
+
 
 
 \subsection{Hidden Markov Models}
 
-\textbf{Similarity score $S_{HMM}$}\\
+There are several implementations of the HMM algorithm available. We found the implementation by MATLAB to be best documented and best fitting for our application and chose to work with said tool suite.
 
-Problem: hier koennen wir keinen Schwellenwert definieren so wie die Resultate aussehen
+\noindent\textbf{Similarity score $S_{HMM}$}\\
+After training the HMM for each card holder, we can calculate the likelihood for each signature to belong to a certain HMM. We define $S_{HMM}$ to be the likelihood of a signature to being generated by a certain model's card holder.
 
-\textbf{Fitness function $\mathbb{F}_{HMM}$}\\
+\noindent\textbf{Fitness function $\mathbb{F}_{HMM}$}\\
 
-\textbf{Classification of Signatures}\\
 
-\textbf{Detection of forgeries}\\
 
+\noindent\textbf{Classification of Signatures}\\
+
+
+
+
+
+\noindent\textbf{Detection of forgeries}\\
+
+\noindent\textbf{Computational complexity}\\
 
 % \subsection{Results}
 

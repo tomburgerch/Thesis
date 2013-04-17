@@ -142,7 +142,7 @@
 \thesistype{Master Thesis\\[5pt]CONFIDENTIAL}
 \title{Fraud Prevention and Detection\\[5pt] in Mobile Payments}
 
-\author{Cedric Waldburger}
+\author{C\'{e}dric Waldburger}
 \email{wcedric@ee.ethz.ch}
 \institute{Distributed Computing Group \\[2pt]
 Computer Engineering and Networks Laboratory \\[2pt]
@@ -170,7 +170,7 @@ ETH Zurich}
 
 \begin{acknowledgements}
 
-  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Decker from the Institute for Distributed Computing at ETH Zurich for their help and support. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support and help.
+  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Decker from the Institute for Distributed Computing at ETH Zurich for their help and support. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support.
 
 \end{acknowledgements}
 
@@ -1634,12 +1634,12 @@ The fitness function $\mathbb{F}_{DTW}$ is defined as the Equal Error Rate (EER)
 
 We are also interested in the computation time to compute the EER to know whether or not a combination is feasible for real time evaluation.
 
-\begin{figure}
+\begin{table}
     \centering
     \tabcolsep 4pt
     \begin{tabular}{l|cccc|cccc|c}
     \hline
-    Experiment & Age & Nr Sig & Length & Vector & Time [s] & Threshold & \textbf{EER}\\
+    Experiment & Age & \# Sig & Length & Vector & Time [s] & Threshold & EER\\
     \hline
          1 & recent & 5   & full      & xyt   & 249   & 0.02  & 0.29 \\ \hdashline[0.5pt/3pt] % 1366148189
          2 & recent & 5   & full      & xy    & 222   & 0.07  & 0.32 \\ \hdashline[0.5pt/3pt] % 1366148141
@@ -1658,7 +1658,7 @@ We are also interested in the computation time to compute the EER to know whethe
     \hline
     \end{tabular}
     \label{tbl:dtw-experiments1}\caption{Results of DTW experiments}
-\end{figure}
+\end{table}
 
 \noindent\textbf{Classification of Signatures}\\
 The results of our experiments are listed in Figure \ref{tbl:dtw-experiments1}.
@@ -1797,17 +1797,83 @@ After training the HMM for each card holder, we can calculate the likelihood for
 
 \noindent\textbf{Fitness function $\mathbb{F}_{HMM}$}\\
 
+We want the range of likelihoods for each signature set against each signature model to be as small as possible. We therefore recorded the ranges in Table XX while we tested the system with five, six and seven states.
+We vary the number of hidden states in the model as we try to minimize the window of likelihood for each signature set.
+
+We calculate the window for each model and how many false positives we get in that case. We stopped our experiments at 9 states as it would otherwise become unfeasible to implement
+
+
+\begin{table}
+    \centering
+    \tabcolsep 4pt
+    \begin{tabular}{l|ccc|ccc}
+    \hline
+    Exp & States & \# Sig & Time [s] & Avg window size & False Positives / 100 Sig \\ \hline
+    1 & 5 & 10 & 48                  & 142.0 & 16.63 \\ \hdashline[0.5pt/3pt]
+    2 & 5 & 50 & 214                 & 209.0 & 33.8 \\ \hdashline[0.5pt/3pt]
+    3 & 6 & 10 & 61                  & 144.0 & 12.45 \\ \hdashline[0.5pt/3pt]
+    4 & 6 & 50 & 560                 & 593.0 & 44.18 \\ \hdashline[0.5pt/3pt]
+    5 & 7 & 10 & 105                 & 144.0 & 9.8 \\ \hdashline[0.5pt/3pt]
+    6 & 7 & 50 & 740                 & 370.0 & 34.72 \\ \hdashline[0.5pt/3pt]
+    7 & 8 & 10 & 150                 & 145.0 & 7.14 \\ \hdashline[0.5pt/3pt]
+    8 & 9 & 10 & 225                 & 148.0 & 5.1 \\ \hdashline[0.5pt/3pt]
+
+    \hline
+    \end{tabular}
+    \label{tbl:hmm_experiments1}\caption{Results of HMM experiments}
+\end{table}
+
+
+
+
+
+
 
 
 \noindent\textbf{Classification of Signatures}\\
+As shown in Table \ref{tbl:hmm_experiments1} the experiments with more signatures cause larger windows and thereby a higher number of false positives per 100 Sig.
 
 
 
 
 
 \noindent\textbf{Detection of forgeries}\\
+We decided to weight the lower computation time higher than the lower average of forgeries and performed the experiments on forgery detection with the parameters used for experiment 5:
+\begin{itemize}
+\item 7 hidden states
+\item The model is trained with the 10 most recent signatures
+\item The symbol alphabet consists of 8 angles
+\end{itemize}
+
+We obtain the window sizes in Table \ref{XX} for our experiments.
+
+\begin{table}
+    \centering
+    \tabcolsep 4pt
+    \begin{tabular}{l|ccc|ccc}
+    \hline
+    Exp & States & \# Sig & Time [s] & Avg window size & False Positives / 100 Sig \\ \hline
+    1 & 5 & 10 & 48                  & 142.0 & 16.63 \\ \hdashline[0.5pt/3pt]
+    2 & 5 & 50 & 214                 & 209.0 & 33.8 \\ \hdashline[0.5pt/3pt]
+    3 & 6 & 10 & 61                  & 144.0 & 12.45 \\ \hdashline[0.5pt/3pt]
+    4 & 6 & 50 & 560                 & 593.0 & 44.18 \\ \hdashline[0.5pt/3pt]
+    5 & 7 & 10 & 105                 & 144.0 & 9.8 \\ \hdashline[0.5pt/3pt]
+    6 & 7 & 50 & 740                 & 370.0 & 34.72 \\ \hdashline[0.5pt/3pt]
+    7 & 8 & 10 & 150                 & 145.0 & 7.14 \\ \hdashline[0.5pt/3pt]
+    8 & 9 & 10 & 225                 & 148.0 & 5.1 \\ \hdashline[0.5pt/3pt]
+
+    \hline
+    \end{tabular}
+    \label{tbl:hmm_window_sizes}\caption{Results of HMM experiments}
+\end{table}
+
+
 
 \noindent\textbf{Computational complexity}\\
+
+training with 6 states took 30s per model on average
+
+computing the likelihood for a signature and a model takes less than a tenth of a second
 
 % \subsection{Results}
 

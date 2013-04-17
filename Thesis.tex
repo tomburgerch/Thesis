@@ -326,25 +326,15 @@ Along with simplicity, quick setup time and low cost, SumUp's advantage over its
 
 \section{Fraud}
 
-Fraud, as defined by Phua et al. ~\cite{5522816}, refers to the abuse of a profit organization's system without necessarily leading to direct legal consequences. Fraud detection, as part of the overall fraud protection, has become one of the most established applications of data mining.
+Fraud, as defined by Phua et al.~\cite{5522816}, refers to the abuse of a profit organization's system without necessarily leading to direct legal consequences. Fraud detection, as part of the overall fraud protection, has become one of the most established applications of data mining.
 
-The large volume of transactions processed each day by SumUp makes a manual verification of each transaction impossible. As such, SumUp has to rely on automated systems to process and validate transactions. At time of this research, there is no established provider of anti-fraud software in this field. However, companies like \fnurl{Sift Science,}{http://siftscience.com} a company which specializes in providing a fraud control service as a third party, has recently raised more than four million USD from leading venture capital firms.
+The large volume and real time nature of the transactions processed each day by SumUp makes a manual verification of each transaction impossible. As such, SumUp has to rely on automated systems to process and validate transactions. At time of this research, there is no established provider of anti-fraud software in this field. However, companies like \fnurl{Sift Science,}{http://siftscience.com} a company which specializes in providing a fraud control service as a third party, has recently raised more than four million USD from leading venture capital firms.
 
-At the time of this work, SumUp does its own internal research to implement, train and tweak its own fraud rules. An internal assessment has shown that the four most popular fraud scenarios are:
-
-% As credit cards are historically a very unsafe payment method, special attention has to be paid when dealing with credit card information and processing credit card transactions.
-% A fact that is reflected by looking at how many papers were written about fraud detection in which area. As shown in Figure \ref{fig:fraud-literature-count}.
-
-\begin{itemize}
-    \item Money laundry
-    \item Copied or stolen cards
-    % \item Impersonators transferring money under someone else's name
-    % \item Illegal money being transferred through SumUp's system
-\end{itemize}
+SumUp does its own internal research to implement, train and tweak its own fraud rules. An internal assessment has shown that the two most popular fraud scenarios are the use of merchant accounts for money laundry and copied or stolen cards.
 
 Our fraud prevention mechanisms focus on preventing money laundry while our fraud detection measurements will help to identify a card holder by signature and thereby make it hard for fraudsters to use stolen cards. After a card has been used a certain amount of times, the goal is to  build a reliable signature model to verify it's the same person signing the next time the card is used.
 
-Not only are physical cards at risk to be stolen, also the digital copy of the credit card data needs to be protected. This is one of the reasons SumUp only saves encrypted card information and is obliged to do so according to the Payment Card Industry Data Security Standard (PCI DSS) and in an environment defined by the standard. The standard defines a set of rules to reach these control objectives:
+Not only the physical cards are at risk of theft, the digital copy of the credit card data also needs to be protected. This is one of the reasons SumUp only saves encrypted card information and is obliged to do so according to the \fnurl{Payment Card Industry Data Security Standard}{http://pcisecuritystandards.org/} (PCI DSS) and in an environment defined by the standard. The standard defines a set of rules to reach these control objectives:
 \begin{itemize}
 \item Build and maintain a secure network
 \item Protect card holder data
@@ -354,69 +344,33 @@ Not only are physical cards at risk to be stolen, also the digital copy of the c
 \item Maintain an information security policy
 \end{itemize}
 
-This has an impact on our work as the regulations connected to  protecting card holder data only allow storing card numbers and not names of card holders. The goal of this requirement is that even if someone would gain access to SumUp's database, it would not be possible to retrieve all information needed to process a transaction. This however, bears one disadvantage: we cannot collude information of multiple cards used by a single customer and can therefore only build a signature model based on the signatures we collect per card, not per customer. As the majority of all US card holders holds at least two credit cards \cite{woolsey2010credit}, being able to merge the signature databases from different cards of one card holder, could significantly increase the accuracy of the signature model.
+This has an impact on our work on fraud protection as the regulations connected to  protecting card holder data only allow storing card numbers and not names of card holders. The goal of this requirement is that even if someone would gain access to SumUp's database, it would not be possible to retrieve all information needed to process a transaction. This however, bears one disadvantage: we cannot collude information of multiple cards used by a single customer and can therefore only build a signature model based on the signatures we collect per card, not per card holder. As the majority of all US card holders holds at least two credit cards \cite{woolsey2010credit}, being able to merge the signature databases from different cards of one card holder, could significantly increase the accuracy of the signature model.
 
 It is impossible to be absolutely certain about the legitimacy of a transaction. In reality, the goal must be to filter out possible evidences of fraud from the available data using cost-effective algorithms in real time.
 
 
-
-% \begin{figure}[tb]
-%     \begin{center}
-%         \includegraphics[width=\textwidth]{figures/fraud-literature-count}
-%     \end{center}
-%     \caption{Number of research papers published on different fraud areas}
-%     \label{fig:fraud-literature-count}
-% \end{figure}
-
-
-
-
-
 \section{Signature Verification}
 
-Most previous work on signature detection has been done with signatures captured with a pen on paper or on a digital tablet. When a signature is captured on paper, it was afterwards digitalized using a scanner. The dynamic characteristics of a signature are lost in that process and the algorithms that can be applied to the signature information are very different. Therefore it is common to divide signature verification into two methods:
+Most previous work on signature detection has been done on signatures written with a pen on paper or on a digital tablet. When a signature is captured on paper, it was afterwards digitalized using a scanner or camera. The dynamic characteristics of a signature are lost in that process and the algorithms that can be applied to the signature information are very different. It is common to divide signature verification into two methods:
 
 \begin{itemize}
 \item \textbf{Offline signature verification} performs recognition algorithms based on static features of a signature, mainly shape and length.
 \item \textbf{Online signature verification} performs algorithms on the dynamic features of a signature. These analyze the speed, the acceleration, the angular acceleration, the pressure and many other local properties of a signature.
 \end{itemize}
 
-Since digital tablets, touchscreens interfaces and smartphones became affordable and widely deployed, it became feasible to capture dynamic features of a signature. In Chapter \ref{chp:signature-verification} we look at the common techniques in both areas, offline and online, to verify signatures.
+Since digital tablets, touchscreens interfaces and smartphones became affordable and widely deployed, it became feasible to capture dynamic features of a signature. In Chapter \ref{chp:signature-verification} we look at the common techniques of both types, offline and online, to verify signatures.
 
-The high accuracy and resolution of current digitizing tablets and smartphone screens enables to capture signature data in high resolution and precision on relatively cheap devices.
+The high accuracy and resolution of current digital tablets and smartphone screens enables to capture signature data in high resolution and precision on relatively cheap devices.
 Traditionally, digital signatures were captured on a digital tablet with a pen. However, signatures captured by SumUp are collected on a variety of mobile devices and have fundamentally different characteristics than signatures captured on digital tablets. The main reasons for these differences are:
 
 \begin{itemize}
-    \item The signatures are captured by finger instead of a pen which is not how people are accustomed to sign. This leads to higher variability and less stable signature models.
-    \item Most smartphones don't have a fixed sampling rate but an event-based sampling. Whereas the sampling rate on digital tablets is constant, the rate in signatures captured on smartphones can vary a lot within one signature.
-    \item The signatures are captured on a lot of different devices with different screen sizes, resolutions, sensor densities and other device specific characteristics.
+    \item The signatures are written by finger instead of a pen, which is not how people are accustomed to sign. This leads to higher variability and less stable signature models.
+    \item Most smartphones use an event-triggered sampling in contrary to digital tables which often use a a fixed sampling rate. While the sampling rate on digital tablets is constant, the rate in signatures captured on smartphones can vary a lot within one signature.
+    \item The signatures are captured on a lot of different devices with different screen sizes, resolutions, sensor densities, operating systems and other device specific characteristics.
 \end{itemize}
 
-We have to verify signatures in real time to give instant feedback whether or not a transaction will be authorized. This limits not only the number of algorithms we can use in parallel but also the complexity of our models and our dataset.
-We discuss our strategies to overcome the listed difficulties in Chapter \ref{chp:signature-verification}.
-
-% How to approach that without the complicated and expensive chip\&pin device?
-
-% Use signature detection to determine if someone is who he/she claims to be
-
-% Specialties of Mobile Payment Signatures:
-% - They don't need to be extracted from a paper background
-% - All the info is available (timestamps), digital
-
-% Diverse applications inspired researchers to investigate the feasibility of two distinct categories of automatic signa- ture verification systems: those concerned with the verifica- tion of signature images and those concerned with the veri- fication of signatures that were captured dynamically, using a special pen and digitising tablet. These systems are referred to as offline and online systems, respectively.
-
-% In offline systems, a signature is digitised using a hand- held or flatbed scanner and only the completed writing is stored as an image. These images are referred to as static sig- natures. Offline systems are of interest in scenarios where only hard copies of signatures are available, for example where a large number of documents need to be authenti- cated.
-% In the online case, a special pen is used on an electronic surface such as a digitiser combined with a liquid crystal dis- play. Apart from the two-dimensional coordinates of succes- sive points of the writing, pen pressure as well as the angle and direction of the pen are captured dynamically and then stored as a function of time. The stored data is referred to as a dynamic signature and also contains information on pen velocity and acceleration. Online systems are of interest for “point-of-sale” and security applications.
-
-% Since online signatures also contain dynamic informa- tion, they are difficult to forge. It therefore comes as no sur- prise that offline signature verification systems are much less reliable than online systems.
-
-
-% Various pattern recognition techniques have been ex- ploited to authenticate handwritten signatures (see Section 2). These techniques include template matching techniques [7, 9, 11], minimum distance classifiers [10, 12, 14, 15], neu- ral networks [8, 13, 16], hidden Markov models (HMMs) [17, 18], and structural pattern recognition techniques.
-% => p559 coetzer
-
-% Jose L Camino:
-% Usually the signature classification methods are divided into two kinds: On-line systems and off- lines systems. The on-line systems parameterize the signature using dynamic characteristics such as how long is the signing process, the inclination of the pencil when signing, the pressure on the pencil on the sheet, the speed of the written line, etc. For that, an electronic pencil is used [4][5][6]. Subsequently a classifier is used to recognize the signature form above parameters. In off-line classification method the signature is written on a sheet and it is scanned. Subsequently, fiom the image scanned, the usual step is parameterize their geometric structure as previous stage to their recognition by a Neural Network based classifier [2,7,8,9].
-
+As transactions need to be authorized or rejected in real time, we are limited on the number of algorithms we can use during the process and the complexity of our models and dataset.
+We discuss our strategies to overcome these difficulties in Chapter \ref{chp:signature-verification}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER FRAUD

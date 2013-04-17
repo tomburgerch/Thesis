@@ -1845,49 +1845,69 @@ We decided to weight the lower computation time higher than the lower average of
 \item The symbol alphabet consists of 8 angles
 \end{itemize}
 
-We obtain the window sizes in Table \ref{XX} for our experiments.
+We obtain the window sizes in Table \ref{tbl:hmm_window_sizes} for experiment 5. If a result is within the window, we consider it an accepted signature, otherwise rejected.
+
+Within the 30 forgeries, 6 were false positives matches which corresponds to an error rate of 20 percent.
 
 \begin{table}
     \centering
-    \tabcolsep 4pt
-    \begin{tabular}{l|ccc|ccc}
-    \hline
-    Exp & States & \# Sig & Time [s] & Avg window size & False Positives / 100 Sig \\ \hline
-    1 & 5 & 10 & 48                  & 142.0 & 16.63 \\ \hdashline[0.5pt/3pt]
-    2 & 5 & 50 & 214                 & 209.0 & 33.8 \\ \hdashline[0.5pt/3pt]
-    3 & 6 & 10 & 61                  & 144.0 & 12.45 \\ \hdashline[0.5pt/3pt]
-    4 & 6 & 50 & 560                 & 593.0 & 44.18 \\ \hdashline[0.5pt/3pt]
-    5 & 7 & 10 & 105                 & 144.0 & 9.8 \\ \hdashline[0.5pt/3pt]
-    6 & 7 & 50 & 740                 & 370.0 & 34.72 \\ \hdashline[0.5pt/3pt]
-    7 & 8 & 10 & 150                 & 145.0 & 7.14 \\ \hdashline[0.5pt/3pt]
-    8 & 9 & 10 & 225                 & 148.0 & 5.1 \\ \hdashline[0.5pt/3pt]
 
+    \begin{tabular}{l|c|crrr}
+    \hline
+    Person & Window & Width & $\mathcal{F}_1$ & $\mathcal{F}_2$ & $\mathcal{F}_3$ \\ \hline
+    1 & [-144, -121] & 23   & -119 \xmark      & 0 \xmark       & -435  \xmark \\ \hdashline[0.5pt/3pt]
+    2 & [-97, -73] & 24     & 0 \xmark        & 0 \xmark        & 0 \xmark  \\ \hdashline[0.5pt/3pt]
+    3 & [-331, -100] & 231  & 0 \xmark        & -506 \xmark     & -231 \cmark  \\ \hdashline[0.5pt/3pt]
+    4 & [-223, -75] & 148   & 0 \xmark        & 0 \xmark        & -235 \xmark  \\ \hdashline[0.5pt/3pt]
+    5 & [-142,  -110] & 32  & -396 \xmark     & -657 \xmark     & 0 \xmark  \\ \hdashline[0.5pt/3pt]
+    6 & [-526, -190] & 336  & -482 \cmark     & 0 \xmark        & -269 \cmark  \\ \hdashline[0.5pt/3pt]
+    7 & [-448, -192] & 256  & -625 \xmark     & -476 \xmark     &  -344 \cmark  \\ \hdashline[0.5pt/3pt]
+    8 & [-235, -102] & 133  & 0 \xmark        & 0 \xmark        & 0 \xmark  \\ \hdashline[0.5pt/3pt]
+    9 & [-106, -78] & 28    & -403 \xmark     & -478 \xmark     & 0 \xmark  \\ \hdashline[0.5pt/3pt]
+    10 & [-330, -93] & 237  & -278 \cmark     & -599 \xmark     & -244 \cmark  \\ \hdashline[0.5pt/3pt]
     \hline
     \end{tabular}
-    \label{tbl:hmm_window_sizes}\caption{Results of HMM experiments}
+    \label{tbl:hmm_window_sizes}\caption{Window Sizes for Experiment Configuration 5}
 \end{table}
 
 
 
 \noindent\textbf{Computational complexity}\\
 
-training with 6 states took 30s per model on average
+The computation time needed to tran the models are shown in Table \ref{tbl:hmm_experiments1}. The combination of parameters we chose, takes 10.5 seconds to train one set of signatures. As this task can be done in the background and in parallel, we consider it to be low enough to scale.
+The computation of the likelihood in respect to a model takes less than a tenth of a second and thus fulfills real time requirements.
 
-computing the likelihood for a signature and a model takes less than a tenth of a second
-
-% \subsection{Results}
-
-% Computational feasibility
 
 \subsection{Fusion of scores}
 
-How correlated are the three scores?
+Table \ref{tbl:fusion-fp} shows a summary of all algorithms and the false positives we encountered. Only for Person 10 we encountered the case that the same forgery was a false positive in more than one system ($\mathcal{F}_3$). For all other forgeries we are able to apply majority voting to exclude the false positives. We propose the following system:
 
-Which tool can i use for this?
+\begin{enumerate}
+\item As the algorithm based on global features has the highes accuracy and to save computation power, first run this algorithm and stop if the signature is identified as a forgery
+\item Apply the HMM algorithm and only continue if the signature is not recognized as a forgery
+\item Compute the DTW score and if signature is still not recognized as forgery, consider the signature as genuine
+\end{enumerate}
 
-Wenn schlecht korreliert: Fusion ein guter Ansatz
+\begin{table}
+    \centering
+    \begin{tabular}{l|ccc}
+    \hline
+    Person  & Global Features   & DTW & HMM \\ \hline
+    1 &     & $\mathcal{F}_2$&  \\ \hdashline[0.5pt/3pt]
+    2 &     & $\mathcal{F}_1,\mathcal{F}_2,\mathcal{F}_3$&  \\ \hdashline[0.5pt/3pt]
+    3 &     & $\mathcal{F}_1,\mathcal{F}_2$& $\mathcal{F}_3$ \\ \hdashline[0.5pt/3pt]
+    4 &     & &  \\ \hdashline[0.5pt/3pt]
+    5 &     & &  \\ \hdashline[0.5pt/3pt]
+    6 &     & $\mathcal{F}_2$& $\mathcal{F}_1, \mathcal{F}_3$  \\ \hdashline[0.5pt/3pt]
+    7 &  $\mathcal{F}_1$   &  & $\mathcal{F}_3$ \\ \hdashline[0.5pt/3pt]
+    8 &     &$\mathcal{F}_3$ &  \\ \hdashline[0.5pt/3pt]
+    9 &     & $\mathcal{F}_3$&  \\ \hdashline[0.5pt/3pt]
+    10 &    & $\mathcal{F}_2, \mathcal{F}_3$& $\mathcal{F}_1, \mathcal{F}_3$ \\ \hdashline[0.5pt/3pt]
 
-Fusion-Techniken: 1/3 Score each oder 2 lowest oder 2 highest oder anderes weighting
+    \hline
+    \end{tabular}
+    \label{tbl:fusion-fp}\caption{The false positives we encountered with the global features, DTW and HMM algorithm}
+\end{table}
 
 
 

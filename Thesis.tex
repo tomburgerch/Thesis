@@ -1502,19 +1502,13 @@ Computing the features for a signature and comparing them to the previously comp
 \subsection{Dynamic Time Warping}
 
 \textbf{Similarity score $S_{DTW}$}\\
-The similarity score is given as the DTW's output.
-We have evaluated two kinds of distances
+The similarity score in this case is directly given as the DTW algorithm's output.
+We vary the input to the DTW algorithm to see the effect on the similarity score. We test combinations of the following parameters in our experiments:
 \begin{itemize}
-\item the 2-Norm of the $x,y$-vector
-\item the 2-Norm of the $x,y,t$-vector which includes the timestamp for each point
-\end{itemize}
-
-We have tested combinations of the following inputs:
-\begin{itemize}
-\item \textbf{Age}: We do not use the full signature set for every card holder to reduce the computation time. We therefore choose a subset of signatures. We test recent signatures, i.e.\ chronologically the last 5, 10 or 20 signatures, or old signatures, i.e.\ the first 5, 10, 20 signatures ever recorded by a card holder.
-\item \textbf{Amount of signatures}: For computation reasons we restrict the set of signatures to a subset. We obtain the results for 5, 10 and 20 signatures. We also run one full experiment with up to 50 signatures for each card holder.
-\item \textbf{Lengh}: We noted that the variability of a signature is often higher towards the end than at the beginning and therefore perform experiments using the full, i.e.\ including all points of a signature, or only a subset, which we annotate as partial.
-\item \textbf{Vector}: We calculate the distance between two points during the DTW algorithm as either between the geometric position $x,y$ or the geometric position including the time $x,y,t$.
+\item \textbf{Age}: In order to reduce the computation time, we run the algorithm on a subset of all signatures for a card holder. We compute the similarity score for \emph{recent}, i.e.\ the last 5, 10 or 20 signatures, or \emph{old} signatures, i.e.\ the first 5, 10, 20 signatures ever recorded by a card holder.
+\item \textbf{Amount of signatures}: As the computation time depends on the number of signatures used for each card holder, we obtain results for 5, 10 and 20 signatures per card holder. We also conduct and experiment with the full dataset, i.e.\ up to 50 signatures per card holder, to measure the impact on accuracy.
+\item \textbf{Length}: By analyzing the visual representation of the signatures in our dataset, we assume that the variability of a signature is higher towards the end than at the beginning. To prove our visual impression, we perform experiments using the \emph{full} signature vector, i.e.\ including all points of a signature, or only a \emph{partial} amount of all points.
+\item \textbf{Vector}: The DTW algorithm uses a distance function to compute the distance between two points. For each point in our signature database, we obtained the geometric position $x, y$ and timestamp $t$. We conduct experiments on both, the full vector $xyt$ and only the geometric information $xy$. We use the 2-Norm to compute the distance between two vectors.
 \end{itemize}
 
 \textbf{Fitness function $\mathbb{F}_{DTW}$}\\
@@ -1542,7 +1536,7 @@ We are also interested in the computation time to compute the EER to know whethe
          10 & recent & 20  & partial   & xy    & 661   & 0.28  & 0.20 \\ \hdashline[0.5pt/3pt] % 1366149159
          11 & old & 10  & full      & xyt   & 944   & 0.01  & 0.39 \\ \hdashline[0.5pt/3pt] %1366151221
          12 & old & 10  & full      & xy    & 866   & 0.05  & 0.30 \\ \hdashline[0.5pt/3pt] %1366151125
-         13 \ref{fig:dtw-exp4} & recent & 50 & partial & xy & 2137 & 0.26 & 0.33 \\ \hdashline[0.5pt/3pt] %1366153811
+         13 \ref{fig:dtw-exp4} & recent & 50 & partial & xy & 2137 & 0.26 & 0.33 \\  %1366153811
     \hline
     \end{tabular}
     \caption{Results of DTW experiments}
@@ -1550,26 +1544,25 @@ We are also interested in the computation time to compute the EER to know whethe
 \end{table}
 
 \textbf{Classification of Signatures}\\
-The results of our experiments are listed in Figure \ref{tbl:dtw-experiments1}.
+The results of our experiments are listed in Table \ref{tbl:dtw-experiments1}.
 We found that:
 \begin{itemize}
-\item The algorithm performs better on distance vectors that exclude time information.
-\item The algorithm is faster with less signatures per card holder and for a distance vector which excludes time information.
-\item More recent signatures perform better than older signatures. This motivates the use of a sliding window.
-\item Partial information of the signature vector is not only a lot faster but can also perform a lot better than full information. This is due to the higher variability in the signatures towards the end.
-\item Signtaure classification in general is very time consuming and could not be done in real time.
+\item The algorithm results in a lower EER for distance vectors that exclude time information.
+\item A higher of signatures per card holder and the addition of time information in vector, both negatively affect the computation time.
+\item More recent signatures perform better than old signatures. This motivates the use of a sliding window.
+\item Partial information of the signature vector has a positive effect on the computation time and leads to a lower EER. This confirms the higher variability in the signatures towards the end.
+\item Signature classification is very time consuming as the cross product between all signatures in the same set needs to be computed.
 \end{itemize}
 
-The best performing combination is found to be
+Experiment 4 leads to the lowest EER. It uses the following input combination:
 \begin{itemize}
 \item Recent signatures
 \item Five signatures per card holder
 \item Partial information of the signature vector
-\item No time information in the distance function
+\item Time information not included in distance vector
 \end{itemize}
 
-Experiment 4 produces an EER of 0.12 with a threshold of 0.3. Computing the similarity score $S_{DTW}$ for the cross product of all signatures took 40 seconds, which also makes it the fastes approach. The graphic representation is shown in Figure \ref{fig:dtw-exp1}. We use this setup to detect forgeries.
-
+Experiment 4 produces an EER of 0.12 with a threshold of 0.3. The threshold is relative to the highest score encountered during the experiment. With a computation time of 40 seconds to compute the similarity score $S_{DTW}$ for the cross product of all signatures, it is also the fastest combination. The graphic representation of the results is shown in Figure \ref{fig:dtw-exp1}. We use this combination to detect forgeries.
 
 \begin{figure}
         \centering
@@ -1607,11 +1600,16 @@ Experiment 4 produces an EER of 0.12 with a threshold of 0.3. Computing the simi
 \end{figure}
 
 \textbf{Detection of forgeries}\\
-We calculate the distance between each forgery and each signature of a card holder's ground truth and use majority voting to decide whether a signature is accepted or rejected. The vote of two signatures counts as a positive vote if $S_{DTW}$ is higher than the found threshold of 0.30.
+\begin{enumerate}
+\item For each forgery we calculate the similarity score $S_{DTW}$ to the five most recent signatures of the card holder. The results are shown in Figure \ref{fig:dtw-forgeries1}.
 
-The maximum score we found in the previous experiment was 241881, the threshold of 0.3 therefore corresponds to $241881 \cdot 0.3 = 72564.2$.
-In the 30 forgeries, we got 11 false positives as shown in Figure \ref{tbl:dtw-forgeries-results-tbl}. That corresponds to an error rate of 36 percent.
+\item We apply the previously found relative threshold of 0.3 to decide if the forgery is classified as genuine or forged. During the classification experiment we found the highest score of $241,881$ and thus we get an absolute threshold of $241881 \cdot 0.3 = 72564.2$. Figure \ref{fig:dtw-forgeries2} shows the results after applying the threshold.
 
+\item As we create 5 similarity scores between the forgery and the five most recent signatures of a card holder, we can then apply majority voting to decide whether the test signature is classified as genuine or forged. Table \ref{fig:dtw-forgeries3} shows the results of the majority voting.
+
+\end{enumerate}
+
+From the 30 forgeries in our database, 11 were wrongly classified as genuine. This corresponds to an error rate of 36 percent.
 
 
 \begin{figure}
@@ -1619,14 +1617,14 @@ In the 30 forgeries, we got 11 false positives as shown in Figure \ref{tbl:dtw-f
 
     \begin{subfigure}[b]{0.3\textwidth}
             \centering
-            \includegraphics[width=0.8\textwidth]{figures/dtw_forgeries_1.png}
+            \includegraphics[height=14cm]{figures/dtw_forgeries_1.png}
             \caption{}
             \label{fig:dtw-forgeries1}
     \end{subfigure}%
     \qquad
     \begin{subfigure}[b]{0.3\textwidth}
             \centering
-            \includegraphics[width=0.8\textwidth]{figures/dtw_forgeries_2.png}
+            \includegraphics[height=14cm]{figures/dtw_forgeries_2.png}
             \caption{}
             \label{fig:dtw-forgeries2}
     \end{subfigure}%
@@ -1665,7 +1663,7 @@ In the 30 forgeries, we got 11 false positives as shown in Figure \ref{tbl:dtw-f
 
 
 \textbf{Real time feasibility}\\
-Calculating the DTW score between two signatures takes about one tenth of a second on a modern computer which is by far fast enough to fulfill our real time requirements. However, computing the threshold requires longer computation and should be implemented in a background process.
+Calculating the DTW score between two signatures under the described circumstances takes about one tenth of a second which is fast enough to fulfill our real time requirements. However, computing the threshold requires longer computation and should be implemented in a background process.
 
 
 

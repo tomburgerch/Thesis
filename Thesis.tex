@@ -508,7 +508,7 @@ end
 
 The PEP \& HAR check was implemented as a \fnurl{Sinatra}{http://sinatrarb.com/} Ruby Applicaton, accessible through a REST interface. It fulfills multiple purposes: It parses the initial or incremental database file, it continuously rechecks all users in the database versus the updated database and also answers requests from the sign-up component.
 
-It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a \fnurl{CentOS}{http://centos.org/} Linux environment and the linux \fnurl{Crontab Tool}{http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5/} is used to run the first two tasks in a constant interval:
+It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a Linux environment and the Linux \fnurl{Crontab Tool}{http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5/} is used to run the first two tasks in a constant interval:
 \begin{itemize}
 \item Each day, the incremental update and delete file are downloaded from World-Check to keep the database up to date.
 \item On a weekly base, each user is screened against the updated database and new hits raise a flag in the operations team's panel for further inspection.
@@ -1605,9 +1605,9 @@ In order to detect forgeries we conduct the following steps for the above found 
 \begin{enumerate}
 \item For each forgery we calculate the similarity score $S_{DTW}$ to the five most recent signatures of the card holder. The results are shown in Figure \ref{fig:dtw-forgeries1}.
 
-\item We apply the previously found relative threshold of 0.3 to decide if the forgery is classified as genuine or forged. During the classification experiment we found the highest score of $241,881$ and thus we get an absolute threshold of $241881 \cdot 0.3 = 72564.2$. Figure \ref{fig:dtw-forgeries2} shows the results after applying the threshold.
+\item We apply the previously found relative threshold of 0.3 to decide if the forgery is classified as genuine or forged. During the classification experiment we found the highest score of $241,881$ and thus we get an absolute threshold of $241,881 \cdot 0.3 = 72,564.2$. Figure \ref{fig:dtw-forgeries2} shows the results after applying the threshold.
 
-\item As we create 5 similarity scores between the forgery and the five most recent signatures of a card holder, we can then apply majority voting to decide whether the test signature is classified as genuine or forged. Table \ref{fig:dtw-forgeries3} shows the results of the majority voting.
+\item As we create five similarity scores between the forgery and the five most recent signatures of a card holder, we can then apply majority voting to decide whether the test signature is classified as genuine or forged. Table \ref{tbl:dtw-forgeries-results-tbl} shows the results of the majority voting.
 
 \end{enumerate}
 
@@ -1768,19 +1768,20 @@ Table \ref{tbl:hmm_window_sizes} shows the results we obtain. Out of 30 forgerie
 
 
 \textbf{Real time feasibility}\\
-The computation time needed to train the HMM models are shown in Table \ref{tbl:hmm_experiments1}. Given eThe combination of parameters we chose, takes 10.5 seconds to train one set of signatures. As this task can be done in the background and in parallel, we consider it to be low enough to scale.
-The computation of the likelihood in respect to a model takes less than a tenth of a second and thus fulfills real time requirements.
+The computation time needed to train the HMM models are shown in Table \ref{tbl:hmm_experiments1}. Given the parameter combination of experiment 5, it takes takes 10.5 seconds to train the model for each card holder with the last 10 signatures. As this task can be done in the background and in parallel, we consider it to be a small enough time to scale the system for thousands of users.
+
+The computation of the likelihood in respect to a given model takes less than a tenth of a second and thus fulfills real time requirements.
 
 
 \newpage
 \subsection{Fusion of scores}
 
-Table \ref{tbl:fusion-fp} shows a summary of all algorithms and the false positives we encountered. Only for Person 10 we encountered the case that the same forgery was a false positive in more than one system ($\mathcal{F}_3$). For all other forgeries we are able to apply majority voting to exclude the false positives. We propose the following system:
+Table \ref{tbl:fusion-fp} shows a summary of all algorithms and the false positive matches we encountered. Only for one out of ten test subjects (Person 10), we encountered the case that the same forgery was a false positive match in more than one system ($\mathcal{F}_3$). For all other forgeries we are able to apply majority voting to exclude the false positives. We propose the following system:
 
 \begin{enumerate}
-\item As the algorithm based on global features has the highes accuracy and to save computation power, first run this algorithm and stop if the signature is identified as a forgery
-\item Apply the HMM algorithm and only continue if the signature is not recognized as a forgery
-\item Compute the DTW score and if signature is still not recognized as forgery, consider the signature as genuine
+\item As the algorithm based on global features has the highest accuracy and to save computation power, we suggest to first run this algorithm and stop if the signature is identified as a forgery
+\item If the signature was not identified as a forgery, perform the DTW and HMM algorithm.
+\item Apply majority voting based on the three results. If a forgery is detected by at least two algorithms, flag it as a forger. Otherwise consider the signature to be genuine.
 \end{enumerate}
 
 \begin{table}
@@ -1813,24 +1814,11 @@ Table \ref{tbl:fusion-fp} shows a summary of all algorithms and the false positi
 
 \chapter{Conclusions}
 
-Wie lang soll conclusion in etwa sein?
+We designed and implemented two complementary fraud protection systems. Our fraud prevention system was already released to production and performs very well. The number of false positive matches on high risk clients dropped significantly after the new component was deployed. This helped SumUp's operations team to reduce the unnecessary work hours that were spent to manually clear false positive matches.
+SumUp's exponential growth caused an exponential growth of false positive matches with the old check and caused delays in the sign-up process. Since the new component was released, the backlog never had to be carried to the next week and thereby helps SumUp's to grow even faster.
 
-1 Seite
+The proposed fraud detection system is able to detect forgeries with a high accuracy while retaining the real time property. Signatures written by finger on a mobile device show less stable characteristics than signatures written with a pen but the combination of three algorithms allows us to minimize the number of false positive matches. For the remaining false positives, we apply a feedback system in addition to our signature verification system to ensure that clients are at all time able to process card payments with SumUp, even if their signature is not recognized by the automatic system.
 
-\textbf{Fraud Prevention}
-Zeitersparnis bei Ops
-
-Business kann weiter skalieren was ohne fast nicht moeglich waere
-
-Ersparnis von Resourcen
-
-\textbf{Fraud Detection}
-
-Detection rate nicht so gut wie bei vergleichbaren Arbeiten mit Pen captured signatures
-
-Aber: Feedback loop erlaubt das Reduzieren von False Positives und das Training der Signatur-Modelle
-
-Was soll da rein in etwa damit es nicht 'future work' wird?
 
 
 

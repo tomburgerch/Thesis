@@ -439,12 +439,12 @@ World-Check is a paid service and the data is retrieved over an encrypted HTTPS 
 
 Clearly, parsing three gigabytes of raw data and rebuilding the database each time a new user processes through the sign-up flow is slow and not practical. We therefore chose to parse the needed data into a relational database, allowing us to perform queries within split seconds. The algorithm we used to make the lookup faster, consists of two parts - parsing and lookup.
 
-\noindent\textbf{Parsing the data}
+\textbf{Parsing the data}
 
 The raw data contains only one record per individual but often lists not only one pair of first and last name but many. The additional pairs are retrieved from the aliases and alternative\_spellings fields. For faster lookup, each record from the original CSV file is parsed into multiple records in the database such that there exists one database record for each pair of first and last name combination. We create a record for each permutation of first and last name retrieved from those fields to cover all identities a high risk user might possibly use.
 Listing \ref{lst:world-check-parse} shows the algorithm used to create the cross product of all name pairs.
 
-\noindent\textbf{Lookup}
+\textbf{Lookup}
 
 To improve the speed of a lookup, the database has an index on first and last name on the PEP/HRA table to speed up the lookup. An index was also generated on the other fields used by the lookup algorithm: date of birth (\emph{dob}), decease date (\emph{deceases}), locations (\emph{cities}) and countries.
 
@@ -1187,13 +1187,28 @@ before release
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Reactive Fraud Detection}
 \label{sec:exp-reactive}
 
 \subsection{Database}
 
-As there don't seem to be any publicly available databases of signatures that were collected with a finger on a mobile device, we collected our own database and forgeries.
-Between 8 and 80 Signatures per person were collected from 11 people on 4 different days on four different devices. This is an approximation of the reality in terms of how many signatures we have for one card holder and on how many different devices signatures for one card holder were collected. In total, a set of 487 signatures was collected. However, for most of our results, the signatures captured on the Android device were neglected due to a bug in the capturing software.
+As there is no publicly available database of signatures written by finger and captured by a smartphone's touch screen, we created a database for the purpose of this research.
+Between eight and 80 Signatures per person were collected from ten people on four different days on four different devices. This approximates the reality in terms of how many signatures SumUp has available per card holder and the devices they were collected with. In total, a set of 487 signatures was collected.
 The devices used to collect the signatures are listed in Table \ref{tbl:signatures-devices} and were all used equally often.
 
 \begin{table}[tb]
@@ -1218,50 +1233,53 @@ The devices used to collect the signatures are listed in Table \ref{tbl:signatur
     \label{tbl:signatures-devices}
 \end{table}
 
-We also collected three forgeries for each person. The forgeries are created by an untrained person and of the following kind:
+We also collected three forgeries for each person. The forgeries were created by two untrained persons and are of the following types:
 
 \begin{itemize}
-\item \textbf{Spontaneous Forgery $\mathcal{F}_1$}: A random signature from the set of one person's signatures was shown the imposter for 5 secs. The imposter was only allowed to forge the signature after the five seconds.
-\item \textbf{Sample Forgery $\mathcal{F}_2$}: A random signature from the set of one person's signatures was shown to the imposter for an indefinite amount of time and the imposter was able to look at the signature while forging the signature.
-\item \textbf{Knowledgable Forgery $\mathcal{F}_3$}: The imposter had unlimited access to all of one person's signatures to forge the signature.
+\item \textbf{Spontaneous Forgery $\mathcal{F}_1$}: A random signature from one card holder's  signature set was shown to the impostor during five seconds. The impostor was allowed to start the forgery after the five seconds when he had no access to the signature anymore.
+\item \textbf{Sample Forgery $\mathcal{F}_2$}: A random signature from one card holder's signature set was shown to the impostor for an indefinite amount of time and the impostor was able to look at the signature while forging the signature.
+\item \textbf{Knowledgeable Forgery $\mathcal{F}_3$}: The impostor had unlimited access to a card holder's full signature set while creating the forgery.
 \end{itemize}
 
-With each technique in our work, we gatheres statistics about two use cases:
+
+For each technique described in Section \ref{sec:global-features} - \ref{sec:hidden-markov-models}, we gathered statistics about two use cases:
 \begin{itemize}
-\item \textbf{Classification of signatures}: Our goal is to measure how well the algorithm performs in connecting a signature with its card holder. This part runs the ground truth agains itself.
-\item \textbf{Detection of forgeries}: Our goal is to measure how well the algorithm is at detecting forgeries. The set of forgeries is run against this perticular card holder's set of confirmed signatures.
+\item \textbf{Classification of signatures}: This approach's goal is to measure how well the algorithm performs in connecting a signature with its card holder. In this part we run the ground truth against itself to train the algorithm and adjust its parameters.
+\item \textbf{Detection of forgeries}: Using the previously obtained parameters, we run the algorithm against the database of forgeries to see which of the forgeries are correctly detected. This corresponds to SumUp's use case of our fraud detection work.
 \end{itemize}
+
+All experiments were conducted on a current Mac OS/Unix system and run within a single thread. It is expected that the time needed to compute results could be reduced by using parallel execution of the algorithms. SumUp's server hardware exceeds this Mac OS/Unix system's computation power. We can assume that the execution times are  even shorter on the production system.
 
 \subsection{Pre-Alignment and Normalization}
 
-In order to compare the signatures, we normalized some of the properties before comparing the signatures.
+In order to compare the signatures, we normalized some of the properties before comparing the signatures. To account for the fact that the signatures were collected on devices with specific characteristics, the following parameters were normalized:
+
 \begin{itemize}
-\item \textbf{Sampling rate}: Because we collected the signatures on touchscreen devices with event-based sampling, we got very different sampling rates. In order to compare signatures, we normalize the sampling rate to 20 Hz for all signatures, what is about half of the typical sampling of a signature which is collected on an iPhone 4s.
-\item \textbf{Size and length}: The different screen size and pixel density between the devices caused very different height, width and length for the signatures. In order to compare them, we normalized the signatures height and width. Of course, when we used the width-to-height ratio as a global feature, we collected this value before normalization.
-\item \textbf{Time}: As more screen estate also means longer distances to draw a signature, we also adjusted the timestamps when we normalized the size of a signature.
+\item \textbf{Sampling rate}: Because we collected the signatures on touchscreen devices with event-based sampling, we recorded very different sampling rates between devices but also within the data for one signature. Typically, signatures collected on iOS devices were originally sampled at a rate of 40 Hz and signatures collected on the Android device at 60 Hz. In order to compare signatures, we normalize the sampling rate to 20 Hz for all signatures which equates about half of the typical sampling rate of a signature collected on an iPhone 4s.
+\item \textbf{Size and length}: The different screen sizes and pixel densities caused different height, width and length properties. In order to compare the signatures, we normalized the signatures height and width to fit within a 200 pixel by 300 pixel rectangle. The width-to-height ratio was recorded before the normalization as it is used as a global feature in Section \ref{sec:global-features}.
+\item \textbf{Time}: As bigger screen sizes also means longer distances to draw a signature, we adjusted the timestamps when we normalized the size of a signature. We referred to the normalized value when we used time in Section \ref{sec:global-features}.
 \end{itemize}
-
-
-
 
 
 
 
 
 \subsection{Global Features}
-Our solution uses the following global features, as listed in Section \ref{sec:features}:
+\label{sec:global-features}
+
+Our implementation of a signature verification system based on global features uses a subset of the proposed features in Section \ref{sec:features}. Our system relies on the following features:
 
 \begin{itemize}
-\item Signature length in pixels $l$
-\item Total time to sign in milliseconds $t$
+\item Signature length $l$ in pixels
+\item Total time to sign  $t$ in milliseconds
 \item Maximum and average velocity $v_\text{max}, \bar{v}$
 \item Maximum acceleration $a_\text{max}$
 \item Number of segments $n$
 \item Width to height ration $r$
 \end{itemize}
 
-Other common features, e.g.\ the total number of dots recorded, are irrelevant for our experiments as those features are device specific and can thus not be used to calculate the similarity between signatures.
-Table \ref{tbl:global-features-results-avg} shows our results for the average of these features for each person's signature set.
+Other proposed features, e.g.\ the total number of dots recorded, are irrelevant for our experiments as we normalize those features in order to compare signatures captured on different devices.
+Figure \ref{fig:global-features} shows our results for each card holder's signature set. We list the minimum (Table \ref{tbl:global-features-results-min}), average (Table \ref{tbl:global-features-results-avg}) and maximum (Table \ref{tbl:global-features-results-max}) value for each feature and card holder.
 
 \begin{figure}
     \centering
@@ -1270,7 +1288,7 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
             \small
             \begin{tabular}{c|c|c|c|c|c|c|c}
             \hline
-            \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+            \textbf{P} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
             \hline
             0 & 1316.81 & 1640.0 & 2.27 & 0.8 & 1.11 & 2.0 & 0.0 \\ \hdashline[0.5pt/3pt]
             1 & 827.09 & 1373.0 & 1.5 & 0.6 & 0.58 & 2.0 & 1.0 \\ \hdashline[0.5pt/3pt]
@@ -1293,7 +1311,7 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
             \small
             \begin{tabular}{c|c|c|c|c|c|c|c}
             \hline
-            \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+            \textbf{P} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
             \hline
             0 & 1701.69 & 1942.75 & 15.5 & 0.88 & 16.93 & 2.13 & 0.5 \\ \hdashline[0.5pt/3pt]
             1 & 1235.27 & 1773.95 & 11.24 & 0.7 & 13.36 & 2.0 & 1.93 \\ \hdashline[0.5pt/3pt]
@@ -1318,7 +1336,7 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
             \small
             \begin{tabular}{c|c|c|c|c|c|c|c}
             \hline
-            \textbf{Person} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
+            \textbf{P} & $l$ & $t$ & $v_\text{max}$ & $\bar{v}$ & $a_\text{max}$ & $n$ & $r$\\
             \hline
             0 & 2571.75 & 2282.0 & 54.42 & 1.13 & 73.35 & 3.0 & 1.0 \\ \hdashline[0.5pt/3pt]
             1 & 2048.9 & 2957.0 & 82.49 & 0.69 & 139.0 & 2.0 & 3.0 \\ \hdashline[0.5pt/3pt]
@@ -1340,25 +1358,27 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
     \label{fig:global-features}
 \end{figure}
 
-\noindent\textbf{Similarity score $S_{GF}$}\\
-We use our knowledge about the minimum, average and maximum value for each of the sigature sets for a specific card holder to create a similarity score.
-We compute the seven global features for a test signature and we assign a point for each of the features if the test value lies between the minimum and maximum that we computed earlier. This gives us the score vector
-$$G = [s_l, s_t, s_{v_\text{max}}, s_{\bar{v}}, s_{a_\text{max}}, s_n, s_r]$$
 
-We assume that not all of the global features are of the same significance. We therefore define a  weigthing vector $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r]$$
+\textbf{Similarity score $S_{GF}$}\\
+We use our knowledge about the minimum, average and maximum value for each of the signature sets to create a similarity score.
+For a test signature $s_t$, we compute the seven global features. For each feature of the test signature that lies within the card holder's maximum and minimum values, we assign a 1 in the score vector $G$. If the test value does not lie within this window, we assign a 0.
+$$G = [g_l, g_t, g_{v_\text{max}}, g_{\bar{v}}, g_{a_\text{max}}, g_n, g_r], g \in \{0,1\}$$
 
-Our similarity score is calculated as
+We assume that not all of the global features are of the same significance. We therefore define a  weighting vector $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r]$$
+
+Our similarity score is calculated as the cross product of the score vector $G$ and the weighting vector $W$:
 $$S_{GF} = G \times W$$
 
-As this approach includes every signature every collected and thereby possibly enlarges the windows where other signatures are matched, a sliding window should be used for larger datasets. As we were are working with less than 30 signatures per card holder, we did not implement a sliding window mechanism for this work.
+As every signature added to the database possibly enlarges the window between a card holder's minimum and maximum value for each feature, a sliding window should be used for larger datasets. As we were are working with less than 50 signatures per card holder, we did not implement a sliding window mechanism as part of our research.
 
-\noindent\textbf{Fitness function $\mathbb{F}_{GF}$}\\
-We run each signature against each of the eleven signature models, defined by global features maxima and minima of a system. The fitness function tries to reduce the number of signatures which receive the highes possible similarity score for a given weighting vector $W$.
-As all signatures will score a perfect score at least once, the fitness function's goal is to come as close to the number of signatures in the ground truth set as possible.
+\textbf{Fitness function $\mathbb{F}_{GF}$}\\
+In order to find the best performing weighting vector $W$, we run each signature against each of the ten signature models and minimize the number of false positive matches. A signature model is defined by the minimum/maximum range for each feature.
 
-The definition of $\mathbb{F}$ is given in pseudo code in Listing \ref{lst:global-features-fitness-function}.
+By definition, all signatures will score a perfect score at least once. The fitness function $\mathbb{F}_{GF}$ tries to get as close to that number as possible. Starting with the weighting vector $W = [0, 0, 0, 0, 0, 0, 0]$, the first result corresponds to the total number of signatures used for this experiment. By exploring all possible $W$ for $w \in {0,1,2}$, the algorithm finds the $W$ for which the least elements the highest similarity score  $S_{GF}$ at the same time.
 
+The fitness function for global features $\mathbb{F}_{GF}$ is defined in pseudo code in Listing \ref{lst:global-features-fitness-function}.
 
+\begin{figure}
 \begin{lstlisting}[caption={The fitness function for global features tries to reduce the number of signatures with the hightes possible score for a given weighting vector $W$},label={lst:global-features-fitness-function}]
 
 until fitness == #signatures_in_groundtruth
@@ -1372,29 +1392,30 @@ until fitness == #signatures_in_groundtruth
     permutate w
 end
 \end{lstlisting}
+\end{figure}
+
+\textbf{Classification of Signatures}\\
+We defined the start vecor $W = [0,0,0,0,0,0,0]$ and let the fitness function permutate the vector until a local minimum was found. The local minimum was reached for $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [0, 1, 0, 1, 0, 1, 1]$$
 
 
-\noindent\textbf{Classification of Signatures}\\
-We defined the start vecor $W = [0,0,0,0,0,0,0]$ and let the fitness function permutate the vector until a local minimum was found for all $W$ consisting of $\{0,1,2\}$. The local minima was reached for $$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [0, 1, 0, 1, 0, 1, 1]$$
-At the local minimum, there are 755 signatures with the highest score which is 478 more than in the ground truth (278) that we used for this approach.
+We used a subset of 278 signatures for this experiment. The local minimum was reached at 755 signatures that scored the a similarity score $S_{GF} =4$ for the same $W$. This includes 478 signatures more than the global minimum.
+From $W$ we conclude that time $t$, average velocity $\bar{v}$, the number of segments $n$ and the width-to-height ratio $r$ are the important global features and should be used to compare signatures and detect forgeries.
 
-We conclude that time $t$, average velocity $\bar{v}$, the number of segments $n$ and the width-to-height ratio $r$ should be used to compare signatures.
-
-If we extend our search and include the two groups with the highest occurrences, we get still get 840 signatures included in the highest and second highest score and the weighting vector:
-$$W = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [0, 2, 0, 2, 0, 2, 1]$$
+When we extend the fitness function to include the two groups with the highest occurrences, we get 840 signatures in the top tier and the weighting vector $W'$ which confirms the importance of the same features.
+$$W' = [w_l, w_t, w_{v_\text{max}}, w_{\bar{v}}, w_{a_\text{max}}, w_n, w_r] = [0, 2, 0, 2, 0, 2, 1]$$
 
 
-\noindent\textbf{Detection of forgeries}\\
-We used the previously found vector to test the robustness of this approach against forgeries. We set $$W = [0, 1, 0, 1, 0, 1, 1]$$
-and ran all the forgeries against the previously trained signature models given by the minimum and maximum values.
 
-We computed these four values for each of the found global features, $t, \bar{v}, n$ and $r$. We then checked whether they lie within the bounds for that feature for each person. The results can be seen in Figure \ref{fig:global-features-forgeries}. The tables first list the min/max for each feature, the value found for the forgery and whether or not it was a hit.
+\textbf{Detection of forgeries}\\
+We used the previously found weighting vector $W$ to test the robustness of this approach against forgeries. We set $$W = [0, 1, 0, 1, 0, 1, 1]$$
+and run all forgeries against the previously trained signature models, which are defined by the minimum and maximum values.
 
-A hit means that the test value lies within the reference min/max for all four features.
-We notice that most of the matches were falsified mostly because the impostor took too long to sign ($t$ too high) or because he didn't sign fast enough ($\bar{v}$ too little). Out of the 30 forgeries, only one of the simple forgeries was a hit. This corresponds to an error rate of 3.33 percent.
+For each forgery, we compute the value of each of the four important global features, $t, \bar{v}, n$ and $r$. We compare the generated value to the the bounds for that feature for each person. A match requires that the test value lies within the reference minimum and maximum for all four features. The results are shown in Figure \ref{fig:global-features-forgeries}. The tables first lists the minimum and maximum for each feature and card holder, the value found for the forgery and whether the signature was correctly rejected as a forgery or accepted (a false positive match).
 
-\noindent\textbf{Computational complexity}\\
-Computing the features for a signature and comparing them to the previously computed min/max values takes less than a tenth of a second and the approach is therefore feasible in realtime. In addition, by using a sliding window, the computational complexity of computing the min/max values will stay at a predictable level even though the total signature set may grow very large.
+All but one forgeries were correctly rejected as forgeries. We notice that most of the forgeries were rejected mostly because the impostor took too long to sign ($t$ too high) or because he didn't sign fast enough ($\bar{v}$ too little). We achieve an error rate of 3.33 percent with this system.
+
+\textbf{Real time feasibility}\\
+Computing the features for a signature and comparing them to the previously computed minimum and maximum values takes less than one hundredth of a second. By using a sliding window, the computational complexity of computing the minimum and maximum values is guaranteed to have an upper bound even if the total amount of signatures for a card holder may grow to very large. We conclude that this approach is feasible for real time application.
 
 \begin{figure}
     \centering
@@ -1477,15 +1498,10 @@ Computing the features for a signature and comparing them to the previously comp
 
 
 
-% Findings:
-% -ration is a very weak indicator
-% - v_avg is ok
-% - vmax weak
-% - amax weak
 
 \subsection{Dynamic Time Warping}
 
-\noindent\textbf{Similarity score $S_{DTW}$}\\
+\textbf{Similarity score $S_{DTW}$}\\
 The similarity score is given as the DTW's output.
 We have evaluated two kinds of distances
 \begin{itemize}
@@ -1501,7 +1517,7 @@ We have tested combinations of the following inputs:
 \item \textbf{Vector}: We calculate the distance between two points during the DTW algorithm as either between the geometric position $x,y$ or the geometric position including the time $x,y,t$.
 \end{itemize}
 
-\noindent\textbf{Fitness function $\mathbb{F}_{DTW}$}\\
+\textbf{Fitness function $\mathbb{F}_{DTW}$}\\
 
 The fitness function $\mathbb{F}_{DTW}$ is defined as the Equal Error Rate (EER) during the classification phase. It is used to determine the optimal threshold to accept/reject a signature.
 
@@ -1533,7 +1549,7 @@ We are also interested in the computation time to compute the EER to know whethe
     \label{tbl:dtw-experiments1}
 \end{table}
 
-\noindent\textbf{Classification of Signatures}\\
+\textbf{Classification of Signatures}\\
 The results of our experiments are listed in Figure \ref{tbl:dtw-experiments1}.
 We found that:
 \begin{itemize}
@@ -1590,7 +1606,7 @@ Experiment 4 produces an EER of 0.12 with a threshold of 0.3. Computing the simi
         \caption{EER and Heatmap of the three best performing and the longtest DTW experiments}\label{fig:dtw-experiments2}
 \end{figure}
 
-\noindent\textbf{Detection of forgeries}\\
+\textbf{Detection of forgeries}\\
 We calculate the distance between each forgery and each signature of a card holder's ground truth and use majority voting to decide whether a signature is accepted or rejected. The vote of two signatures counts as a positive vote if $S_{DTW}$ is higher than the found threshold of 0.30.
 
 The maximum score we found in the previous experiment was 241881, the threshold of 0.3 therefore corresponds to $241881 \cdot 0.3 = 72564.2$.
@@ -1648,7 +1664,7 @@ In the 30 forgeries, we got 11 false positives as shown in Figure \ref{tbl:dtw-f
 
 
 
-\noindent\textbf{Computational complexity}\\
+\textbf{Real time feasibility}\\
 Calculating the DTW score between two signatures takes about one tenth of a second on a modern computer which is by far fast enough to fulfill our real time requirements. However, computing the threshold requires longer computation and should be implemented in a background process.
 
 
@@ -1662,13 +1678,14 @@ Calculating the DTW score between two signatures takes about one tenth of a seco
 
 
 \subsection{Hidden Markov Models}
+\label{sec:hidden-markov-models}
 
 There are several implementations of the HMM algorithm available. We found the implementation by MATLAB to be best documented and best fitting for our application and chose to work with said tool suite.
 
-\noindent\textbf{Similarity score $S_{HMM}$}\\
+\textbf{Similarity score $S_{HMM}$}\\
 After training the HMM for each card holder, we can calculate the likelihood for each signature to belong to a certain HMM. We define $S_{HMM}$ to be the likelihood of a signature to being generated by a certain model's card holder.
 
-\noindent\textbf{Fitness function $\mathbb{F}_{HMM}$}\\
+\textbf{Fitness function $\mathbb{F}_{HMM}$}\\
 
 We want the range of likelihoods for each signature set against each signature model to be as small as possible. We therefore recorded the ranges in Table XX while we tested the system with five, six and seven states.
 We vary the number of hidden states in the model as we try to minimize the window of likelihood for each signature set.
@@ -1704,14 +1721,14 @@ We calculate the window for each model and how many false positives we get in th
 
 
 
-\noindent\textbf{Classification of Signatures}\\
+\textbf{Classification of Signatures}\\
 As shown in Table \ref{tbl:hmm_experiments1} the experiments with more signatures cause larger windows and thereby a higher number of false positives per 100 Sig.
 
 
 
 
 
-\noindent\textbf{Detection of forgeries}\\
+\textbf{Detection of forgeries}\\
 We decided to weight the lower computation time higher than the lower average of forgeries and performed the experiments on forgery detection with the parameters used for experiment 5:
 \begin{itemize}
 \item 7 hidden states
@@ -1747,7 +1764,7 @@ Within the 30 forgeries, 6 were false positives matches which corresponds to an 
 
 
 
-\noindent\textbf{Computational complexity}\\
+\textbf{Real time feasibility}\\
 
 The computation time needed to tran the models are shown in Table \ref{tbl:hmm_experiments1}. The combination of parameters we chose, takes 10.5 seconds to train one set of signatures. As this task can be done in the background and in parallel, we consider it to be low enough to scale.
 The computation of the likelihood in respect to a model takes less than a tenth of a second and thus fulfills real time requirements.

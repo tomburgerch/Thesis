@@ -77,7 +77,7 @@
 \usepackage{caption}
 \DeclareCaptionFont{white}{\color{white}}
 \DeclareCaptionFont{black}{\color{black}}
-\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{#1#2#3}}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.3, 0.3, 0.3,0.01}{\parbox{\textwidth}{#1#2#3}}}
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
 \captionsetup{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
 
@@ -197,10 +197,10 @@ ETH Zurich}
 
 \chapter{Introduction}
 
-As smartphones become ubiquitous, they're being used in more and more industries and fields. An application that has seen a lot of traction recently is mobile payments. The usage of the smartphone in this field includes its utilization as an electronic wallet, a virtual bank account and as a payment processing terminal to accept credit cards and other payment methods.
+As smartphones become ubiquitous, they are being used in more and more industries and fields. An application that has seen a lot of traction recently is mobile payments. The usage of the smartphone in this field includes its utilization as an electronic wallet, a virtual bank account and as a payment processing terminal to accept credit cards and other payment methods.
 This work focuses on an application of the latter.
 The density of smartphones per capita and the computational power of current mobile phones have reached a level where it becomes practical to use phones as electronic cash registers.
-\fnurl{iZettle}{http://www.izettle.com}, \fnurl{Square}{http://www.squareup.com} and \fnurl{SumUp}{http://www.sumup.com} are just some of the companies which make use of this situation and are enabling merchants to receive payments via their smartphone. This thesis was written in collaboration with SumUp, a mobile payment company located in Berlin.
+\fnurl{iZettle}{http://izettle.com}, \fnurl{Square}{http://squareup.com} and \fnurl{SumUp}{http://sumup.com} are just some of the companies which make use of this situation and are enabling merchants to receive payments via their smartphone. This thesis was written in collaboration with SumUp, a mobile payment company located in Berlin.
 
 Financial businesses have a higher risk of becoming targets of fraud attacks than businesses in other industries due to the direct financial gain for fraudsters. On mobile devices, it becomes even more important to build automatic processes to protect the system from fraud as mobile payments are characterized by low amounts per transaction but a very large quantity of transactions which makes it unfeasible to monitor all transactions manually. While some security standards exist and are imposed by financial authorities, those rules were made for traditional financial institutions. The new mobile, connected environment not only opens up a lot of beneficial opportunities but also more attack vectors for fraudsters and requires advanced countermeasures. Therefore, it is important to not only respect given guidelines but pro-actively develop new ways and adapt existing guidelines to the specifics of the mobile environment to prevent attacks.
 
@@ -238,7 +238,7 @@ While credit cards are also very popular with consumers in Europe, not as many b
 \item A percentage of each transaction goes to the credit card company. Usually, merchants pay between 2.75 and 5 percent to the card payment terminal provider. Often, a minimal fee is charged for small transactions.
 \end{itemize}
 
-All these costs are much higher than in the USA and thus there's a higher entry barrier for businesses in Europe to provide the option to pay by card. It is likely that the costs are higher due to more extensive regulations in Europe which require more operational effort. Also, the CAS and CAP devices are more complex than SAS devices and the hardware costs therefore higher.
+All these costs are much higher than in the USA and thus there is a higher entry barrier for businesses in Europe to provide the option to pay by card. It is likely that the costs are higher due to more extensive regulations in Europe which require more operational effort. Also, the CAS and CAP devices are more complex than SAS devices and the hardware costs therefore higher.
 
 \begin{figure}[tb]
     \begin{center}
@@ -255,7 +255,7 @@ The business has been successful because it removed two out of three of the prev
 
 Instead of building and selling expensive hardware, the only hardware required --- the card reader --- is shipped at no charge and the mobile application is distributed for free via the Apple AppStore and Google Play Store. We refer to tablets and phones which run either iOS or Android as \emph{smartphones} to avoid confusion with tablet input devices such as \fnurl{Wacom}{http://wacom.com/} tablets to which we refer as \emph{digital tablets}.
 
-Payment through SumUp gives taxi drivers, market traders and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advantage. Card payments can now be processed right on the spot and without an initial financial investment.
+Payment through SumUp gives taxi drivers, market traders and other small stores, who could not afford one of the traditional payment terminals, an enormous economic advantage. Card payments can now be processed right on the spot and without an initial financial investment.
 
 
 Processing a transaction with SumUp is illustrated in five simple steps in Fig \ref{fig:flow-customer}.
@@ -316,7 +316,7 @@ Processing a transaction with SumUp is illustrated in five simple steps in Fig \
 \end{enumerate}
 
 
-Depending on the authorization method, a number of requests are made to the SumUp servers and from there to other entities of the transaction authorization chain, including acquirers, issuing banks and credit card institutions. The simplified mechanics behind a credit card transaction processed through SumUp are shown in Figure \ref{fig:credit-card-flow}.  Internally, a request is sent to SumUp's fraud server which performs a variety of checks and analysis to decide whether the transaction is accepted or declined. There's currently no established third party provider for fraud detection in this area and all rules are custom made. The signature is part of the data that is exchanged with the fraud server and the signature verification process, as described in Chapter \ref{chp:signature-verification}, is an integral part of the  authorization process.
+Depending on the authorization method, a number of requests are made to the SumUp servers and from there to other entities of the transaction authorization chain, including acquirers, issuing banks and credit card institutions. The simplified mechanics behind a credit card transaction processed through SumUp are shown in Figure \ref{fig:credit-card-flow}.  Internally, a request is sent to SumUp's fraud server which performs a variety of checks and analysis to decide whether the transaction is accepted or declined. There is currently no established third party provider for fraud detection in this area and all rules are custom made. The signature is part of the data that is exchanged with the fraud server and the signature verification process, as described in Chapter \ref{chp:signature-verification}, is an integral part of the  authorization process.
 
 
 Along with simplicity, quick setup time and low cost, SumUp's advantage over its competitors is that it deducts a relatively low fee per transaction of 2.75 percent. From that fee, it also pays the other parties in the value chain. To build a sustainable business model, SumUp will enable customers to also process other types of mobile payments, alongside credit card transactions. The Consumer-To-Business (C2B) credit card transactions will only be one part of all mobile payment transactions. A long term strategy is to implement all payment schemes as listed by the European Payments Council (EPC). Mobile payments may at one point replace all current payment methods for Business-to-Consumer (B2C) transactions as well as Business-to-Business (B2B), Consumer-to-Consumer (C2C) and C2B transactions. The EPC predicts this will happen due to the availability and convenience of mobile devices paired with the user's perception of having full control over it. This creates an environment of trust and convenience for conducting payments \cite{mpwhitepaper}.
@@ -331,7 +331,7 @@ The large volume and real time nature of the transactions processed each day by 
 
 SumUp does its own internal research to implement, train and tweak its own fraud rules. An internal assessment has shown that the two most popular fraud scenarios are the use of merchant accounts for money laundry and copied or stolen cards.
 
-Our fraud prevention mechanisms focus on preventing money laundry while our fraud detection measurements will help to identify a card holder by signature and thereby make it hard for fraudsters to use stolen cards. After a card has been used a certain amount of times, the goal is to  build a reliable signature model to verify it's the same person signing the next time the card is used.
+Our fraud prevention mechanisms focus on preventing money laundry while our fraud detection measurements will help to identify a card holder by signature and thereby make it hard for fraudsters to use stolen cards. After a card has been used a certain amount of times, the goal is to  build a reliable signature model to verify it is the same person signing the next time the card is used.
 
 Not only the physical cards are at risk of theft, the digital copy of the credit card data also needs to be protected. This is one of the reasons SumUp only saves encrypted card information and is obliged to do so according to the \fnurl{Payment Card Industry Data Security Standard}{http://pcisecuritystandards.org/} (PCI DSS) and in an environment defined by the standard. The standard defines a set of rules to reach these control objectives:
 \begin{itemize}
@@ -406,7 +406,7 @@ In the next section we will present the data of the two databases and their orig
 World-Check \cite{website:world-check} is one provider of the PEP and HRA database. It consolidates the list by polling many different lists - including the FBI's Most Wanted List, Interpol and others.
 
 The data is supplied in a text file as Comma Separated Values (CSV) and contains information in 26 fields per person listed. The most important fields are listed in Table \ref{tbl:world-check-fields}. Unfortunately, the records are far from being complete. A lot of the records are missing some of the important fields like birthday or locations, which makes it hard to falsify a match automatically and sometimes a match has to be made on just first and last name correlation. World-Check normalizes the data so that all dates have the same format, city and country names are always spelled the same way and all data in a specific field is formatted the same way.
-The full database file is about three gigabytes in size and contains some 1.8 million records of PEPs and HRAs in total. As the database is constantly changing, there's also a daily, weekly and monthly incremental update and delete file, with which the database is kept updated without having to download the full database file every so often.
+The full database file is about three gigabytes in size and contains some 1.8 million records of PEPs and HRAs in total. As the database is constantly changing, there is also a daily, weekly and monthly incremental update and delete file, with which the database is kept updated without having to download the full database file every so often.
 World-Check is a paid service and the data is retrieved over an encrypted HTTPS connection.
 
 \begin{table}
@@ -456,7 +456,7 @@ To reduce the number of false positives, the lookup uses additional information 
 \item Country
 \end{itemize}
 
-The algorithm is outlined in Listing \ref{lst:world-check-lookup}. It's output is a set of \fnurl{Know Your Customer}{http://fsa.gov.uk/smallfirms/resources/factsheets/pdfs/KYC_table.pdf} (KYC) action and statuses which flag the customer in the system and may restrict her from certain actions, e.g. processing transactions with her account.
+The algorithm is outlined in Listing \ref{lst:world-check-lookup}. Its output is a set of \fnurl{Know Your Customer}{http://fsa.gov.uk/smallfirms/resources/factsheets/pdfs/KYC_table.pdf} (KYC) action and statuses which flag the customer in the system and may restrict her from certain actions, e.g. processing transactions with her account.
 
 \begin{figure}
 \begin{lstlisting}[caption={The Lookup algorithm},label={lst:world-check-lookup}]
@@ -478,12 +478,12 @@ def lookup fname, lname, dob, city, country
         m = record["dob"].month != 0 ? record["dob"]["month"] : null
         d = record["dob"].day   != 0 ? record["dob"]["day"]   : null
 
-        # now skip if one of the values exists but doesn't match
+        # now skip if one of the values exists but does not match
         next if y && y != dob["year"]
         next if m && m != dob["month"]
         next if d && d != dob["day"]
 
-        # at this point, dob matches or wasn't given
+        # at this point, dob matches or was not given
         # now, check city
         next unless record["locations"].contains? city
 
@@ -506,9 +506,9 @@ end
 
 \section{Implementation \& Architecture}
 
-The PEP \& HAR check was implemented as a \fnurl{Sinatra}{http://www.sinatrarb.com/} Ruby Applicaton, accessible through a REST interface. It fulfills multiple purposes: It parses the initial or incremental database file, it continuously rechecks all users in the database versus the updated database and also answers requests from the sign-up component.
+The PEP \& HAR check was implemented as a \fnurl{Sinatra}{http://sinatrarb.com/} Ruby Applicaton, accessible through a REST interface. It fulfills multiple purposes: It parses the initial or incremental database file, it continuously rechecks all users in the database versus the updated database and also answers requests from the sign-up component.
 
-It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a \fnurl{CentOS}{http://www.centos.org/} Linux environment and the linux \fnurl{Crontab Tool}{http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5/} is used to run the first two tasks in a constant interval:
+It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a \fnurl{CentOS}{http://centos.org/} Linux environment and the linux \fnurl{Crontab Tool}{http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5/} is used to run the first two tasks in a constant interval:
 \begin{itemize}
 \item Each day, the incremental update and delete file are downloaded from World-Check to keep the database up to date.
 \item On a weekly base, each user is screened against the updated database and new hits raise a flag in the operations team's panel for further inspection.
@@ -638,7 +638,7 @@ The simplest approach of comparing two feature vectors element by element is to 
 This approach has two major drawbacks:
 \begin{itemize}
 \item It only works if the two vectors have equal length. As signatures always vary a bit, it is rarely the case that two signatures and thus the two feature vectors have equal length.
-\item Even if the overall path of the signature is very similar, very often there are parts that are distorted or additional in one of two signatures. Linear correlation isn't able to account for local distortions and would thus create a bad score even if the beginning and end of the signature's path were a perfect match.
+\item Even if the overall path of the signature is very similar, very often there are parts that are distorted or additional in one of two signatures. Linear correlation is not able to account for local distortions and would thus create a bad score even if the beginning and end of the signature's path were a perfect match.
 \end{itemize}
 
 As both phenomena are very characteristics for signature verification, more advanced techniques are developed. Our work concentrates on Dynamic Time Warping (DTW) and Hidden Markov Models (HMM) as these two techniques have shown most success --- especially when combined --- in previous work \cite{fierrez2005line, citeulike:885135, kashi1998hidden, PiyushShanker:2007:OSV:1274199.1274423,martens1996line}.
@@ -669,7 +669,7 @@ As both phenomena are very characteristics for signature verification, more adva
 
 
 
-Dynamic Time Warping (DTW) is a dynamic programming algorithm to measure the similarity between two time series which may vary in time or speed. This has been used for speech recognition and can also be used for signature detection to cope with the non-linear time distortions which one might see in the signals because a signer does not always sign with the same speed. It has shown to be a much more robust distance measure than the Euclidean distance in a simple linear correlation \cite{Keogh:2000:SUD:347090.347153, 1030918, 1227706} due to it's ability to match similar shapes even if they are out of phase in the time axis.
+Dynamic Time Warping (DTW) is a dynamic programming algorithm to measure the similarity between two time series which may vary in time or speed. This has been used for speech recognition and can also be used for signature detection to cope with the non-linear time distortions which one might see in the signals because a signer does not always sign with the same speed. It has shown to be a much more robust distance measure than the Euclidean distance in a simple linear correlation \cite{Keogh:2000:SUD:347090.347153, 1030918, 1227706} due to its ability to match similar shapes even if they are out of phase in the time axis.
 
 Koegh et al.~\cite{Keogh:2002:EID:1287369.1287405} showed that the mean error rate average over 1000 runs for DTW was an order of magnitude lower than the error rate for the Euclidean distance. However, the DTW algorithm also took approximately 230 times longer to evaluate than the Euclidean distance.
 It was first applied to signatures in 1977 by Yasuhara and Oka \cite{yasuhara1977DTW} who concluded that is a very useful approach for online real-time signature verification. Yasuhara and Oka used an adaption of the algorithm that was originally proposed by Sakoe and Chiba \cite{1163055} and tuned the algorithm for the use on signature data.
@@ -763,7 +763,7 @@ Hao Feng et al.~\cite{Feng:2003:OSV:961320.961331} proposed another extension of
 % Hidden Markov Models (HMM) have been widely used by the speech recognition community (Ra- biner, 1989) as well as in many handwriting recognition applications (Dolfing, 1998). Sev- eral approaches using HMMs for dynamic signature verification have been proposed in the last years (Dolfing et al., 1998; Fierrez et al., 2007; Muramatsu and Matsumoto, 2003; Van et al., 2007; Yang et al., 1995). An HMM represents a double stochastic process, governed by an underlying Markov chain, with a finite number of states and random function set that gen- erate symbols or observations each of which is associated with one state (Yang et al., 1995). Observations are modeled with GMMs in most speech and handwriting recognition applica- tions. GMMs, which can be considered a single-state HMM, have been also successfully used for signature verification (Richiardi and Drygajlo, 2003).
 
 A Hidden Markov Model (HMM) is a stochastic process with an underlying Markov Model.
-Unlike with classical Markov Models (MM), the states of a Hidden Markov Model can not directly be observed. Only the symbols emitted from Model's states may be observed. If the signature is interpreted as a succession of observed symbols, then we can, given an HMM, calculate the probability of each path through the states in the model. By training the HMM to match the signatures that are known to be genuine we can thus reconstruct a probability of the user matching.
+Unlike with classical Markov Models (MM), the states of a Hidden Markov Model can not directly be observed. Only the symbols emitted from model's states may be observed. If the signature is interpreted as a succession of observed symbols, then we can, given an HMM, calculate the probability of each path through the states in the model. By training the HMM to match the signatures that are known to be genuine we can thus reconstruct a probability of the user matching.
 
 
 \begin{figure}[tb]
@@ -861,14 +861,14 @@ The following three problems and their solution are what make HMMs so useful for
 
 We are interested in the Evaluation of an observed sequence to match a test signature to one of the signature models and we are interested in the training to train the signature models with the signatures we collect from a card holder. We follow previous authors who used the discretized angle between two points of a signature as the symbols. Based on those symbols, we train our model using the Baum-Welch algorithm. After training signature models, we calculate the likelihood of a signature belonging to a certain card holder by using the Forward-Backward algorithm to compare the signature to this card holder's signature model. A detailed description of all three problems and their solutions is given by Rabiner et al.~\cite{rabiner1989tutorial}.
 
-In our case, we chose to work with an LTR HMM that doesn't allow to skip any states which leads to a transition matrix $A$ of the form:
+In our case, we chose to work with an LTR HMM that does not allow to skip any states which leads to a transition matrix $A$ of the form:
 \begin{equation}
 A = \left[\begin{array}{ccccc}a_{11} & a_{12} & 0 & \hdots & 0 \\0 & a_{22} & a_{23} & \cdots & 0 \\\vdots & \vdots & \vdots & \ddots & 0 \\0 & 0 & 0 & a_{(N-1)(N-1)} & a_{(N-1)N} \\0 & 0 & 0 & 0 & a_{NN}\end{array}\right]
 \label{eq:hmm-transition-matrix}
 \end{equation}
 
 
-We also chose to work with a LTR HMM that doesn't skip any states and we chose $\pi$ such that the system starts in the first state:
+We also chose to work with a LTR HMM that does not skip any states and we chose $\pi$ such that the system starts in the first state:
 $$\pi = \left[\begin{array}{cccc}1 & 0 & \cdots & 0\end{array}\right]$$
 
 
@@ -893,7 +893,7 @@ $$P(V^T) = \sum\limits_{r=1}^{r_\text{max}} \prod\limits_{t=1}^T  P(v(t) | w_(t)
 \end{enumerate}
 The problem with this approach is that it is of complexity $\mathcal{O}(N^TT)$ and therefore unfeasible even for small values of N and T. E.g. for $N=5$ States and $T=100$ observations, there are on the order of $100 \cdot 5^100 \approx 10^{72}$ computations.
 
-Clearly, a more efficient way is required. Fortunately, there's The Forward-Backward algorithm is a recursive approach to approximate the solution.
+Clearly, a more efficient way is required. Fortunately, there is The Forward-Backward algorithm is a recursive approach to approximate the solution.
 
 \begin{enumerate}
 \item We define the forward-backward variable which is the probability that a model is currently in state $i$ and has already produced the first $t$ elements of $V^T$
@@ -1412,7 +1412,7 @@ and run all forgeries against the previously trained signature models, which are
 
 For each forgery, we compute the value of each of the four important global features, $t, \bar{v}, n$ and $r$. We compare the generated value to the the bounds for that feature for each person. A match requires that the test value lies within the reference minimum and maximum for all four features. The results are shown in Figure \ref{fig:global-features-forgeries}. The tables first lists the minimum and maximum for each feature and card holder, the value found for the forgery and whether the signature was correctly rejected as a forgery or accepted (a false positive match).
 
-All but one forgeries were correctly rejected as forgeries. We notice that most of the forgeries were rejected mostly because the impostor took too long to sign ($t$ too high) or because he didn't sign fast enough ($\bar{v}$ too little). We achieve an error rate of 3.33 percent with this system.
+All but one forgeries were correctly rejected as forgeries. We notice that most of the forgeries were rejected mostly because the impostor took too long to sign ($t$ too high) or because he did not sign fast enough ($\bar{v}$ too little). We achieve an error rate of 3.33 percent with this system.
 
 \textbf{Real time feasibility}\\
 Computing the features for a signature and comparing them to the previously computed minimum and maximum values takes less than one hundredth of a second. By using a sliding window, the computational complexity of computing the minimum and maximum values is guaranteed to have an upper bound even if the total amount of signatures for a card holder may grow to very large. We conclude that this approach is feasible for real time application.
@@ -1498,7 +1498,7 @@ Computing the features for a signature and comparing them to the previously comp
 
 
 
-
+\newpage
 \subsection{Dynamic Time Warping}
 
 \textbf{Similarity score $S_{DTW}$}\\
@@ -1600,6 +1600,8 @@ Experiment 4 produces an EER of 0.12 with a threshold of 0.3. The threshold is r
 \end{figure}
 
 \textbf{Detection of forgeries}\\
+In order to detect forgeries we conduct the following steps for the above found combination of inputs.
+
 \begin{enumerate}
 \item For each forgery we calculate the similarity score $S_{DTW}$ to the five most recent signatures of the card holder. The results are shown in Figure \ref{fig:dtw-forgeries1}.
 
@@ -1673,22 +1675,28 @@ Calculating the DTW score between two signatures under the described circumstanc
 
 
 
-
+\newpage
 
 \subsection{Hidden Markov Models}
 \label{sec:hidden-markov-models}
 
-There are several implementations of the HMM algorithm available. We found the implementation by MATLAB to be best documented and best fitting for our application and chose to work with said tool suite.
+Several implementations of the HMM algorithm are available. We chose to work with the implementation included in the \fnurl{MATLAB}{http://mathworks.com/products/matlab/} tool suite because it provided the most extensive documentation. However, when an algorithm based on HMM is at one point be deployed to SumUp's production environment, we suggest to create a custom implementation to optimize speed and avoid high license fees.
 
 \textbf{Similarity score $S_{HMM}$}\\
-After training the HMM for each card holder, we can calculate the likelihood for each signature to belong to a certain HMM. We define $S_{HMM}$ to be the likelihood of a signature to being generated by a certain model's card holder.
+After training the HMM with each card holder's signature set, we calculate the likelihood for each signature to belong to each of the trained HMMs. We define $S_{HMM}$ as the likelihood of a signature being generated by a specific model.
+
+We try different combinations of hidden states and amount of signatures per card holder to optimize the classification of signatures.
 
 \textbf{Fitness function $\mathbb{F}_{HMM}$}\\
+We define the fitness function $\mathbb{F}_{HMM}$ as the amount of false positive matches we get during the signature classification. We proceed as follows to compute the number of false positive matches for each experiment:
 
-We want the range of likelihoods for each signature set against each signature model to be as small as possible. We therefore recorded the ranges in Table XX while we tested the system with five, six and seven states.
-We vary the number of hidden states in the model as we try to minimize the window of likelihood for each signature set.
+\begin{enumerate}
+\item We train each card holder's signature set with his signatures.
+\item By computing the likelihood for each signature of a card holder's set with this card holder's trained model, we obtain a maximum and minimum likelihood for each card holder's trained model.
+\item We compute the likelihood for each signature in the database with each trained model. If the likelihood value is within the previously obtained maximum and minimum value, but the signature was not created by this model's card holder, we count it as a false positive.
+\end{enumerate}
 
-We calculate the window for each model and how many false positives we get in that case. We stopped our experiments at 9 states as it would otherwise become unfeasible to implement
+
 
 
 \begin{table}
@@ -1704,7 +1712,7 @@ We calculate the window for each model and how many false positives we get in th
     5 & 7 & 10 & 105                 & 144.0 & 9.8 \\ \hdashline[0.5pt/3pt]
     6 & 7 & 50 & 740                 & 370.0 & 34.72 \\ \hdashline[0.5pt/3pt]
     7 & 8 & 10 & 150                 & 145.0 & 7.14 \\ \hdashline[0.5pt/3pt]
-    8 & 9 & 10 & 225                 & 148.0 & 5.1 \\ \hdashline[0.5pt/3pt]
+    8 & 9 & 10 & 225                 & 148.0 & 5.1 \\
 
     \hline
     \end{tabular}
@@ -1714,29 +1722,26 @@ We calculate the window for each model and how many false positives we get in th
 
 
 
-
-
-
-
-
 \textbf{Classification of Signatures}\\
-As shown in Table \ref{tbl:hmm_experiments1} the experiments with more signatures cause larger windows and thereby a higher number of false positives per 100 Sig.
+Table \ref{tbl:hmm_experiments1} shows the results of our experiments.
+Although the number of false positives decreases with more states, the computation time increases and we did not conduct any experiments for more than 9 states because the computation time would make an implementation unfeasible.
 
+Experiments with more signatures cause larger windows and thereby a higher number of false positives per 100 Signatures. We use the configuration used in Experiment 5 to detect forgeries as it is a reasonable trade-off between computation time and accuracy.
+We use the following setup:
 
-
-
-
-\textbf{Detection of forgeries}\\
-We decided to weight the lower computation time higher than the lower average of forgeries and performed the experiments on forgery detection with the parameters used for experiment 5:
 \begin{itemize}
 \item 7 hidden states
 \item The model is trained with the 10 most recent signatures
 \item The symbol alphabet consists of 8 angles
 \end{itemize}
 
-We obtain the window sizes in Table \ref{tbl:hmm_window_sizes} for experiment 5. If a result is within the window, we consider it an accepted signature, otherwise rejected.
 
-Within the 30 forgeries, 6 were false positives matches which corresponds to an error rate of 20 percent.
+
+
+\textbf{Detection of forgeries}\\
+For the mentioned configuration, we obtain the windows between minimum and maximum likelihood shown in column two of Table \ref{tbl:hmm_window_sizes}. We run each card holder's forgeries against this card holder's trained HMM. If the likelihood is within the shown window, we consider it a false positive match.
+
+Table \ref{tbl:hmm_window_sizes} shows the results we obtain. Out of 30 forgeries, 6 were false positive matches. We conclude an error rate of 20 percent of our chosen HMM algorithm.
 
 \begin{table}
     \centering
@@ -1753,7 +1758,7 @@ Within the 30 forgeries, 6 were false positives matches which corresponds to an 
     7 & [-448, -192] & 256  & -625 \xmark     & -476 \xmark     &  -344 \cmark  \\ \hdashline[0.5pt/3pt]
     8 & [-235, -102] & 133  & 0 \xmark        & 0 \xmark        & 0 \xmark  \\ \hdashline[0.5pt/3pt]
     9 & [-106, -78] & 28    & -403 \xmark     & -478 \xmark     & 0 \xmark  \\ \hdashline[0.5pt/3pt]
-    10 & [-330, -93] & 237  & -278 \cmark     & -599 \xmark     & -244 \cmark  \\ \hdashline[0.5pt/3pt]
+    10 & [-330, -93] & 237  & -278 \cmark     & -599 \xmark     & -244 \cmark  \\
     \hline
     \end{tabular}
     \caption{Window Sizes for Experiment Configuration 5}
@@ -1763,11 +1768,11 @@ Within the 30 forgeries, 6 were false positives matches which corresponds to an 
 
 
 \textbf{Real time feasibility}\\
-
-The computation time needed to tran the models are shown in Table \ref{tbl:hmm_experiments1}. The combination of parameters we chose, takes 10.5 seconds to train one set of signatures. As this task can be done in the background and in parallel, we consider it to be low enough to scale.
+The computation time needed to train the HMM models are shown in Table \ref{tbl:hmm_experiments1}. Given eThe combination of parameters we chose, takes 10.5 seconds to train one set of signatures. As this task can be done in the background and in parallel, we consider it to be low enough to scale.
 The computation of the likelihood in respect to a model takes less than a tenth of a second and thus fulfills real time requirements.
 
 
+\newpage
 \subsection{Fusion of scores}
 
 Table \ref{tbl:fusion-fp} shows a summary of all algorithms and the false positives we encountered. Only for Person 10 we encountered the case that the same forgery was a false positive in more than one system ($\mathcal{F}_3$). For all other forgeries we are able to apply majority voting to exclude the false positives. We propose the following system:
@@ -1803,79 +1808,6 @@ Table \ref{tbl:fusion-fp} shows a summary of all algorithms and the false positi
 
 
 
-% \subsection{Forgeries}
-% A signature verification system typically focuses on the detection of one or more category of forged signatures. A skilled forgery is produced when the forger has unrestricted
-% access to one or more samples of the writer’s actual signa- ture (see Figure 1b). A casual forgery or a simple forgery (see Figure 1c) is produced when the forger is familiar with the writer’s name, but does not have access to a sample of the ac- tual signature—stylistic differences are therefore prevalent. A random forgery or zero-effort forgery (see Figure 1d) can be any random scribble or a signature of another writer, and may even include the forger’s own signature. The genuine signatures and high quality forgeries for other writers are usually considered to be forgeries of this type.
-% Skilled forgeries can be subdivided into amateur and pro- fessional forgeries. A professional forgery is produced by an in- dividual who has professional expertise in handwriting anal- ysis. They are able to circumvent obvious problems and ex- ploit their knowledge to produce high-quality, spacial forg- eries (see Figure 2b).
-
-% In the context of online verification, amateur forgeries can be subdivided into home-improved and over-the-shoulder forgeries (see [6]). The category of home-improved forgeries contains forgeries that are produced when the forger has a paper copy of a genuine signature and has ample opportu- nity to practice the signature at home. Here the imitation is based only on the static image of the original signature (see Figure 2c). The category of over-the-shoulder forgeries contains forgeries that are produced immediately after the forger has witnessed a genuine signature being produced. The forger therefore learns not only the spatial image, but also the dynamic properties of the signature by observing the signing process (see Figure 2d). The different types of forg- eries are summarised in Figure 3.
-
-
-% Three types of forgeries were considered: ”over the shoulder” (O.S.), ”home improved” (H.I.) and ”professional” (PR.). The first kind of forgeries (O.S.) were captured by the forger after he has seen the gen- uine signature being written, that is after knowing the dy- namic properties of the signature by observation of the sign- ing process. Of course, in this case, the forger also learns the spatial image of the signature. The second type of forg- eries (H.I.) are made in other conditions: the forger only imitates the static image of the genuine signature, and has the possibility of practicing the signature at home. Finally, the last kind of forgeries (PR.) are produced by individu- als who have professional expertise in handwriting analy- sis. They exploit their experience in discriminating gen- uine from forged signatures to produce high quality spatial forgeries. This database contains 1530 genuine signatures, 1470 O.S. forgeries (30 per individual except two), 1530 H.I. forgeries (30 per individual), and 200 PR. forgeries (10 per individual for 20 individuals).
-
-
-% \subsection{SumUp}
-
-
-% \subsection{SVC2004}
-% Two development databases were released prior to the Signature Ver- ification Competition (SVC) 2004 (Yeung et al., 2004). They were captured using a WACOM digitizing tablet and a Grip Pen. Due to privacy issues, users were advised to use invented signatures as genuine ones. The two databases differ in the available data, and correspond to the two tasks defined in the competition. One contains only coordinate information while the other provides also pressure and pen orientation signals. Each database contains 40 users, with 20 genuine signatures and 20 forgeries per user acquired in two sessions. Both occidental and asian signatures are present in the databases. Examples of signatures from this database are shown in Fig. 2.6.
-
-% \subsection{SUSig}
-
-
-% \subsection{ATVS-SSig\_DB}
-
-% \section{Experimental Setup}
-
-% \section{Feature Selection}
-% ==
-% Due to the curse of dimensionality (Theodoridis and Koutroumbas, 2006), the performance of a statistical classifier is degraded if the available training data is too small compared to the number of dimensions of the feature vector (Jain and Zongker, 1997). This is usually the case in signature verification, where the average length of a digitized signature is of a few hundreds of samples and the available number of training signatures is relatively small (in practical applications between 3 and 5). The amount of training signatures is mostly conditioned by the willingness of the users to provide many samples during enrollment. Nevertheless, when signatures are captured during only one unique session, their variability is small in general, leading to a poorly trained model.
-% Feature selection techniques try to reduce the dimensionality of the feature vectors while optimizing the verification accuracy. Their goal is to find the optimum combination of features according to a given optimization criterion. Ideally, given a feature vector of F dimensions, all the possible combinations from 1 to F features should be tested in order to find the optimal combination.
-% p15++
-
-
-
-% \subsection{Experiment Setup}
-
-% \subsubsection{Feature Extraction}
-
-% From 01030918.pdf:
-% Like in [2], in order to estimate the speed at time 􏰥, we consider the point visited at time 􏰥, 􏰖 􏰶􏰥􏰷 􏰭 􏰶􏰨􏰶􏰥􏰷􏰈 􏰩 􏰶􏰥􏰷􏰷 and its two neighbors in the se-
-% quence (see Fig. 1), that is 􏰖 􏰶􏰥 􏰰 􏰫􏰷 and 􏰖 􏰶􏰥 􏰸 􏰫􏰷. We
-% estimate the speed in the 􏰨 and 􏰩 directions respectively by
-% 􏰦􏰨􏰶􏰥􏰷 􏰭 Æ􏰨􏰶􏰥􏰷 􏰭 􏰨􏰶􏰥 􏰸 􏰫􏰷 􏰰 􏰨􏰶􏰥 􏰰 􏰫􏰷 and􏰦􏰩􏰶􏰥􏰷 􏰭 Æ􏰩􏰶􏰥􏰷 􏰭
-% 􏰩 􏰶􏰥 􏰸 􏰫􏰷 􏰰 􏰩 􏰶􏰥 􏰰 􏰫􏰷, and so an estimate of speed magni- 􏱈
-% ￼tudeattime􏰥 isgivenby􏱇􏱇􏰦 􏰶􏰥􏰷􏱇􏱇 􏰭 Æ 􏰨􏰶􏰥􏰷 􏰬 􏰸 Æ 􏰩
-% include also for motion direction 􏰂􏰶􏰥􏰷 and Æ 􏰂􏰶􏰥􏰷 under the form of their cosine and sine.1 Besides these 5 dynamic features, we keep the axial pressure and the pen-tilt. Fur- thermore, following the principle in [11], we extract a low resolution image (of 9 values) around each point in order to introduce spatial information. As shown in Fig. 1, a 􏰺 􏰱 􏰺 window centered on each point of this sequence permits to compute a ”context bitmap” as follows: when the window is centered on a pen-down, the number of pen-down points in each of the 9 rectangles are computed; when the win- dow is centered on a pen-up, the 9 values representing the low resolution image of spatial context are all set to zero. This permits to introduce rough variations in such parame- ters when a pen-up appears in the sequence. The window shifts along the trajectory described by the pen, point per point. Therefore, 17 parameters are extracted on each point of the sequence: 8 dynamic and 9 static.
-
-
-% \subsubsection{Dynamic Time Warping}
-
-
-% \subsubsection{Hidden Markov Models}
-
-
-% \subsection{Computational Requirements}
-% An automatic signature verification system can only be eco- nomically viable when the processing requirements are feasi- ble. The practicality of our system as a real-time application depends on the number of floating point operations (flops) required to verify a test signature. The bulk of these flops are
-% required to calculate the DRT. Much less flops are required to match a set of feature vectors (which represents a test signa- ture) with the HMM of the claimed writer’s signature.
-
-% DRT
-% We assume that the original image consists of Ψ pixels and that Θ angles (between 0◦ and 180◦) are used to calculate the DRT. When β (i.e., the number of beams per angle) is taken to be equal to the highest dimension of the original image, the number of flops required to calculate the DRT is on the order of 4ΨΘ (see [23]). This implies that for an average im- ageof500×300pixels,withΘ = 128andβ = 500,the number of flops required to calculate the DRT is on the or- der of 76.8 × 106. With these parameters, an EER of 17.9% is achieved when only skilled forgeries from the Stellenbosch data set are considered. However, these computational re- quirements can be significantly reduced without compromis- ing the performance of our system (see Table 2). The num- ber of flops required to calculate the DRT of an image of 256 × 128 pixels, with Θ = 64 and β = 256, is on the or- der of 8.4 × 106. With these parameters, an EER of 18.4% is achieved when only skilled forgeries from the Stellenbosch data set are considered.
-
-% Matching
-% Since the states in our HMM are organised in a ring and the dissimilarity value in (8) is based on an Euclidean distance measure, the number of flops required to match an obser- vation sequence with an HMM is on the order of T(Nl + d). Therefore, despite the high dimensionality of the feature vec- tors, relatively few flops are required to match an observation sequence with an HMM. With d = 512, T = 256, N = 64, and l = 1, on the order of only 147 456 flops are required. With these parameters, an EER of 17.9% is achieved when only skilled forgeries from the Stellenbosch data set are con- sidered. With d = 256, T = 128, N = 32 and l = 1, on the order of only 36 864 flops are required. With these parame- ters, an EER of 18.4% is achieved when only skilled forgeries from the Stellenbosch data set are considered (see Table 2).
-
-
-
-
-% \section{Evaluation}
-% Throughout this paper, the false rejection rate (FRR), the false acceptance rate (FAR), the equal error rate (EER), and the average error rate (AER) are used as quality performance measures. The FRR is the ratio of the number of genuine test signatures rejected to the total number of genuine test sig- natures submitted. The FAR is the ratio of the number of forgeries accepted to the total number of forgeries submitted. When the decision threshold is altered so as to decrease the FRR, the FAR will invariably increase, and vice versa. When a certain threshold is selected, the FRR is equal to the FAR. This error rate is called the EER and the corresponding threshold may be called the equal error threshold. The average of the FRR and FAR is called the AER. When a threshold is used,
-
-% that is, close to the equal error threshold, the FRR and FAR will not differ much. In this case the AER is approximately equal to the EER.
-
-
-% \subsection{Modi}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER CONCLUSIONS
 
@@ -1901,65 +1833,6 @@ Aber: Feedback loop erlaubt das Reduzieren von False Positives und das Training 
 Was soll da rein in etwa damit es nicht 'future work' wird?
 
 
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOR REFERENCE LEAVE THE EXAMPLES AFTER THIS LINE
-
-
-% % Start writing here
-% \chapter{This is the first chapter}
-
-% Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-% \section{This is the first section}
-
-% Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-% \subsection{And this the first subsection}
-
-% Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-% \begin{figure}[htpb]
-% 	\centering
-% 	\includegraphics{figures/eth_logo_black}
-% 	\caption{Example figure.}
-% 	\label{figure:example}
-% \end{figure}
-
-% \begin{table}[htpb]
-% 	\centering
-% 	\begin{tabular}{l|c|c|c}
-% 		Header 1 & Header 2 & Header 3 & Header 4\\ \hline
-% 		Row 1 & 15 & 17 & 12 \\
-% 		Row 2 & 13 & 1 & 8 \\
-% 	\end{tabular}
-% 	\caption{Example table.}
-% 	\label{table:example}
-% \end{table}
-
-% And here we reference our only figure~\ref{figure:example} and table~\ref{table:example}.
-
-% \begin{theorem}[First Theorem] \label{thm:first theorem}
-% 	This is our first theorem.
-% \end{theorem}
-
-% \begin{proof}
-% 	And this is the proof of the first theorem with a complicated formula and a reference to Theorem~\ref{thm:first theorem}. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-% 	\begin{equation}
-% 		{\frac {\mathrm d}{\mathrm dx}}\arctan(\sin({x}^{2}))=-2 \cdot {\frac {\cos({x}^{2})x}{-2+\left (\cos({x}^{2})\right )^{2}}} \label{eq:this}
-% 	\end{equation}
-% 	Here a reference to the above equation~(\ref{eq:this}).
-% \end{proof}
-
-% \noindent And lastly, we cite an external document~\cite{TestReference}.
-% \noindent And lastly, we cite an external document~\cite{Bissig11}.
-% \noindent And lastly, we cite an external document~\cite{Martinez08}.
 
 % This displays the bibliography for all cited external documents. All references have to be defined in the file references.bib and can then be cited from within this document.
 \bibliographystyle{splncs}

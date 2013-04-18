@@ -399,28 +399,6 @@ Previous to our work, a test based on only first and last name was already in pl
 
 In the next section we will present the data of the two databases and their origin before talking about the way we structured the lookup and implementation of our solution.
 
-% two strat agains aml: identify customer, get id \& proof of address
-% 2nd mitigating strategy: monitor patterns, activity, ...
-
-% plugged into both: screening at beginning \& end
-
-
-% sanctions hit => can't trade with him
-% report suspicion report
-
-% suspicious act report = sar
-
-% => serious organized crime association
-
-% pep = enhanced customer due diligence
-% get more docs, based on wealth and funds
-
-% if we onboard them, we need to block settlements
-
-
-% Our work is inspired by, amongst others, the potential fi- nancial benefits that the automatic clearing of cheques will have for the banking industry. Despite an increasing num- ber of electronic alternatives to paper cheques, fraud perpe- trated at financial institutions in the United States has be- come a national epidemic. The National Check Fraud Center Report of 2000 [1] states that: “. . . cheque fraud and coun- terfeiting are among the fastest-growing crimes affecting the United States’ financial system, producing estimated annual losses exceeding USD 10 billion with the number continuing to rise at an alarming rate each year.”
-
-% 1: National Check Fraud Center, National Check Fraud Center Report, 2000.
 
 \section{PEP \& HRA Database}
 
@@ -557,6 +535,7 @@ A request is triggered and answered with the following steps:
 \item The result is returned to the sign-up component with information of whether or not the user can continue the sign-up flow
 \item The respective KYC actions and statuses are set in the database.
 \end{enumerate}
+
 
 
 
@@ -994,42 +973,6 @@ $$\sum\limits_{t=1}^T\gamma_i(t)$$
 
 
 
-% \section{Online Signature Detection}
-% % Online signature verification methods are generally categorized to either use global or local features to classify a given signature
-
-% % ==
-
-% % On-line or dynamic systems use captured signature time-functions. These functions are obtained using digitizer tablets or touchscreens (e.g. Tablet-PCs, smart phones, etc.). Tradition- ally, dynamic systems have presented a better performance than off-line systems as more levels of information than the signature static image are available (Plamondon and Lorette, 1989). This is the approach considered in this work, and will be described in the following chapters.
-
-% % Feature Extraction: Two main approaches have been followed in this step: feature- based systems extract global features (e.g. signature duration, number of pen-ups, average velocity) from the signature in order to obtain a holistic feature vector (Lee et al., 1996). On the other hand, function-based systems use the signature time functions (e.g. position, pressure) for verification. Traditionally, function-based approaches have yielded better results than feature-based ones (Fierrez-Aguilar et al., 2005a; Kholmatov and Yanikoglu,
-% 2005).
-
-
-% \subsection{Feature-Based Methods}
-% % As the name suggests, feature-based methods use features extracted from the sig- natures to perform the verification task. In general two different types of features are considered: global and local. Global features are related to the signature as a whole, for instance the signature duration or the mean pressure applied. Local features are based on single sample points. Examples for local features are the maximum velocity or the highest curvature.
-
-% % Lee et al. [5].
-
-% % A large number of features useful for signature verification was listed by Fierrez-Aguilar et al. [6].
-
-% % This is why in general a smaller set of more discriminative features is preferred. The issue of feature selection in the signature verification task was extensively studied by Richiardi et al. [7].
-
-% % After having found a suitable feature vector, an arbitrary one-class classifi- cation scheme can be used to perform the classification into valid and invalid signatures. Since there is no negative training data available, the task of classifi- cation is very similar to the task of outlier- or novelty detection. Several methods to perform such a classification are known [8].
-
-
-
-
-% \subsection{Function-Based Methods}
-
-% % Function-based signature verification methods are focused on building a signa- ture model which accurately reflects the temporal behaviour of the signature. Instead of extracting features that are used for verification, the emphasis of the signature model lies in the (timed) sequence of strokes drawn during the signing process. Comparing any signature to the model built during training will lead to a match score which is based on the level of similarity between (timed) sequence of strokes in the model and the signature under test. Function-based methods are reported to deliver better performance than global feature based methods [6]. Two function-based methods are predominant in the literature: Hidden Markov Model based methods and Dynamic Time Warping (DTW) based methods.
-
-% % page 6-8 for sample feature set
-
-% % Function-based methods to perform signature verification compare the tempo- ral behaviour of the recorded signals x(t), y(t), p(t) and a(t). In this work, a dynamic time warping based method is used. The performance of a Hidden Markov Model system might be higher than the DTW system performance but the implementation complexity is much lower for the DTW system.
-
-
-
-
 
 
 
@@ -1113,35 +1056,30 @@ Traditionally, the system would work as shown in Figure TODO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER EXPERIMENTS
 \chapter{Implementation and Evaluation}
 \label{chp:experiments}
-% offline vs online
-% using dynamic features: speed, acceleration
 
 
-% Circle Detection?
-% X Detection?
+Our work on fraud prevention was implemented and released to SumUp's production environment. Section \ref{sec:exp-preventive} describes the implementation's setup and performance. We show how the new check's performance has affected the work of SumUp's operations team and to which extent we were able to reduce the amount of false positives.
 
-Section \ref{sec:exp-preventive} will give insight into how our work has affected the number of false positives and thus the manual inputs from Operations have changed since the new component was released.
-
-Section \ref{sec:exp-reactive} will first introduce the database of signatures we collected to test our signature verification algorithms and afterwards show the equal error rate (EER) achieved in different scenarios.
+We discuss our fraud detection system in Section \ref{sec:exp-reactive}. We introduced the database used for our experiments and give a detailed description of the performance of the separate algorithms used. We also discuss the technical feasibility of each approach and the fusion of all three scores.
 
 
 \section{Preventive Fraud Detection}
 \label{sec:exp-preventive}
 
-The algorithms described in Listing \ref{lst:world-check-parse} and Listing \ref{lst:world-check-lookup} were implemented in a Ruby Sinatra app with a REST interface and released to production about 2 months prior to the submission of this thesis.
+The algorithms described in Listing \ref{lst:world-check-parse} and Listing \ref{lst:world-check-lookup} were implemented in a Ruby Sinatra application with a REST interface and the application was deployed to production six weeks prior to the submission of this report.
 
 \subsection{Setup}
 
-The full database was parsed on a testing environment and the resulting data was copied over into production. The daily updates are received on the production machine and directly parsed into the production database through the parsing script.
+The full World-Check PEP/HAR database was parsed in a testing environment using the algorithm in Listing \ref{lst:world-check-parse} and the parsed data was copied into the production database. The daily, incremental updates are downloaded from the World-Check servers into the production environment and are directly parsed into the production database.
 
-The PEP/HRA check is performed either automatically or manually:
+The PEP/HRA check is performed automatically or manually in at least three occasions:
 \begin{itemize}
 \item \textbf{Automatically} for each new user during sign-up
-\item \textbf{Automatically} for each existing user once a week to re-check each account after incorporating the changes of that week
-\item \textbf{Manually} from the Operations Admin Panel (OAP) via a button
+\item \textbf{Automatically} for each existing user at the end of each week to re-check each account after incorporating the incremental updates of that week
+\item \textbf{Manually} from the SumUp Operations Admin Panel (SOAP) via a button
 \end{itemize}
 
-Each request must be triggered via a POST request. Depending on the user object that needs to be checked, the body of the request changes. Table \ref{tbl:har-pep-requests} lists the different request types.
+Each request is triggered via a POST request. Depending on the user type to be checked, the body of the request changes. Table \ref{tbl:har-pep-requests} lists the different request types.
 
 \begin{table}[tb]
     \begin{center}
@@ -1155,50 +1093,51 @@ Each request must be triggered via a POST request. Depending on the user object 
         \hline
         \end{tabular}
     \end{center}
-    \label{tbl:har-pep-requests}
     \caption{The requests received by the PEP/HAR component}
+    \label{tbl:har-pep-requests}
 \end{table}
 
 \subsection{Results}
 
-The new component was released to production on March 4th, 2013, at beginning of calendar week 10. At the same time, the old component was discontinued. Every new user was automatically checked during the sign-up process. In addition to that, Business Officers and Owners were checked manually through SOAP by the Operations Team.
+The new component was released to production at beginning of calendar week 10 on March 4th, 2013. At the same time, the old check was discontinued. Every new user since then was automatically checked during the sign-up process. In addition to that, Business Officers and Owners were checked manually through SOAP by the Operations Team. The following data refers to checks during the sign-up process and excludes data from weekly re-checks or manual requests.
 
-As SumUp is still growing rapidly, all numbers were normalized in respect to 1000 sign ups per week. The number of manual work could be greatly reduced. Chart \ref{fig:pep-hra-charts} shows how the number of matches reduced in calendar week 10 after the new component was released.
-Due to high amount of manual work that was required to reject or approve a match, the false positives were often only rejected one or two week after the initial match, which explains the shift between the curves in Figure \ref{fig:pep-hra-charts}.
+As SumUp is still growing rapidly, all numbers were normalized in respect to 1000 new sign-ups per week. The number of manual work by the operations team could be greatly reduced thanks to a much lower rate of false positives and therefore less matches which have to be manually confirmed or rejected. Figure \ref{fig:pep-hra-charts} shows how the number of matches declined in calendar week 10 after the release of the new component.
+The high amount of false positive matches which had to be checked by the operations team caused a backlog which is clearly visible by the shifted red curve in Figure \ref{fig:pep-hra-charts}. Due to the high amount of manual work that was required to reject or approve a match, the false positives were often only rejected --- and thereby marked as a false positive match  --- one or two week after the initial match.
 
-Typically, about 50 to 100 matches were generated per 1000 new users with the old component. Almost all of those were false positives and therefore cause manual work that wouldn't have been necessary. With the new component, we were able to drastically reduce the amount of manual work required. After introduction of the new check to the system, the typical amount of matches per 1000 new sign ups after the release of the new component is below 10. The peak in calendar week 14 was caused by a system migration where a lot of accounts were checked again. However, as these accounts had been previously rejected, they did not cause any additional manual work.
+Typically, about 50 to 100 matches were generated per 1000 new users with the old component. Almost all of those were false positives and therefore caused unnecessary manual work. With the new component, we were able to drastically reduce the amount of manual work required. After introduction of the new check to the system, the typical amount of matches per 1000 new sign-ups after the release of the new component declined to below ten and the amount of false positive matches was less than two. The higher number of false positive matches in week 13-10 was influenced by the backlog of previous weeks but it quickly stabilized from week 13-11 ongoing as shown in Table \ref{tbl:hra-pep-results}. The peak in calendar week 14 was caused by a system migration in the course of which a lot of accounts were checked again. However, as these accounts had been previously rejected, they did not cause any additional manual work.
 
-Umformulieren! die ration muss kleiner werden!!!
-It is too early to say whether the ratio of false positives per matches was also significantly reduced due to the backlog of false positives that were cleared within the first weeks after the new component's release. However, the numbers in Table \ref{tbl:hra-pep-results} indicate a trend towards a lower amount of false positives per total amount of matches.
+The numbers in Table \ref{tbl:hra-pep-results} show that the number of false positive matches could be reduced from 50-80 per 1000 sign-ups to less than two which corresponds to a reduction of over 96 percent.
+
+SumUp's operations team reports the reduction had a significant impact on their work. The amount of work hours per week in this area has declined from more than seven to less than one hour on average as shown in Table \ref{tbl:man-hours}. These are absolute numbers and do not account for the continued exponential growth of new sign-ups. The amount of work hours in this area has been almost doubling every month before the release of the new component in march.
 
 \begin{table}[tb]
     \begin{center}
-        \begin{tabular}{cc|c|c|c}
-        & week  & Matches   & False Positives   & Ratio \\ \cline{2-5}
+        \begin{tabular}{cc|c|cc}
+        & Week  & Matches [per 1000 sign-ups]   & False Positive Matches \\ \cline{2-5}
 \multirow{6}{*}{
 \begin{sideways}
 after release
 \end{sideways}
-}  & 13-15 & 3,29      & 1,39              & 42\%  \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-14 & 25,36     & 1,40              & 6\%   \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-13 & 1,77      & 0,98              & 56\%  \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-12 & 2,84      & 0,95              & 33\%  \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13.11 & 2,20      & 2,42              & 110\% \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-10 & 2,64      & 6,71              & 255\% \\ \cline{2-5}\cline{2-5}
+}  & 13-15 & 3,29      & 1,39                \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-14 & 25,36     & 1,40            \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-13 & 1,77      & 0,98            \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-12 & 2,84      & 0,95            \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13.11 & 2,20      & 2,42            \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-10 & 2,64      & 6,71            \\ \cline{2-5}\cline{2-5}
 \multirow{6}{*}{
 \begin{sideways}
 before release
 \end{sideways}
-       }  & 13-09 & 64,33     & 58,91             & 92\%  \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-08 & 60,71     & 53,99             & 89\%  \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-07 & 55,89     & 55,89             & 100\% \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-06 & 77,83     & 77,83             & 100\% \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-05 & 65,10     & 36,86             & 57\%  \\ \cdashline{2-5}[0.5pt/3pt]
-       & 13-04 & 71,00     & 68,73             & 97\%  \\ \cline{2-5}
+       }  & 13-09 & 64,33     & 58,91          \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-08 & 60,71     & 53,99             \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-07 & 55,89     & 55,89             \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-06 & 77,83     & 77,83             \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-05 & 65,10     & 36,86             \\ \cdashline{2-5}[0.5pt/3pt]
+       & 13-04 & 71,00     & 68,73             \\ \cline{2-5}
         \end{tabular}
     \end{center}
-    \label{tbl:hra-pep-results}
     \caption{The requests received by the PEP/HAR component. Ratio: Erwaehnen von backlog! false positive beinhalten backlog}
+    \label{tbl:hra-pep-results}
 \end{table}
 
 \begin{figure}
@@ -1230,22 +1169,20 @@ before release
         \label{fig:pep-hra-charts}
 \end{figure}
 
-The operation department reports that the number of man hours was reduced since the release of the new component. It is still early but the numbers in Table \ref{tbl:man-hours} indicate that one to two full days of manual work were saved by introducing the new component.
 
-Erwaehnen dass es absolute Zahlen sind in der Tabelle!
 
 \begin{table}[tb]
     \begin{center}
         \begin{tabular}{c|c|c}Month & Matches (absolute numbers) & Man Hours \\ \hline
         December & 283 & 10 hours \\ \hdashline[0.5pt/3pt]
         January & 463 & 16 hours  \\ \hdashline[0.5pt/3pt]
-        February & 853 & 29 hours \\ \hline \hline
+        February & 853 & 29 hours \\ \hline
         March & 125 & 4 hours \\ \hdashline[0.5pt/3pt]
-        April (month to date) & 9 & 0.3 hours \\ \hline
+        April 1st - 14th & 9 & 0.3 hours \\ \hline
         \end{tabular}
     \end{center}
-    \label{tbl:man-hours}
     \caption{The requests received by the PEP/HAR component}
+    \label{tbl:man-hours}
 \end{table}
 
 
@@ -1277,8 +1214,8 @@ The devices used to collect the signatures are listed in Table \ref{tbl:signatur
         \hline
         \end{tabular}
     \end{center}
-    \label{tbl:signatures-devices}
     \caption{The four devices used to collect signatures, ordered by screen size}
+    \label{tbl:signatures-devices}
 \end{table}
 
 We also collected three forgeries for each person. The forgeries are created by an untrained person and of the following kind:
@@ -1347,8 +1284,8 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
             9 & 1299.5 & 5467.0 & 0.79 & 0.24 & 0.41 & 4.0 & 1.0 \\
             \hline
             \end{tabular}
-            \label{tbl:global-features-results-min}
             \caption{The minimum values for each signature set and all global features}
+            \label{tbl:global-features-results-min}
     \end{subfigure}%
 
     \begin{subfigure}[b]{\textwidth}
@@ -1370,8 +1307,8 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
             9 & 2047.7 & 6953.81 & 3.95 & 0.29 & 5.04 & 12.19 & 2.4 \\
             \hline
             \end{tabular}
-            \label{tbl:global-features-results-avg}
             \caption{The average values for each signature set and all global features}
+            \label{tbl:global-features-results-avg}
     \end{subfigure}%
 
     ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
@@ -1395,8 +1332,8 @@ Table \ref{tbl:global-features-results-avg} shows our results for the average of
             9 & 3428.25 & 8083.0 & 20.12 & 0.42 & 33.69 & 17.0 & 9.0 \\
             \hline
             \end{tabular}
-            \label{tbl:global-features-results-max}
             \caption{The maximum values for each signature set and all global features}
+            \label{tbl:global-features-results-max}
     \end{subfigure}%
 
     \caption{The minimum, average and maximum values we obtained for all global features for each subject's set of signatures.}
@@ -1481,8 +1418,8 @@ Computing the features for a signature and comparing them to the previously comp
             9 & [5467.0, 8083.0] & [0.24, 0.42] & [4.0, 17.0] & [1.0,9.0] & 24910.0 & 0.08 & 18.0 & 1.0 & \xmark \\ \hdashline[0.5pt/3pt]
             \hline
             \end{tabular}
-            \label{tbl:global-features-forg-spontaneous}
             \caption{The results for spontaneous forgeries $\mathcal{F}_1$}
+            \label{tbl:global-features-forg-spontaneous}
     \end{subfigure}%
 
     \begin{subfigure}[b]{\textwidth}
@@ -1505,8 +1442,8 @@ Computing the features for a signature and comparing them to the previously comp
             9 & [5467.0, 8083.0] & [0.24, 0.42] & [4.0, 17.0] & [1.0,9.0] & 11826.0 & 0.12 & 16.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
             \hline
             \end{tabular}
-            \label{tbl:global-features-forg-sample}
             \caption{The results for sample forgeries $\mathcal{F}_2$}
+            \label{tbl:global-features-forg-sample}
     \end{subfigure}%
 
     \begin{subfigure}[b]{\textwidth}
@@ -1529,8 +1466,8 @@ Computing the features for a signature and comparing them to the previously comp
             9 & [5467.0, 8083.0] & [0.24, 0.42] & [4.0, 17.0] & [1.0,9.0] & 9138.0 & 0.17 & 17.0 & 2.0 & \xmark \\ \hdashline[0.5pt/3pt]
             \hline
             \end{tabular}
-            \label{tbl:global-features-forg-knowledgable}
             \caption{The results for knowledgable forgeries $\mathcal{F}_3$}
+            \label{tbl:global-features-forg-knowledgable}
     \end{subfigure}%
 
 
@@ -1590,10 +1527,10 @@ We are also interested in the computation time to compute the EER to know whethe
          11 & old & 10  & full      & xyt   & 944   & 0.01  & 0.39 \\ \hdashline[0.5pt/3pt] %1366151221
          12 & old & 10  & full      & xy    & 866   & 0.05  & 0.30 \\ \hdashline[0.5pt/3pt] %1366151125
          13 \ref{fig:dtw-exp4} & recent & 50 & partial & xy & 2137 & 0.26 & 0.33 \\ \hdashline[0.5pt/3pt] %1366153811
-
     \hline
     \end{tabular}
-    \label{tbl:dtw-experiments1}\caption{Results of DTW experiments}
+    \caption{Results of DTW experiments}
+    \label{tbl:dtw-experiments1}
 \end{table}
 
 \noindent\textbf{Classification of Signatures}\\
@@ -1647,7 +1584,7 @@ Experiment 4 produces an EER of 0.12 with a threshold of 0.3. Computing the simi
                 \centering
                 \includegraphics[width=0.8\textwidth]{figures/dtw-exp4.png}
                 \caption{DTW with up to 50 recent signatures per card holder, partial information about each signature and excluding time information}
-                \label{fig:dtw-exp3}
+                \label{fig:dtw-exp4}
         \end{subfigure}%
 
         \caption{EER and Heatmap of the three best performing and the longtest DTW experiments}\label{fig:dtw-experiments2}
@@ -1698,8 +1635,8 @@ In the 30 forgeries, we got 11 false positives as shown in Figure \ref{tbl:dtw-f
             10 & \xmark & \cmark & \cmark \\ \hdashline[0.5pt/3pt]
             \hline
             \end{tabular}
-            \label{tbl:dtw-forgeries-results-tbl}
             \caption{}
+            \label{tbl:dtw-forgeries-results-tbl}
     \end{subfigure}%
 
 
@@ -1756,7 +1693,8 @@ We calculate the window for each model and how many false positives we get in th
 
     \hline
     \end{tabular}
-    \label{tbl:hmm_experiments1}\caption{Results of HMM experiments}
+    \caption{Results of HMM experiments}
+    \label{tbl:hmm_experiments1}
 \end{table}
 
 
@@ -1803,7 +1741,8 @@ Within the 30 forgeries, 6 were false positives matches which corresponds to an 
     10 & [-330, -93] & 237  & -278 \cmark     & -599 \xmark     & -244 \cmark  \\ \hdashline[0.5pt/3pt]
     \hline
     \end{tabular}
-    \label{tbl:hmm_window_sizes}\caption{Window Sizes for Experiment Configuration 5}
+    \caption{Window Sizes for Experiment Configuration 5}
+    \label{tbl:hmm_window_sizes}
 \end{table}
 
 
@@ -1842,7 +1781,8 @@ Table \ref{tbl:fusion-fp} shows a summary of all algorithms and the false positi
 
     \hline
     \end{tabular}
-    \label{tbl:fusion-fp}\caption{The false positives we encountered with the global features, DTW and HMM algorithm}
+    \caption{The false positives we encountered with the global features, DTW and HMM algorithm}
+    \label{tbl:fusion-fp}
 \end{table}
 
 

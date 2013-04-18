@@ -170,13 +170,13 @@ ETH Zurich}
 
 \begin{acknowledgements}
 
-  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Decker from the Institute for Distributed Computing at ETH Zurich for their help and support. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole Software Development Team at SumUp for their continuous support.
+  I would like to thank my advisors Prof. Roger Wattenhofer and Christian Decker from the Institute for Distributed Computing at ETH Zurich for their help and support. I also wish to thank Stefan Jeschonnek, Conor Wogan, Matti Biskup and the whole software development team at SumUp for their continuous support.
 
 \end{acknowledgements}
 
 
 \begin{abstract}
-    Mobile payments have seen a lot of traction recently and a set of companies have emerged around the opportunity of payments processed from mobile devices. We've conducted this work in collaboration with a company that allows merchants to process credit card transactions on their smartphone by using a mobile application and a hardware credit card reader which plugs into the phones headphone connector.
+    Mobile payments have seen a lot of traction recently and a set of companies have emerged around the opportunity of payments processed from mobile devices. We've conducted this work in collaboration with a company that allows merchants to process credit card transactions on their smartphone by using a mobile application and a hardware credit card reader which plugs into the phone's headphone connector.
 
     The innovative technology has opened up new beneficial opportunities for both, merchants and clients but it has also opened new opportunities for fraud in the area of credit card transactions. Historically prone to fraud, the credit card industry is highly regulated. But as existing anti-fraud regulations are specified for the traditional credit card business, the advances in technology call for new anti-fraud measures.
 
@@ -201,8 +201,6 @@ As smartphones become ubiquitous, they're being used in more and more industries
 This work focuses on an application of the latter.
 The density of smartphones per capita and the computational power of current mobile phones have reached a level where it becomes practical to use phones as electronic cash registers.
 \fnurl{iZettle}{http://www.izettle.com}, \fnurl{Square}{http://www.squareup.com} and \fnurl{SumUp}{http://www.sumup.com} are just some of the companies which make use of this situation and are enabling merchants to receive payments via their smartphone. This thesis was written in collaboration with SumUp, a mobile payment company located in Berlin.
-
-% \cite{Hanmandlu05} \cite{citeulike:3393241} \cite{citeulike:885135} \cite{1030918} \cite{1227706} \cite{Kim:2005:SED:2156512.2156558} \cite{Coetzer:2004:OSV:1289340.1289385} \cite{711942}
 
 Financial businesses have a higher risk of becoming targets of fraud attacks than businesses in other industries due to the direct financial gain for fraudsters. On mobile devices, it becomes even more important to build automatic processes to protect the system from fraud as mobile payments are characterized by low amounts per transaction but a very large quantity of transactions which makes it unfeasible to monitor all transactions manually. While some security standards exist and are imposed by financial authorities, those rules were made for traditional financial institutions. The new mobile, connected environment not only opens up a lot of beneficial opportunities but also more attack vectors for fraudsters and requires advanced countermeasures. Therefore, it is important to not only respect given guidelines but pro-actively develop new ways and adapt existing guidelines to the specifics of the mobile environment to prevent attacks.
 
@@ -255,7 +253,8 @@ SumUp's goal is to lower the barrier for merchants to accept credit card payment
 As of April 2013, SumUp's services are used by thousands of merchants in more than ten European countries.
 The business has been successful because it removed two out of three of the previously mentioned monetary obstacles to a more widespread adoption: anyone who signs up with SumUp receives a free card reader for use with a smartphone and there is no monthly subscription fee. As the merchant already owns the expensive hardware in form of a smartphone and most people already pay for a data subscription, the cost on both ends is reduced substantially. This way, SumUp is able to finance itself through the 2.75 percent transaction fee. At its core, it competes with traditional credit card terminal providers who require their clients to pay a monthly fee for their terminal and the high initial charge for the device.
 
-Instead of building and selling expensive hardware, the only hardware required --- the card reader --- is shipped at no charge and the mobile application is distributed for free via the Apple AppStore and Google Play Store.
+Instead of building and selling expensive hardware, the only hardware required --- the card reader --- is shipped at no charge and the mobile application is distributed for free via the Apple AppStore and Google Play Store. We refer to tablets and phones which run either iOS or Android as \emph{smartphones} to avoid confusion with tablet input devices such as \fnurl{Wacom}{http://wacom.com/} tablets to which we refer as \emph{digital tablets}.
+
 Payment through SumUp gives taxi drivers, market traders and other small stores, who couldn't afford one of the traditional payment terminals, an enormous economic advantage. Card payments can now be processed right on the spot and without an initial financial investment.
 
 
@@ -378,10 +377,10 @@ We discuss our strategies to overcome these difficulties in Chapter \ref{chp:sig
 
 \chapter{Fraud Prevention \\PEP \& HRA Detection}
 
-Fraud prevention is applied during the sign-up process of a new user and with the goal to keep high risk users from gaining access to the system.
+Fraud prevention is applied during the sign-up process of a new user with the goal to keep high risk users from gaining access to the system.
 Any financial institution has a high interest to implement as many anti-fraud mechanisms as possible. With the financial industry being a strictly regulated industry, many precautions are mandatory and described by the governing financial authority. Yet, more mechanisms are added on top of the mandated ones as they provide a competitive advantage.
 
-The financial authority governing SumUp's operations is the United Kingdom (UK) Financial Services Authority (FSA) and the regulatory environment is specified in the Money Laundry Regulations (MLR) from 2007 \cite{website:aml-regulations-2007}. Chapter 2 of the MLR specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
+The financial authority governing SumUp's operations is the United Kingdom (UK) \fnurl{Financial Services Authority}{http://fsa.gov.uk/} (FSA) and the regulatory environment is specified in the UK Money Laundry Regulations (MLR) from 2007 \cite{website:aml-regulations-2007}. Chapter 2 of the MLR specifies the due diligence that has to be done for every client. As part of the due diligence process, the financial institutions are required to check that the customer does not fall into one of the two following categories:
 
 \begin{itemize}
 \item \textbf{Politically Exposed Persons} (PEP) are people who hold a prominent political function. In the United Kingdom this is defined as a national position. Also a PEP's spouse and children are included in this category.
@@ -390,7 +389,7 @@ The financial authority governing SumUp's operations is the United Kingdom (UK) 
 
 \end{itemize}
 
-We will refer to the combination of PEP and HRA as "high risk clients". Any new client needs to be checked against existing lists for both types at sign-up and regularly after the initial sign-up.
+We will refer to the combination of PEP and HRA as \emph{high risk clients}. Any new client needs to be checked against existing lists for both types at sign-up and regularly after the initial sign-up.
 If the algorithm returns a positive match with either a PEP or an HRA, a flag is raised in the SumUp Operations Admin Panel (SOAP) and the match has to be confirmed or falsified manually. If the match can be falsified, nothing more needs to be done and the user will continue the sign-up flow. However, if there is a positive PEP or HRA match, different procedures have to be followed.
 
 For an identified PEP match, additional due diligence needs to be done to sign up the client. Additional documents need to be collected that give detailed information about the wealth and assets of said client. After performing the additional due diligence, a client can be signed up but settlements need to be blocked.
@@ -426,9 +425,11 @@ In the next section we will present the data of the two databases and their orig
 \section{PEP \& HRA Database}
 
 
-World-Check \cite{website:world-check} is one of the providers of the PEP \& HRA database. It consolidates the list by polling many different lists - including the FBI's Most Wanted LIist, Interpol and others.
+World-Check \cite{website:world-check} is one provider of the PEP and HRA database. It consolidates the list by polling many different lists - including the FBI's Most Wanted List, Interpol and others.
 
-The data is supplied in a text file as Comma Separated Values (CSV) and contains information in 26 fields per person. The most important fields are listed in table \ref{tbl:world-check-fields}. Unfortunately, the records are far from complete. A lot of the records are missing some of the important fields like birthday or locations, which makes it hard to falsify a match automatically and sometimes a match falls back on just first and last name correlation. World-Check normalizes the data so that all dates have the same format, city and country names are always spelled the same name and data in one field is always represented the same way.
+The data is supplied in a text file as Comma Separated Values (CSV) and contains information in 26 fields per person listed. The most important fields are listed in Table \ref{tbl:world-check-fields}. Unfortunately, the records are far from being complete. A lot of the records are missing some of the important fields like birthday or locations, which makes it hard to falsify a match automatically and sometimes a match has to be made on just first and last name correlation. World-Check normalizes the data so that all dates have the same format, city and country names are always spelled the same way and all data in a specific field is formatted the same way.
+The full database file is about three gigabytes in size and contains some 1.8 million records of PEPs and HRAs in total. As the database is constantly changing, there's also a daily, weekly and monthly incremental update and delete file, with which the database is kept updated without having to download the full database file every so often.
+World-Check is a paid service and the data is retrieved over an encrypted HTTPS connection.
 
 \begin{table}
     \begin{tabular}{l|p{9cm}}
@@ -436,18 +437,17 @@ The data is supplied in a text file as Comma Separated Values (CSV) and contains
     Field & Value \\ \hline
     uid & unique identifier within the World-Check database\\ \hdashline[0.5pt/3pt]
     last\_name & subject's primarily used last name\\ \hdashline[0.5pt/3pt]
-    first\_name & subject's primarily used firs first name \\ \hdashline[0.5pt/3pt]
-    aliases & other first/last name combinations that the subject has used\\ \hdashline[0.5pt/3pt]
-    alternative\_spelling & alternative spelling of the subject's name\\ \hdashline[0.5pt/3pt]
-    category & used to define if subject is a PEP or HRA\\ \hdashline[0.5pt/3pt]
-    sub\_category & used to define if subject is a PEP or HRA\\ \hdashline[0.5pt/3pt]
-    age & age of the subject \\ \hdashline[0.5pt/3pt]
+    first\_name & subject's primarily used  first name \\ \hdashline[0.5pt/3pt]
+    aliases & other first/last name combinations the subject has used\\ \hdashline[0.5pt/3pt]
+    alternative\_spelling & alternative spellings of the subject's first/last name\\ \hdashline[0.5pt/3pt]
+    category & used to define if subject is a PEP or HRA \\ \hdashline[0.5pt/3pt]
+    age & the subject's age \\ \hdashline[0.5pt/3pt]
     dob & the subject's date of birth \\ \hdashline[0.5pt/3pt]
     deceased & information about the subject's death \\ \hdashline[0.5pt/3pt]
-    locations & the cities the subject was associated with \\ \hdashline[0.5pt/3pt]
-    countries & the countries the subject was associated with \\ \hdashline[0.5pt/3pt]
+    locations & the cities the subject is associated with \\ \hdashline[0.5pt/3pt]
+    countries & the countries the subject is associated with \\ \hdashline[0.5pt/3pt]
     further\_information & description and references about the subject \\ \hdashline[0.5pt/3pt]
-    external\_sources & information about from which sources the information in the database was extracted \\ \hline
+    external\_sources & information about from which sources the information in the database is extracted \\ \hline
 
     \end{tabular}
 
@@ -456,24 +456,19 @@ The data is supplied in a text file as Comma Separated Values (CSV) and contains
 \end{table}
 
 
-The full database file is about three gigabytes in size and contains some 1.8 million records of PEPs and HRAs combined. As the database is constantly changing, there's also a daily, weekly and monthly incremental update and delete file, with which the database is kept updated without having to download the full database file every so often.
-World-Check is a paid service and the data is retrieved over encrypted HTTPS connection.
-
-
-
 
 \section{Algorithm}
 
 Clearly, parsing three gigabytes of raw data and rebuilding the database each time a new user processes through the sign-up flow is slow and not practical. We therefore chose to parse the needed data into a relational database, allowing us to perform queries within split seconds. The algorithm we used to make the lookup faster, consists of two parts - parsing and lookup.
 
-\textbf{Parsing the data}
+\noindent\textbf{Parsing the data}
 
 The raw data contains only one record per individual but often lists not only one pair of first and last name but many. The additional pairs are retrieved from the aliases and alternative\_spellings fields. For faster lookup, each record from the original CSV file is parsed into multiple records in the database such that there exists one database record for each pair of first and last name combination. We create a record for each permutation of first and last name retrieved from those fields to cover all identities a high risk user might possibly use.
 Listing \ref{lst:world-check-parse} shows the algorithm used to create the cross product of all name pairs.
 
-\textbf{Lookup}
+\noindent\textbf{Lookup}
 
-To improve the duration of a lookup, the database has an index on first and last name on the PEP/HRA table to speed up the lookup. An index was also generated on the other fields used by the lookup algorithm: Date Of Birth (DOB), deceased, locations (cities) and countries.
+To improve the speed of a lookup, the database has an index on first and last name on the PEP/HRA table to speed up the lookup. An index was also generated on the other fields used by the lookup algorithm: date of birth (\emph{dob}), decease date (\emph{deceases}), locations (\emph{cities}) and countries.
 
 To reduce the number of false positives, the lookup uses additional information besides the first and last name to confirm or falsify a match. For each lookup, at least the following information needs to be provided to the algorithm:
 \begin{itemize}
@@ -483,8 +478,9 @@ To reduce the number of false positives, the lookup uses additional information 
 \item Country
 \end{itemize}
 
-The algorithm is outlined in Listing \ref{lst:world-check-lookup}. It's output is a set of Know Your Customer (KYC) action and statuses which flag the customer in the system and may restrict him from certain actions, e.g. processing transactions with her account.
+The algorithm is outlined in Listing \ref{lst:world-check-lookup}. It's output is a set of \fnurl{Know Your Customer}{http://fsa.gov.uk/smallfirms/resources/factsheets/pdfs/KYC_table.pdf} (KYC) action and statuses which flag the customer in the system and may restrict her from certain actions, e.g. processing transactions with her account.
 
+\begin{figure}
 \begin{lstlisting}[caption={The Lookup algorithm},label={lst:world-check-lookup}]
 def lookup fname, lname, dob, city, country
 
@@ -528,7 +524,7 @@ def lookup fname, lname, dob, city, country
     end
 end
 \end{lstlisting}
-
+\end{figure}
 
 \section{Implementation \& Architecture}
 
@@ -536,8 +532,8 @@ The PEP \& HAR check was implemented as a \fnurl{Sinatra}{http://www.sinatrarb.c
 
 It uses Ruby \fnurl{ActiveRecord (AR)}{http://guides.rubyonrails.org/active_record_querying.html} to connect to a relational database. The Ruby Sinatra Application runs within a \fnurl{CentOS}{http://www.centos.org/} Linux environment and the linux \fnurl{Crontab Tool}{http://unixhelp.ed.ac.uk/CGI/man-cgi?crontab+5/} is used to run the first two tasks in a constant interval:
 \begin{itemize}
-\item \textbf{daily:} Each day, the incremental update and delete file are downloaded from World-Check to keep the database up to date.
-\item \textbf{weekly:} On a weekly base, each user is screened against the updated database and new hits raise a flag in the operations team's panel for further inspection.
+\item Each day, the incremental update and delete file are downloaded from World-Check to keep the database up to date.
+\item On a weekly base, each user is screened against the updated database and new hits raise a flag in the operations team's panel for further inspection.
 \end{itemize}
 
 The third task, answering requests from the sign-up flow is done via a REST interface. Chapter \ref{chp:experiments} goes into greater detail of how the requests are structured. The system topology is shown in Figure \ref{fig:fraud-arch}.

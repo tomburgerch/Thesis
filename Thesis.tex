@@ -459,7 +459,7 @@ To reduce the number of false positives, the lookup uses additional information 
 The algorithm is outlined in Listing \ref{lst:world-check-lookup}. Its output is a set of \fnurl{Know Your Customer}{http://fsa.gov.uk/smallfirms/resources/factsheets/pdfs/KYC_table.pdf} (KYC) action and statuses which flag the customer in the system and may restrict her from certain actions, e.g. processing transactions with her account.
 
 \begin{figure}
-\begin{lstlisting}[caption={The Lookup algorithm},label={lst:world-check-lookup}]
+\begin{lstlisting}[caption={The PEP/HRA Lookup algorithm},label={lst:world-check-lookup}]
 def lookup fname, lname, dob, city, country
 
     # collect all hits on first and last name
@@ -658,7 +658,7 @@ As both phenomena are very typical for signature verification, more advanced tec
                 \label{fig:hmm1}
         \end{subfigure}%
 
-        \caption{Two conceptual drawings show how DTW deals with the two main problems in signature recognition. The time series on the left is stretched but still matched thanks to DTW's ability to account for the scaling of segments or the signature as a whole. The drawing on the right is a representation of how DTW is still able to match two sequences even if one is distorted.}
+        \caption{Two conceptual drawings show how DTW deals with the two main problems in signature recognition. The time series (a) is stretched but still matched thanks to DTW's ability to account for the scaling of segments or the signature as a whole. The drawing (b) is a representation of how DTW is still able to match two sequences even if one is distorted.}
         \label{fig:dtw-model}
 \end{figure}
 
@@ -713,7 +713,7 @@ The first case corresponds to the case of insertion, the second to a match and t
                 \label{fig:hmm1}
         \end{subfigure}%
 
-        \caption{Two slightly distoreted, strechted time series $X,Y$ can still be matched with the DTW algorithm as the almost perfectly diagonal warping path shows.}
+        \caption{Two slightly distoreted, strechted time series $X,Y$ can still be matched with the DTW algorithm as the diagonal warping path shows.}
         \label{fig:dtw-matrix}
 \end{figure}
 
@@ -785,14 +785,14 @@ In speech and signature recognition, a left-to-right Markov Model has proven to 
 
 \begin{figure}
         \centering
-        \begin{subfigure}[b]{0.35\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr1.eps}
                 \caption{}
                 \label{fig:hmm1}
         \end{subfigure}%
         \quad
-        \begin{subfigure}[b]{0.35\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr2.eps}
                 \caption{}
@@ -801,21 +801,21 @@ In speech and signature recognition, a left-to-right Markov Model has proven to 
 
         ~ %add desired spacing between images, e. g. ~, \quad, \qquad etc.
           %(or a blank line to force the subfigure onto a new line)
-        \begin{subfigure}[b]{0.35\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr3.eps}
                 \caption{}
                 \label{fig:hmm1}
         \end{subfigure}%
         \quad
-        \begin{subfigure}[b]{0.35\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr5.eps}
                 \caption{}
                 \label{fig:hmm1}
         \end{subfigure}%
 
-        \begin{subfigure}[b]{0.25\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
                 \centering
                 \includegraphics[width=\textwidth]{figures/hmm-ltr4.eps}
                 \caption{}
@@ -857,7 +857,7 @@ $$\pi = \left[\begin{array}{cccc}1 & 0 & \cdots & 0\end{array}\right]$$
     \begin{center}
         \includegraphics[width=0.6\textwidth]{figures/symbol-creation.eps}
     \end{center}
-    \caption{Our symbols are defined as the discretized tangent angle. The left image represents a close up look of a signature and the points that define it. The drawing in the middle shows a zoomed version of the boxed segment on the right and the tangent angle for the two points in this area. The right drawing shows the discretized $\gamma\prime$ for an alphabet of 8 symbols.}
+    \caption{Our symbols are defined as the discretized tangent angle. The left image represents a close up look of a signature and the points that define it. The drawing in the middle shows a zoomed version of the boxed segment and the tangent angle for the two points in this area. The right drawing shows the discretized $\gamma\prime$ for an alphabet of 8 symbols.}
     \label{fig:hmm-symbol-creation}
 \end{figure}
 
@@ -971,7 +971,7 @@ $\overline{b_j(k)} = \frac{\mbox{(\ref{eq-hmm5})}}{\mbox{(\ref{eq-hmm4})}} = \fr
 
 A lot of work has been done on signature detection on offline and online signatures. However, almost all work on dynamic signatures has been done on signatures that were written using a pen on a digital tablet or paper. In our case, signatures were captured on a wide range of different devices and with a user's finger instead of a pen.
 
-\subsection{Signatures are written with Finger}
+\subsection{Signatures written with Finger}
 
 Our experience shows that people are not used to write their signature with their finger and the first few times they sign, their signature differs a lot. However, after just 10-15 times, the signature's shape stabilizes.
 
@@ -1017,6 +1017,12 @@ A simple approach to use signature verification is shown in Figure \ref{fig:fb-l
 
 This means that a user has no way of processing a card transaction if the signature does not pass the threshold that is generated based on his previous signatures. To overcome this problem, we suggest to use a feedback loop as shown in \ref{fig:fb-loop2}. Instead of declining a transaction, a request is sent to the merchant to confirm the identity of the card holder. If the merchant is able to confirm the card holder's identity, the transaction is processed. If the merchant is unable to confirm the identity, the card holder is reported as he is most probably a stolen or copied card.
 
+This approach has several benefits:
+\begin{itemize}
+\item A signature evolves over time. With a feedback loop, the system can adapt over time to eveolving signatures.
+\item The feedback loop helps to train the algorithm as we get very specific feedback on the false negative matches and can correct the algorithm without extra testing in field groups.
+\end{itemize}
+
 \begin{figure}
         \centering
         \begin{subfigure}[b]{\textwidth}
@@ -1032,7 +1038,7 @@ This means that a user has no way of processing a card transaction if the signat
                 \caption{Simplified illustration of processing a transaction with the feedback loop. If the signature check does not reach the acceptance level, a request is sent to the merchant to confirm the card holder's signature. After a positive confirmation, the transaction is processed and otherwised blocked.}
                 \label{fig:fb-loop2}
         \end{subfigure}%
-        \caption{A traditional signature detection system based on a threshold (a) and our proposed system that includes a feedback loop (b) }
+        \caption{A traditional signature detection system based on a threshold (a) and the extended system that includes a feedback loop (b) }
         \label{fig:feedback-loop}
 \end{figure}
 
@@ -1127,7 +1133,7 @@ before release
        & 13-04 & 71,00     & 68,73             \\ \cline{2-5}
         \end{tabular}
     \end{center}
-    \caption{The requests received by the PEP/HAR component. Ratio: Erwaehnen von backlog! false positive beinhalten backlog}
+    \caption{The matches and false postivies generated by the fraud prevention component before and after release of the new component.}
     \label{tbl:hra-pep-results}
 \end{table}
 
@@ -1156,7 +1162,7 @@ before release
                 \label{fig:chart-har}
         \end{subfigure}%
 
-        \caption{Evolution of the number of matches generated by the automatic PEP/HRA check. The top graph shows the evolution of the overall matches and false positives and the bottom and bottom graph the evolution for PEP and HRA separately. The new check was released to production in week 13-10 which is clearly visible as a drop in numbers.}
+        \caption{Evolution of the number of matches generated by the automatic PEP/HRA check. The top graph shows the evolution of the overall matches and false positives and the bottom and bottom graph the evolution for PEP and HRA separately. The new check was released to production in week 13-10 which is clearly visible as both numbers decline. The shifted false positives indicate the backlog of records that had to manually confirmed or rejected.}
         \label{fig:pep-hra-charts}
 \end{figure}
 
@@ -1172,7 +1178,7 @@ before release
         April 1st - 14th & 9 & 0.3 hours \\ \hline
         \end{tabular}
     \end{center}
-    \caption{The requests received by the PEP/HAR component}
+    \caption{The absolute numbers of matches and man hours caused by matches and false positives. The new component was released at the beginning of march and the impact on the number of work hours is significant.}
     \label{tbl:man-hours}
 \end{table}
 
@@ -1530,7 +1536,7 @@ We are also interested in the computation time to compute the EER to know whethe
          13 \ref{fig:dtw-exp4} & recent & 50 & partial & xy & 2137 & 0.26 & 0.33 \\  %1366153811
     \hline
     \end{tabular}
-    \caption{Results of DTW experiments}
+    \caption{Results of the DTW experiments}
     \label{tbl:dtw-experiments1}
 \end{table}
 
@@ -1793,7 +1799,7 @@ Table \ref{tbl:fusion-fp} shows a summary of all algorithms and the false positi
 
     \hline
     \end{tabular}
-    \caption{The false positives we encountered with the global features, DTW and HMM algorithm}
+    \caption{The false positives we encountered with the global features algorithm, DTW and HMM algorithm}
     \label{tbl:fusion-fp}
 \end{table}
 
